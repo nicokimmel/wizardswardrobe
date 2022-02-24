@@ -1,0 +1,57 @@
+## Title: Wizard's Wardrobe
+## Author: ownedbynico
+## Version: 1.7
+## Description: Throw all your setups into the wardrobe and let the wizard equip them exactly when you need it.
+## APIVersion: 101032
+## DependsOn: LibAddonMenu-2.0 LibChatMessage>=105
+## SavedVariables: WizardsWardrobeSV
+
+## This Add-on is not created by, affiliated with or sponsored by ZeniMax Media Inc. or its affiliates.
+## The Elder Scrolls® and related logos are registered trademarks or trademarks of ZeniMax Media Inc. in the United States and/or other countries.
+## All rights reserved.
+##
+## You can read the full terms at https://account.elderscrollsonline.com/add-on-terms
+
+libs/json.lua
+libs/gridcombobox.lua
+
+lang/en.lua
+lang/$(language).lua
+
+WizardsWardrobeSetup.lua
+WizardsWardrobeConst.lua
+WizardsWardrobeUtils.lua
+WizardsWardrobeQueue.lua
+
+modules/WizardsWardrobeConditions.lua
+modules/WizardsWardrobeTransfer.lua
+modules/WizardsWardrobeRepair.lua
+modules/WizardsWardrobePoison.lua
+modules/WizardsWardrobePrebuff.lua
+modules/WizardsWardrobeBanking.lua
+modules/WizardsWardrobeFood.lua
+modules/WizardsWardrobeMarkers.lua
+modules/WizardsWardrobePreview.lua
+modules/WizardsWardrobeCode.lua
+modules/WizardsWardrobeFixes.lua
+
+WizardsWardrobeGui.lua
+WizardsWardrobeMenu.lua
+WizardsWardrobe.lua
+
+zones/GEN.lua
+zones/SUB.lua
+zones/PVP.lua
+zones/AA.lua
+zones/SO.lua
+zones/HRC.lua
+zones/MOL.lua
+zones/HOF.lua
+zones/AS.lua
+zones/CR.lua
+zones/SS.lua
+zones/KA.lua
+zones/RG.lua
+zones/BRP.lua
+
+Bindings.xml
