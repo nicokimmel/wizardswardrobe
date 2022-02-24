@@ -302,10 +302,10 @@ function WW.MoveItems(itemTaskList)
 			--local itemId = Id64ToString(GetItemUniqueId(item.sourceBag, item.sourceSlot))
 			--local itemLink = GetItemLink(item.sourceBag, item.sourceSlot, LINK_STYLE_BRACKETS)
 			
-			if item.destBag == BAG_BACKPACK then
-				CallSecureProtected("RequestMoveItem", item.sourceBag, item.sourceSlot, item.destBag, item.destSlot, 1)
-			else
+			if item.destBag == BAG_WORN then
 				EquipItem(item.sourceBag, item.sourceSlot, item.destSlot)
+			else
+				CallSecureProtected("RequestMoveItem", item.sourceBag, item.sourceSlot, item.destBag, item.destSlot, 1)
 			end
 		end
 		WWQ.Push(itemTask, item.delay)
