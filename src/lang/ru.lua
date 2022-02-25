@@ -1,7 +1,7 @@
 local language = {
 	
 	-- MESSAGES
-	WW_MSG_FIRSTSTART = "If you are using Wizard's Wardrobe for the first time please be sure to check out the FAQ and feature list on %s. Most questions are already answered there.",
+	WW_MSG_FIRSTSTART = "Если вы используете Wizard's Wardrobe впервые, обязательно ознакомьтесь с FAQ и списком функций на %s. Там уже есть ответы на большинство вопросов.",
 	
 	WW_MSG_ENOENT = "Такой записи нет.",
 	WW_MSG_ERROR = "ОШИБКА!",
@@ -77,12 +77,12 @@ local language = {
 	WW_MENU_RESETUI = "Перезапустить UI",
 	WW_MENU_RESETUI_TT = "|cFF0000Это сбрасывает окно WW и все его позиции в интерфейсах.|r\nВ дальнейшем его нужно снова открыть с помощью /wizard или горячей клавиши.",
 	
-	WW_MENU_AUTOEQUIP = "Auto-Equip",
-	WW_MENU_AUTOEQUIP_DESC = "These settings control what exactly is loaded/saved from the setup.",
-	WW_MENU_AUTOEQUIP_GEAR = "Gear",
-	WW_MENU_AUTOEQUIP_SKILLS = "Skills",
-	WW_MENU_AUTOEQUIP_CP = "Champion points",
-	WW_MENU_AUTOEQUIP_BUFFFOOD = "Buff food",
+	WW_MENU_AUTOEQUIP = "Автоматизация",
+	WW_MENU_AUTOEQUIP_DESC = "Эти опции отвечают за то, что именно будет загружается/сохраняется в сэтапах.",
+	WW_MENU_AUTOEQUIP_GEAR = "Экипировка",
+	WW_MENU_AUTOEQUIP_SKILLS = "Навыки",
+	WW_MENU_AUTOEQUIP_CP = "Звезды системы героя",
+	WW_MENU_AUTOEQUIP_BUFFFOOD = "Бафф еды",
 	
 	WW_MENU_SUBSTITUTE = "Альтернативные сэтапы",
 	WW_MENU_SUBSTITUTE_OVERLAND = "Локации",
@@ -104,7 +104,7 @@ local language = {
 	WW_MENU_FILLPOISONS = "Автоматически пополнять яды",
 	WW_MENU_FILLPOISONS_TT = "Автоматически пытается пополнить яды из инвентаря.\n|H1:item:76827:308:50:0:0:0:0:0:0:0:0:0:0:0:0:36:1:0:0:0:138240|h|h также меняется с |H1:item:79690:6:1:0:0:0:0:0:0:0:0:0:0:0:1:36:0:1:0:0:0|h|h и наоборот если иное не доступно.",
 	WW_MENU_BUFFFOOD = "Автоматически обновлять бафф еды",
-	WW_MENU_BUFFFOOD_TT = "Автоматически съедает подходящую еду когда она заканчивается. Работает только в испытаниях и подземельях.\nЗагляните в \"WizardsWardrobeConst.lua\", чтобы узнать, какие расходники поддерживаются. Их добавление в процессе.",
+	WW_MENU_BUFFFOOD_TT = "Автоматически использует подходящую провизию когда ее бафф заканчивается. Работает только в испытаниях и подземельях.\nЗагляните в \"WizardsWardrobeConst.lua\", чтобы узнать, какие расходники поддерживаются. Их добавление в процессе.",
 	
 
 	-- USER INTERFACE
@@ -119,9 +119,9 @@ local language = {
 	WW_BUTTON_TOGGLEAUTOEQUIP = "Автопереключение наборов",
 	WW_BUTTON_ADD = "Добавить страницу",
 	WW_BUTTON_DELETE = "Удалить страницу",
-	WW_BUTTON_GEAR = "No gear saved!\nPress |cFFFFFF[Shift + Click]|r to save current gear or drag & drop items onto this button.",
-	WW_BUTTON_SKILLS = "No skills saved!\nPress |cFFFFFF[Shift + Click]|r to save current hotbars or drag & drop spells onto this button.",
-	WW_BUTTON_CP = "No CPs saved!\nPress |cFFFFFF[Shift + Click]|r to save current slottables.",
+	WW_BUTTON_GEAR = "Экипировка не сохранена!\nНажмите |cFFFFFF[Shift + ЛКМ]|r, чтобы сохранить текущую экипировку, или перетащите ее элементы на эту кнопку.",
+	WW_BUTTON_SKILLS = "Навыки не сохранены!\nНажмите |cFFFFFF[Shift + ЛКМ]|r, чтобы сохранить текущие панели умений, или перетащите навыки в соответствующие ячейки сэтапа.",
+	WW_BUTTON_CP = "Звезды системы героя не сохранены!\nНажмите |cFFFFFF[Shift + ЛКМ]|r, чтобы сохранить текущие панели звезд.",
 	WW_BUTTON_BUFFFOOD = "Еда не сохранена!\nНажмите |cFFFFFF[Shift + ЛКМ]|r, чтобы сохранить текущую еду, или перетащите ее на эту кнопку.",
 	WW_RENAME_SETUP = "Введите новое название для набора:",
 	WW_RENAME_PAGE = "Введите новое название для страницы:",
@@ -137,7 +137,7 @@ local language = {
 	WW_IMPORT_HELP = "Вставить |cFFFFFF[CTRL + V]|r экспортируемый текст здесь. Убедитесь, что текст не изменен, иначе импорт может завершиться неудачно.\nВам понадобятся все предметы в инвентаре. Особенности экспортированных наборов будут иметь приоритет, но если предмет в инвентаре не имеет правильную особенность, будут использоваться предмет с «неверной» особенностью.",
 	WW_IMPORT_TT = "|cFF0000Внимание! Это перезапишет выбранные наборы.|r",
 	WW_EXPORT = "Экспорт",
-	WW_EXPORT_HELP = "Скопируйте выделенный текст с помощью |cFFFFFF[CTRL + C]|r и поделитесь им с другими.\nЭто содержит экипировку, навыки и CP в компактном формате для импорта в другое место.",
+	WW_EXPORT_HELP = "Скопируйте выделенный текст с помощью |cFFFFFF[CTRL + C]|r и поделитесь им с другими.\nОн содержит экипировку, навыки и CP в компактном формате для импорта в другое место.",
 	WW_DELETE = "Удалить",
 	WW_CONDITIONS = "Режим",
 	WW_CONDITION = "Состояние",
@@ -154,7 +154,7 @@ local language = {
 
 	WW_LINK_IMPORT = "Добавить в WW",
 	
-	WW_PREBUFF_HELP = "Drag and drop spells onto the prebuff bars.\nIf toggle is checked it will keep the prebuff spells on your hotbar until you press that hotbar again. Otherwise it will be unslotted after casting.\nDelay for \"normal\" spells is ~500ms, channeled abilities need more.",
+	WW_PREBUFF_HELP = "Перетащите навыки на панели пребаффа.\nЕсли флажок установлен, они останутся на панели умений, пока вы снова не нажмете соответстввующий бинд. В противном случае после произнесения они будут удалены из соответствующих ячеек.\nЗадержка для «обычных» умений составляет ~500 мс. Заклинания, у которых есть время подготовки/поддержания требуют больше времени.",
 	
 	
 	-- BOSS & TRIAL NAMES
@@ -245,7 +245,7 @@ local language = {
 	WW_BRP_FIFTH = "Дракех Освобожденный",
 	WW_BRP_FINALROUND = "Финальный Раунд",
 
-
+	
 	-- KEYBINDS
 	SI_BINDING_NAME_WW_HOTKEY_SHOW_UI = "Открыть Wizard's Wardrobe",
 	SI_BINDING_NAME_WW_HOTKEY_FIXES_FLIP_SHOULDERS = "Фикс Наплечника разрушения",
@@ -261,11 +261,11 @@ local language = {
 	SI_BINDING_NAME_WW_HOTKEY_SETUP_10 = "Набор 10",
 	SI_BINDING_NAME_WW_HOTKEY_SETUP_11 = "Набор 11",
 	SI_BINDING_NAME_WW_HOTKEY_SETUP_12 = "Набор 12",
-	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_1 = "Prebuff 1",
-	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_2 = "Prebuff 2",
-	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_3 = "Prebuff 3",
-	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_4 = "Prebuff 4",
-	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_5 = "Prebuff 5",
+	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_1 = "Пребафф 1",
+	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_2 = "Пребафф 2",
+	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_3 = "Пребафф 3",
+	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_4 = "Пребафф 4",
+	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_5 = "Пребафф 5",
 }
 
 for key, value in pairs(language) do
