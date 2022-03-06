@@ -58,9 +58,9 @@ function WWM.AddMark(control)
 	local itemData = WWM.gearList[lookupId]
 	mark:SetHidden(not itemData)
 	
-	mark:SetHandler("OnMouseEnter", function(control)
+	mark:SetHandler("OnMouseEnter", function(self)
 		if itemData then
-			ZO_Tooltips_ShowTextTooltip(control, RIGHT, WWM.GetTooltip(itemData))
+			ZO_Tooltips_ShowTextTooltip(self, RIGHT, WWM.GetTooltip(itemData))
 		end
 	end)
 	mark:SetHandler("OnMouseExit", function()

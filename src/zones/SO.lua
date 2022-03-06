@@ -5,7 +5,6 @@ local SO = WW.zones["SO"]
 SO.name = GetString(WW_SO_NAME)
 SO.tag = "SO"
 SO.icon = "/WizardsWardrobe/assets/zones/so.dds"
-SO.legacyIcon = "/esoui/art/treeicons/achievements_indexicon_dungeons_up.dds"
 SO.priority = 2
 SO.id = 639
 
@@ -36,21 +35,5 @@ function SO.Reset()
 end
 
 function SO.OnBossChange(bossName)
-	if #bossName == 0 then
-		bossName = GetString(WW_TRASH)
-	end
-	
-	local pageId = WW.GetSelectedPage(SO)
-	local index = SO.lookupBosses[bossName]
-	
-	local loaded = WW.LoadSetup(SO, pageId, index, true)
-	
-	-- load substitute setup
-	if loaded == nil then
-		index = 2
-		if bossName == GetString(WW_TRASH) then
-			index = 1
-		end
-		WW.LoadSetupSubstitute(index)
-	end
+	WW.conditions.OnBossChange(bossName)
 end

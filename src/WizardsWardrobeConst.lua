@@ -1,8 +1,16 @@
 WizardsWardrobe = WizardsWardrobe or {}
 local WW = WizardsWardrobe
 
-WW.PREVIEW_LINK_TYPE = "wwp"
-WW.URL_LINK_TYPE = "wwu"
+WW.LINK_TYPES = {
+	PREVIEW = "wwp",
+	URL = "wwu",
+}
+
+WW.LOGTYPES = {
+	NORMAL = "FFFFFF",
+	ERROR = "FF7070",
+	INFO = "F8FF70",
+}
 
 WW.GEARSLOTS = {
     EQUIP_SLOT_HEAD,
@@ -97,19 +105,6 @@ WW.CPICONS = {
 	[12] = "/esoui/art/champion/champion_points_health_icon.dds",
 }
 
-WW.TRIGGERS = {
-	NONE = 1,
-	BOSS_CHANGE = 2,
-	TRASH_AFTER_BOSS = 3,
-	TRASH_IF_ULT = 4,
-}
-
-WW.LOGTYPES = {
-	NORMAL = "FFFFFF",
-	ERROR = "FF7070",
-	INFO = "F8FF70",
-}
-
 WW.BUFFFOOD = {
 	[87695] = 84720, 	-- Ghastly Eye Bowl
 	[87697] = 84731, 	-- Witchmother's Potent Brew
@@ -143,6 +138,11 @@ WW.BUFFFOOD = {
 	[153629] = 127596, 	-- Bewitched Sugar Sculls
 	
 	[120762] = 89955,	-- Candied Jester's Coins
+}
+
+WW.CONDITIONS = {
+	NONE = 0,
+	EVERYWHERE = -1,
 }
 
 WW.MARKINVENTORIES = {

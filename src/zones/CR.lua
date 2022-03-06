@@ -5,7 +5,6 @@ local CR = WW.zones["CR"]
 CR.name = GetString(WW_CR_NAME)
 CR.tag = "CR"
 CR.icon = "/WizardsWardrobe/assets/zones/cr.dds"
-CR.legacyIcon = "/esoui/art/treeicons/tutorial_idexicon_summerset_up.dds.dds"
 CR.priority = 7
 CR.id = 1051
 
@@ -49,14 +48,5 @@ function CR.OnBossChange(bossName)
 		return
 	end
 	
-	local pageId = WW.GetSelectedPage(CR)
-	local index = CR.lookupBosses[bossName]
-	
-	local loaded = WW.LoadSetup(CR, pageId, index, true)
-	
-	-- load substitute setup
-	if loaded == nil then
-		index = 2
-		WW.LoadSetupSubstitute(index)
-	end
+	WW.conditions.OnBossChange(bossName)
 end

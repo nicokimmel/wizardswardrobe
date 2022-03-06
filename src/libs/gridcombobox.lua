@@ -23,13 +23,13 @@ local function CreateButton(parent, callback)
 end
 
 local function CreateDropdown(control, parent)
-    local dropdown = WINDOW_MANAGER:CreateControl(control:GetName() .. "Dropdown", parent, CT_CONTROL)
+    local dropdown = WINDOW_MANAGER:CreateControl(control:GetName() .. "Dropdown", control, CT_CONTROL)
+    dropdown:SetDrawTier(DT_MEDIUM)
     dropdown:SetWidth(control:SetWidth())
     dropdown:SetHidden(true)
     dropdown.Toggle = function(self) self:SetHidden(not self:IsHidden()) end
     dropdown:SetAnchor(TOPLEFT, control, BOTTOMLEFT, 0, 15)
     dropdown:SetMouseEnabled(true)
-    dropdown:SetDrawTier(DT_MEDIUM)
     CreateBackdrop(dropdown)
     return dropdown
 end
@@ -167,7 +167,7 @@ function GridComboBox:ClearItems()
     for i = 1, #self.items do
         local key = self.items[i]
         self.pool:ReleaseObject(key)
-        
+
     end
     self.items = {}
     self:Refresh()

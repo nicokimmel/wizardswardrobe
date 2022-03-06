@@ -5,7 +5,6 @@ local MOL = WW.zones["MOL"]
 MOL.name = GetString(WW_MOL_NAME)
 MOL.tag = "MOL"
 MOL.icon = "/WizardsWardrobe/assets/zones/mol.dds"
-MOL.legacyIcon = "/esoui/art/treeicons/tutorial_idexicon_thievesguild_up.dds"
 MOL.priority = 4
 MOL.id = 725
 
@@ -106,21 +105,5 @@ function MOL.GetBossByLocation()
 end
 
 function MOL.OnBossChange(bossName)
-	if #bossName == 0 then
-		bossName = GetString(WW_TRASH)
-	end
-		
-	local pageId = WW.GetSelectedPage(MOL)
-	local index = MOL.lookupBosses[bossName]
-	
-	local loaded = WW.LoadSetup(MOL, pageId, index, true)
-	
-	-- load substitute setup
-	if loaded == nil then
-		index = 2
-		if bossName == GetString(WW_TRASH) then
-			index = 1
-		end
-		WW.LoadSetupSubstitute(index)
-	end
+	WW.conditions.OnBossChange(bossName)
 end

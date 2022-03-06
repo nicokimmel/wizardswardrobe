@@ -4,18 +4,6 @@ local WW = WizardsWardrobe
 WW.gui = WW.gui or {}
 local WWG = WW.gui
 
-function WW.GetSetupCount(zone)
-	if zone.tag == "SUB" then
-		return #zone.bosses
-	else
-		return #zone.bosses + (WW.settings.extraSlots or 0)
-	end
-end
-
-function WW.IsCustomSetup(zone, index)
-	return (zone.tag == "GEN" or zone.tag == "PVP" or index > #zone.bosses)
-end
-
 function WW.GetSelectedPage(zone)
 	if WW.pages[zone.tag] and WW.pages[zone.tag][0] then
 		return WW.pages[zone.tag][0].selected 
@@ -52,8 +40,8 @@ end
 function WW.CheckGear(zone, pageId)
 	local missingTable = {}
 	local inventoryList = WW.GetItemLocation()
-	for index = 1, WW.GetSetupCount(zone) do
-		local setup = Setup:FromStorage(zone.tag, pageId, index)
+	for entry in WW.PageIterator(zone, pageId) do
+		local setup = Setup:FromStorage(zone.tag, pageId, entry.index)
 		for _, gearSlot in ipairs(WW.GEARSLOTS) do
 			if gearSlot ~= EQUIP_SLOT_POISON and gearSlot ~= EQUIP_SLOT_BACKUP_POISON then
 				local gear = setup:GetGearInSlot(gearSlot)

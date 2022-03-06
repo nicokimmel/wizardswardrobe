@@ -35,8 +35,8 @@ function WWB.WithdrawPage(zone, pageId)
 	local preGearTable = {}
 	local amount = 0
 	
-	for index = 1, WW.GetSetupCount(zone) do
-		local setup = Setup:FromStorage(zone.tag, pageId, index)
+	for entry in WW.PageIterator(zone, pageId) do
+		local setup = Setup:FromStorage(zone.tag, pageId, entry.index)
 		for _, gearSlot in ipairs(WW.GEARSLOTS) do
 			local gear = setup:GetGearInSlot(gearSlot)
 			if gearSlot ~= EQUIP_SLOT_POISON
@@ -130,8 +130,8 @@ function WWB.DepositPage(zone, pageId)
 	local itemLocationTable = WW.GetItemLocation()
 	
 	local preGearTable = {}
-	for index = 1, WW.GetSetupCount(zone) do
-		local setup = Setup:FromStorage(zone.tag, pageId, index)
+	for entry in WW.PageIterator(zone, pageId) do
+		local setup = Setup:FromStorage(zone.tag, pageId, entry.index)
 		for _, gearSlot in ipairs(WW.GEARSLOTS) do
 			local gear = setup:GetGearInSlot(gearSlot)
 			if gearSlot ~= EQUIP_SLOT_POISON

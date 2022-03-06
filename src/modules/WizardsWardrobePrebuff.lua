@@ -140,12 +140,8 @@ function WWP.CreatePrebuffWindow()
 	dialog:SetMovable(true)
 	dialog:SetHidden(true)
 	
-	SCENE_MANAGER:RegisterCallback("SceneStateChanged", function(scene, oldState, newState)
-		if scene:GetName() ~= "hud" and scene:GetName() ~= "hudui" then return end
-		if newState ~= SCENE_SHOWING then return end
-		dialog:SetHidden(true)
-	end)
-	
+	table.insert(WW.gui.dialogList, dialog)
+		
 	local background = WINDOW_MANAGER:CreateControlFromVirtual(dialog:GetName() .. "BG", dialog, "ZO_DefaultBackdrop")
 	background:SetAlpha(0.95)
 	
@@ -154,7 +150,7 @@ function WWP.CreatePrebuffWindow()
 	title:SetVerticalAlignment(TEXT_ALIGN_CENTER)
 	title:SetHorizontalAlignment(TEXT_ALIGN_CENTER) 
 	title:SetFont("ZoFontWinH1")
-	title:SetText("PREBUFF")
+	title:SetText(GetString(WW_BUTTON_PREBUFF):upper())
 	
 	local hideButton = WINDOW_MANAGER:CreateControl(dialog:GetName() .. "Hide", dialog, CT_BUTTON)
 	hideButton:SetDimensions(25, 25)

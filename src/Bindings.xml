@@ -15,6 +15,9 @@
 			<Action name="WW_HOTKEY_SETUP_10"><Down>WizardsWardrobe.LoadSetupCurrent(10, false)</Down></Action>
 			<Action name="WW_HOTKEY_SETUP_11"><Down>WizardsWardrobe.LoadSetupCurrent(11, false)</Down></Action>
 			<Action name="WW_HOTKEY_SETUP_12"><Down>WizardsWardrobe.LoadSetupCurrent(12, false)</Down></Action>
+			<Action name="WW_HOTKEY_SETUP_13"><Down>WizardsWardrobe.LoadSetupCurrent(13, false)</Down></Action>
+			<Action name="WW_HOTKEY_SETUP_14"><Down>WizardsWardrobe.LoadSetupCurrent(14, false)</Down></Action>
+			<Action name="WW_HOTKEY_SETUP_15"><Down>WizardsWardrobe.LoadSetupCurrent(15, false)</Down></Action>
 			<Action name="WW_HOTKEY_PREBUFF_1"><Down>WizardsWardrobe.prebuff.Prebuff(1)</Down></Action>
 			<Action name="WW_HOTKEY_PREBUFF_2"><Down>WizardsWardrobe.prebuff.Prebuff(2)</Down></Action>
 			<Action name="WW_HOTKEY_PREBUFF_3"><Down>WizardsWardrobe.prebuff.Prebuff(3)</Down></Action>

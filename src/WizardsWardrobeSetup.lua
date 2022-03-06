@@ -4,7 +4,7 @@ local WW = WizardsWardrobe
 Setup = {
 	name = GetString(WW_EMPTY),
 	disabled = false,
-	condition = nil,
+	condition = {},
 	code = "",
 	skills = {
 		[0] = {},
@@ -25,15 +25,26 @@ function Setup:New(data)
 end
 
 function Setup:FromStorage(tag, pageId, index)
-	local data = {}
+	local data = {
+		name = GetString(WW_EMPTY),
+		disabled = false,
+		condition = {},
+		code = "",
+		skills = {
+			[0] = {},
+			[1] = {},
+		},
+		gear = {
+			mythic = nil,
+		},
+		cp = {},
+		food = {},
+	}
 	if WW.setups[tag]
 		and WW.setups[tag][pageId]
 		and WW.setups[tag][pageId][index] then
 		
-		data = WW.setups[tag][pageId][index]
-	end
-	if WW.zones[tag] and not WW.IsCustomSetup(WW.zones[tag], index) then
-		data.name = WW.GetBossName(WW.zones[tag], index)
+		data = ZO_DeepTableCopy(WW.setups[tag][pageId][index])
 	end
 	setmetatable(data, self)
 	self.__index = self
@@ -50,13 +61,13 @@ function Setup:ToStorage(tag, pageId, index)
 	if not WW.setups[tag][pageId][index] then
 		WW.setups[tag][pageId][index] = {}
 	end
-	WW.setups[tag][pageId][index] = self:GetData()
+	WW.setups[tag][pageId][index] = ZO_DeepTableCopy(self:GetData())
 end
 
 function Setup:Clear()
 	self.name = GetString(WW_EMPTY)
 	self.disabled = false
-	self.condition = nil
+	self.condition = {}
 	self.code = ""
 	self.skills = {
 		[0] = {},
@@ -110,7 +121,7 @@ function Setup:SetName(name)
 end
 
 function Setup:HasCondition()
-	if self.condition and self.condition.mode > 1 then
+	if self.condition and self.condition.boss then
 		return true
 	end
 	return false
@@ -120,8 +131,8 @@ function Setup:GetCondition()
 	return self.condition
 end
 
-function Setup:SetCondition(conditionStruct)
-	self.condition = conditionStruct
+function Setup:SetCondition(conditionTable)
+	self.condition = conditionTable
 end
 
 function Setup:GetCode()

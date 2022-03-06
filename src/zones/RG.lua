@@ -5,7 +5,6 @@ local RG = WW.zones["RG"]
 RG.name = GetString(WW_RG_NAME)
 RG.tag = "RG"
 RG.icon = "/WizardsWardrobe/assets/zones/rg.dds"
-RG.legacyIcon = "/esoui/art/treeicons/tutorial_idexicon_blackwood_up.dds"
 RG.priority = 10
 RG.id = 1263
 
@@ -45,21 +44,5 @@ function RG.OnBossChange(bossName)
 	end
 	RG.lastBoss = bossName
 	
-	if #bossName == 0 then
-		bossName = GetString(WW_TRASH)
-	end
-	
-	local pageId = WW.GetSelectedPage(RG)
-	local index = RG.lookupBosses[bossName]
-	
-	local loaded = WW.LoadSetup(RG, pageId, index, true)
-	
-	-- load substitute setup
-	if loaded == nil then
-		index = 2
-		if bossName == GetString(WW_TRASH) then
-			index = 1
-		end
-		WW.LoadSetupSubstitute(index)
-	end
+	WW.conditions.OnBossChange(bossName)
 end

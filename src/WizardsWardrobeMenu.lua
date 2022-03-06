@@ -14,7 +14,6 @@ function WWM.InitSV()
 		setups = {},
 		pages = {},
 		prebuffs = {},
-		extraSlots = 0,
 		autoEquipSetups = true,
 	})
 	WW.setups = WW.storage.setups
@@ -24,7 +23,7 @@ function WWM.InitSV()
 	WW.settings = ZO_SavedVars:NewAccountWide("WizardsWardrobeSV", 1, nil, {
 		window = {
 			wizard = {
-				width = 353,
+				width = 358,
 				height = 665,
 				scale = 1,
 				locked = false,
@@ -58,7 +57,6 @@ function WWM.InitSV()
 	})
 	
 	-- dont look at this
-	WW.settings.extraSlots = WW.storage.extraSlots
 	WW.settings.autoEquipSetups = WW.storage.autoEquipSetups
 end
 
@@ -117,21 +115,6 @@ function WWM.InitAM()
 			getFunc = function() return WW.settings.unequipEmpty end,
 			setFunc = function(value) WW.settings.unequipEmpty = value end,
 			tooltip = GetString(WW_MENU_UNEQUIPEMPTY_TT),
-		},
-		{
-			type = "slider",
-			name = GetString(WW_MENU_EXTRASLOTS),
-			getFunc = function() return WW.settings.extraSlots end,
-			setFunc = function(value)
-						WW.settings.extraSlots = value
-						WW.storage.extraSlots = value
-					  end,
-			min = 0,
-			max = 6,
-			step = 1,
-			default = 0,
-			requiresReload = true,
-			tooltip = GetString(WW_MENU_EXTRASLOTS_TT),
 		},
 		{
 			type = "divider",

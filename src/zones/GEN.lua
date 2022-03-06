@@ -5,36 +5,10 @@ local GEN = WW.zones["GEN"]
 GEN.name = GetString(WW_GENERAL)
 GEN.tag = "GEN"
 GEN.icon = "/WizardsWardrobe/assets/zones/gen.dds"
-GEN.legacyIcon = "/esoui/art/treeicons/achievements_indexicon_general_up.dds"
 GEN.priority = -2
 GEN.id = -1
 
-GEN.bosses = {
-	[1] = {
-		name = GetString(WW_EMPTY),
-	},
-	[2] = {
-		name = GetString(WW_EMPTY),
-	},
-	[3] = {
-		name = GetString(WW_EMPTY),
-	},
-	[4] = {
-		name = GetString(WW_EMPTY),
-	},
-	[5] = {
-		name = GetString(WW_EMPTY),
-	},
-	[6] = {
-		name = GetString(WW_EMPTY),
-	},
-	[7] = {
-		name = GetString(WW_EMPTY),
-	},
-	[8] = {
-		name = GetString(WW_EMPTY),
-	},
-}
+GEN.bosses = {}
 
 function GEN.Init()
 	

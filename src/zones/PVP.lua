@@ -5,7 +5,6 @@ local PVP = WW.zones["PVP"]
 PVP.name = GetString(WW_PVP_NAME)
 PVP.tag = "PVP"
 PVP.icon = "/WizardsWardrobe/assets/zones/pvp.dds"
-PVP.legacyIcon = "/esoui/art/treeicons/achievements_indexicon_alliancewar_up.dds"
 PVP.priority = 0
 PVP.id = {
 	[181] = true,	-- Cyrodiil
@@ -22,32 +21,7 @@ PVP.id = {
 	[518] = true,	-- Eld Angavar (?)
 }
 
-PVP.bosses = {
-	[1] = {
-		name = GetString(WW_EMPTY),
-	},
-	[2] = {
-		name = GetString(WW_EMPTY),
-	},
-	[3] = {
-		name = GetString(WW_EMPTY),
-	},
-	[4] = {
-		name = GetString(WW_EMPTY),
-	},
-	[5] = {
-		name = GetString(WW_EMPTY),
-	},
-	[6] = {
-		name = GetString(WW_EMPTY),
-	},
-	[7] = {
-		name = GetString(WW_EMPTY),
-	},
-	[8] = {
-		name = GetString(WW_EMPTY),
-	},
-}
+PVP.bosses = {}
 
 function PVP.Init()
 	

@@ -5,7 +5,6 @@ local BRP = WW.zones["BRP"]
 BRP.name = GetString(WW_BRP_NAME)
 BRP.tag = "BRP"
 BRP.icon = "/WizardsWardrobe/assets/zones/brp.dds"
-BRP.legacyIcon = "/esoui/art/treeicons/tutorial_idexicon_murkmire_up.dds"
 BRP.priority = 14
 BRP.id = 1082
 
@@ -91,23 +90,7 @@ function BRP.Reset()
 end
 
 function BRP.OnBossChange(bossName)
-	if #bossName == 0 then
-		bossName = GetString(WW_TRASH)
-	end
-	
-	local pageId = WW.GetSelectedPage(BRP)
-	local index = BRP.lookupBosses[bossName]
-	
-	local loaded = WW.LoadSetup(BRP, pageId, index, true)
-	
-	-- load substitute setup
-	if loaded == nil then
-		index = 2
-		if bossName == GetString(WW_TRASH) then
-			index = 1
-		end
-		WW.LoadSetupSubstitute(index)
-	end
+	WW.conditions.OnBossChange(bossName)
 end
 
 function BRP.OnCombatChange(_, inCombat)

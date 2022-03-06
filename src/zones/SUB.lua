@@ -5,7 +5,6 @@ local SUB = WW.zones["SUB"]
 SUB.name = GetString(WW_SUB_NAME)
 SUB.tag = "SUB"
 SUB.icon = "/WizardsWardrobe/assets/zones/sub.dds"
-SUB.legacyIcon = "/esoui/art/treeicons/achievements_indexicon_prologue_up.dds"
 SUB.priority = -1
 SUB.id = -1
 
@@ -27,5 +26,5 @@ function SUB.Reset()
 end
 
 function SUB.OnBossChange(bossName)
-	
+	WW.conditions.OnBossChange(bossName)
 end

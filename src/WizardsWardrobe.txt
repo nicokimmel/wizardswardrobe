@@ -12,6 +12,9 @@
 ##
 ## You can read the full terms at https://account.elderscrollsonline.com/add-on-terms
 
+Bindings.xml
+WizardsWardrobe.xml
+
 libs/json.lua
 libs/gridcombobox.lua
 
@@ -53,5 +56,3 @@ zones/SS.lua
 zones/KA.lua
 zones/RG.lua
 zones/BRP.lua
-
-Bindings.xml

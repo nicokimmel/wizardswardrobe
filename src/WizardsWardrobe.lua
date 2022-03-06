@@ -17,24 +17,16 @@ local pendingSetup = nil
 
 function WW.LoadSetup(zone, pageId, index, auto)
 	if not zone or not pageId or not index then
-		return nil
+		return false
 	end
 		
 	local setup = Setup:FromStorage(zone.tag, pageId, index)
-	
-	if auto and (not WW.settings.autoEquipSetups
-		or setup:IsDisabled()
-		or WW.conditions.CheckTrashChange(zone, index)) then
-		
-		return false
-	end
 	
 	if setup:IsEmpty() then
 		if not auto then
 			WW.Log(GetString(WW_MSG_EMPTYSETUP), WW.LOGTYPES.INFO)
 		end
-		
-		return nil
+		return false
 	end
 	
 	if WW.settings.auto.gear then WW.LoadGear(setup) end
@@ -51,8 +43,8 @@ function WW.LoadSetup(zone, pageId, index, auto)
 	end
 	
 	local pageName = WW.pages[zone.tag][pageId].name
-	WW.gui.panel.upperLabel:SetText(zone.tag .. " / " .. pageName)
-	WW.gui.panel.lowerLabel:SetText(string.format("|c%s%s|r", logColor, setup:GetName()))
+	--WW.gui.panel.upperLabel:SetText(zone.tag .. " / " .. pageName)
+	--WW.gui.panel.lowerLabel:SetText(string.format("|c%s%s|r", logColor, setup:GetName()))
 	
 	WW.Log(logMessage, logColor, "FFFFFF", setup:GetName(), zone.name)
 	
@@ -75,7 +67,7 @@ end
 function WW.SaveSetup(zone, pageId, index, skip)
 	local setup = Setup:FromStorage(zone.tag, pageId, index)
 	
-	if not skip and WW.settings.overwriteWarning and not setup:IsEmpty() then
+	if not skip and not setup:IsEmpty() and WW.settings.overwriteWarning then
 		WW.gui.ShowConfirmationDialog("OverwriteConfirmation", string.format(GetString(WW_OVERWRITESETUP_WARNING), setup:GetName()),
 		function()
 			WW.SaveSetup(zone, pageId, index, true)
@@ -90,8 +82,6 @@ function WW.SaveSetup(zone, pageId, index, skip)
 	
 	setup:ToStorage(zone.tag, pageId, index)
 	
-	WW.gui.RefreshSetup(zone, pageId, index)
-	
 	WW.Log(GetString(WW_MSG_SAVESETUP), WW.LOGTYPES.NORMAL, "FFFFFF", setup:GetName())
 end
 
@@ -99,11 +89,22 @@ function WW.DeleteSetup(zone, pageId, index)
 	local setup = Setup:FromStorage(zone.tag, pageId, index)
 	local setupName = setup:GetName()
 	
-	setup:Clear()
-	setup:ToStorage(zone.tag, pageId, index)
-	
+	if WW.setups[zone.tag]
+		and WW.setups[zone.tag][pageId]
+		and WW.setups[zone.tag][pageId][index] then
+		
+		table.remove(WW.setups[zone.tag][pageId], index)
+	end
+		
 	WW.markers.BuildGearList()
-	WW.gui.RefreshSetup(zone, pageId, index)
+	WW.conditions.LoadConditions()
+	
+	if zone.tag == WW.selection.zone.tag
+		and pageId == WW.selection.pageId then
+		
+		WW.gui.BuildPage(zone, pageId)
+	end
+	
 	WW.Log(GetString(WW_MSG_DELETESETUP), WW.LOGTYPES.NORMAL, "FFFFFF", setupName)
 end
 
@@ -502,6 +503,23 @@ function WW.SetupIterator()
 	end
 end
 
+function WW.PageIterator(zone, pageId)
+	local setupList = {}
+	if WW.setups[zone.tag] and WW.setups[zone.tag][pageId] then
+		for index, setup in ipairs(WW.setups[zone.tag][pageId]) do
+			if setup then
+				table.insert(setupList, {zone = zone, pageId = pageId, index = index, setup = setup})
+			end
+		end
+	end
+	
+	local i = 0
+	return function()
+		i = i + 1
+		return setupList[i]
+	end
+end
+
 function WW.OnBossChange(_, isBoss, manualBossName)
 	if IsUnitInCombat("player") and not manualBossName then
 		return
@@ -558,8 +576,7 @@ function WW.OnBossChange(_, isBoss, manualBossName)
 	--d("BOSS: " .. bossName)
 	
 	bossLastName = bossName
-	zo_callLater(function ()
-		WW.conditions.CheckBossChange(bossName)
+	zo_callLater(function()
 		WW.currentZone.OnBossChange(bossName)
 	end, 500)
 end
@@ -590,26 +607,16 @@ function WW.OnZoneChange(_, _)
 		-- change ui if loaded
 		WW.gui.OnZoneSelect(WW.currentZone)
 		
-		local setup = Setup:FromStorage(WW.currentZone.tag, WW.selection.pageId, 1)
-		
 		if WW.settings.autoEquipSetups
 			and not isFirstZoneAfterReload
-			and WW.currentZone.tag ~= "PVP"
-			and not setup:IsDisabled() then
-			
-			-- trash setups in dungeons
-			if WW.currentZone.tag == "GEN" then
-				if WW.settings.substitute.dungeons and GetCurrentZoneDungeonDifficulty() > 0 then
-					WW.LoadSetupSubstitute(1)
-					bossLastName = ""
-				end
-				
-				return
-			end
+			and WW.currentZone.tag ~= "PVP" then
 			
 			-- equip first setup
-			local firstSetupName = WW.currentZone.bosses[1].name
-			WW.OnBossChange(_, false, firstSetupName)
+			local firstSetupName = WW.currentZone.bosses[1]
+			if firstSetupName then
+				d(firstSetupName.name)
+				WW.OnBossChange(_, false, firstSetupName.name)
+			end
 		end
 	end, 250)
 end
@@ -650,7 +657,7 @@ function WW.RegisterEvents()
 	-- update pending set name in panel after combat
 	EVENT_MANAGER:RegisterForEvent(WW.name, EVENT_PLAYER_COMBAT_STATE, function(_, inCombat)
 		if not inCombat and pendingSetup then
-			WW.gui.panel.lowerLabel:SetText(pendingSetup)
+			--WW.gui.panel.lowerLabel:SetText(pendingSetup)
 			pendingSetup = nil
 		end
 	end)
@@ -661,7 +668,7 @@ end
 
 function WW.Init()
 	WW.lookupZones = {}
-	for i, zone in pairs(WW.zones) do
+	for _, zone in pairs(WW.zones) do
 		zone.lookupBosses = {}
 		for i, boss in ipairs(zone.bosses) do
 			zone.lookupBosses[boss.name] = i
@@ -687,6 +694,7 @@ function WW.Init()
 		
 	WW.currentZone = WW.zones["GEN"]
 	WW.currentZoneId = 0
+	
 	WW.selection = {
 		zone = WW.zones["GEN"],
 		pageId = 1

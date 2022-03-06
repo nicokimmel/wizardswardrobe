@@ -5,7 +5,6 @@ local HOF = WW.zones["HOF"]
 HOF.name = GetString(WW_HOF_NAME)
 HOF.tag = "HOF"
 HOF.icon = "/WizardsWardrobe/assets/zones/hof.dds"
-HOF.legacyIcon = "/esoui/art/treeicons/tutorial_idexicon_morrowind_up.dds"
 HOF.priority = 5
 HOF.id = 975
 
@@ -152,18 +151,5 @@ function HOF.OnCombatChange(_, inCombat)
 end
 
 function HOF.OnBossChange(bossName)
-	if #bossName == 0 then
-		bossName = GetString(WW_TRASH)
-	end
-	
-	local pageId = WW.GetSelectedPage(HOF)
-	local index = HOF.lookupBosses[bossName]
-	
-	local loaded = WW.LoadSetup(HOF, pageId, index, true)
-	
-	-- load substitute setup
-	if loaded == nil then
-		index = 2
-		WW.LoadSetupSubstitute(index)
-	end
+	WW.conditions.OnBossChange(bossName)
 end

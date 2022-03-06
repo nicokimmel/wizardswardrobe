@@ -8,20 +8,14 @@ function WWP.Init()
 	WWP.name = WW.name .. "Preview"
 	WWP.CreatePreviewWindow()
 	
-	LibChatMessage:RegisterCustomChatLink(WW.PREVIEW_LINK_TYPE, function(linkStyle, linkType, data, displayText)
-		return ZO_LinkHandler_CreateLinkWithoutBrackets(displayText, nil, WW.PREVIEW_LINK_TYPE, data)
+	LibChatMessage:RegisterCustomChatLink(WW.LINK_TYPES.PREVIEW, function(linkStyle, linkType, data, displayText)
+		return ZO_LinkHandler_CreateLinkWithoutBrackets(displayText, nil, WW.LINK_TYPES.PREVIEW, data)
 	end)
 	LINK_HANDLER:RegisterCallback(LINK_HANDLER.LINK_MOUSE_UP_EVENT, WWP.HandleClickEvent)
 	LINK_HANDLER:RegisterCallback(LINK_HANDLER.LINK_CLICKED_EVENT, WWP.HandleClickEvent)
 	
 	WWP.chatCache = {}
 	EVENT_MANAGER:RegisterForEvent(WWP.name, EVENT_CHAT_MESSAGE_CHANNEL, WWP.OnChatMessage)
-	
-	SCENE_MANAGER:RegisterCallback("SceneStateChanged", function(scene, oldState, newState)
-		if scene:GetName() ~= "hud" and scene:GetName() ~= "hudui" then return end
-		if newState ~= SCENE_SHOWING then return end
-		WWP.window:SetHidden(true)
-	end)
 end
 
 function WWP.CreatePreviewWindow()
@@ -34,6 +28,8 @@ function WWP.CreatePreviewWindow()
 	window:SetMouseEnabled(true)
 	window:SetMovable(false)
 	window:SetHidden(true)
+	
+	table.insert(WW.gui.dialogList, window)
 	
 	local fullscreenBackground = WINDOW_MANAGER:CreateControlFromVirtual(window:GetName() .. "BG", window, "ZO_DefaultBackdrop")
 	fullscreenBackground:SetAlpha(0.6)
@@ -504,12 +500,12 @@ function WWP.PrintPreviewString(zone, pageId, index)
 		linkText = linkText:sub(1, 20)
 	end
 	
-	local previewLink = ZO_LinkHandler_CreateLink(linkText, nil, WW.PREVIEW_LINK_TYPE, linkData)
+	local previewLink = ZO_LinkHandler_CreateLink(linkText, nil, WW.LINK_TYPES.PREVIEW, linkData)
 	CHAT_SYSTEM.textEntry:InsertLink(previewLink)
 end
 
 function WWP.OnChatMessage(_, channelType, fromName, text, isCustomerService, fromDisplayName)
-	local style, data, name = string.match(text, "||H(%d):" .. WW.PREVIEW_LINK_TYPE .. ":(.-)||h(.-)||h")
+	local style, data, name = string.match(text, "||H(%d):" .. WW.LINK_TYPES.PREVIEW .. ":(.-)||h(.-)||h")
 	if data and name then
 		table.insert(WWP.chatCache, {
 			data = data,
@@ -531,7 +527,7 @@ function WWP.GetSenderFromCache(dataString)
 end
 
 function WWP.HandleClickEvent(rawLink, mouseButton, linkText, linkStyle, linkType, dataString)
-	if linkType ~= WW.PREVIEW_LINK_TYPE then return end
+	if linkType ~= WW.LINK_TYPES.PREVIEW then return end
 	
 	if mouseButton == MOUSE_BUTTON_INDEX_LEFT then
 		WWP.ShowPreviewFromString(dataString, linkText)
