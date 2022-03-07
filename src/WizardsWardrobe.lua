@@ -34,18 +34,11 @@ function WW.LoadSetup(zone, pageId, index, auto)
 	if WW.settings.auto.cp then  WW.LoadCP(setup) end
 	if WW.settings.auto.food then  WW.EatFood(setup) end
 	
-	local logColor = WW.LOGTYPES.NORMAL
-	local logMessage = GetString(WW_MSG_LOADSETUP)
-	if IsUnitInCombat("player") then
-		logColor = WW.LOGTYPES.INFO
-		logMessage = GetString(WW_MSG_LOADINFIGHT)
-		pendingSetup = setup:GetName()
-	end
-	
 	local pageName = WW.pages[zone.tag][pageId].name
-	--WW.gui.panel.upperLabel:SetText(zone.tag .. " / " .. pageName)
-	--WW.gui.panel.lowerLabel:SetText(string.format("|c%s%s|r", logColor, setup:GetName()))
+	WW.gui.SetPanelText(zone.tag, pageName, setup:GetName())
 	
+	local logMessage = IsUnitInCombat("player") and GetString(WW_MSG_LOADINFIGHT) or GetString(WW_MSG_LOADSETUP)
+	local logColor = IsUnitInCombat("player") and WW.LOGTYPES.INFO or WW.LOGTYPES.NORMAL
 	WW.Log(logMessage, logColor, "FFFFFF", setup:GetName(), zone.name)
 	
 	setup:ExecuteCode(setup, zone, pageId, index, auto)
@@ -651,14 +644,6 @@ function WW.RegisterEvents()
 			zo_callLater(function()
 				wipeChangeCooldown = false
 			end, 15000)
-		end
-	end)
-	
-	-- update pending set name in panel after combat
-	EVENT_MANAGER:RegisterForEvent(WW.name, EVENT_PLAYER_COMBAT_STATE, function(_, inCombat)
-		if not inCombat and pendingSetup then
-			--WW.gui.panel.lowerLabel:SetText(pendingSetup)
-			pendingSetup = nil
 		end
 	end)
 	

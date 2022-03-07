@@ -1,5 +1,26 @@
 <GuiXml>
 	<Controls>
+		<TopLevelControl name="WizardsWardrobePanel" mouseEnabled="true" movable="false" clampedToScreen="true" hidden="true">
+			<Dimensions x="245" y="70"/>
+			<OnMoveStop>WizardsWardrobe.gui.OnPanelMove()</OnMoveStop>
+			<Controls>
+				<Backdrop name="$(parent)BG" inherits="ZO_MinorMungeBackdrop_SemiTransparentBlack" alpha="0.5"> <AnchorFill/> </Backdrop>
+				<Texture name="$(parent)Icon" textureFile="/WizardsWardrobe/assets/icon64.dds" mouseEnabled="true">
+					<Dimensions x="46" y="46"/>
+					<Anchor point="LEFT" relativeTo="$(parent)" relativePoint="LEFT" offsetX="10"/>
+				</Texture>
+				<Label name="$(parent)TopLabel" font="ZoFontGameBold" verticalAlignment="TEXT_ALIGN_CENTER">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="60" offsetY="7"/>
+				</Label>
+				<Label name="$(parent)MiddleLabel" font="ZoFontGameBold" verticalAlignment="TEXT_ALIGN_CENTER">
+					<Anchor point="LEFT" relativeTo="$(parent)" relativePoint="LEFT" offsetX="60"/>
+				</Label>
+				<Label name="$(parent)BottomLabel" font="ZoFontGameBold" verticalAlignment="TEXT_ALIGN_CENTER">
+					<Anchor point="BOTTOMLEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="60" offsetY="-7"/>
+				</Label>
+			</Controls>
+		</TopLevelControl>
+		
 		<TopLevelControl name="WizardsWardrobeWindow" mouseEnabled="true" movable="true" hidden="true">
 			<Dimensions x="358" y="665"/>
 			<DimensionConstraints minX="358" minY="358" maxX="AUTO_SIZE" maxY="AUTO_SIZE"/>
@@ -8,9 +29,7 @@
 			<OnResizeStart>WizardsWardrobe.gui.OnWindowResize("start")</OnResizeStart>
 			<OnResizeStop>WizardsWardrobe.gui.OnWindowResize("stop")</OnResizeStop>
 			<Controls>
- 
 				<Backdrop name="$(parent)BG" inherits="ZO_DefaultBackdrop" alpha="0.95"> <AnchorFill/> </Backdrop>
-				
 				<Control name="$(parent)Title">
 					<Dimensions x="AUTO_SIZE" y="50"/>
 					<Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP"/>
@@ -32,7 +51,6 @@
 						</Button>
 					</Controls>
 				</Control>
-				
 				<Control name="$(parent)TopMenu">
 					<Dimensions x="340" y="50"/>
 					<Anchor point="TOP" relativeTo="$(parent)Title" relativePoint="BOTTOM"/>
@@ -56,12 +74,10 @@
 						</Button>
 					</Controls>
 				</Control>
-				
 				<Texture name="$(parent)TopDivider" textureFile="/esoui/art/miscellaneous/centerscreen_topdivider.dds">
 					<Dimensions x="360" y="2"/>
 					<Anchor point="TOP" relativeTo="$(parent)TopMenu" relativePoint="BOTTOM"/>
 				</Texture>
-				
 				<Control name="$(parent)PageMenu">
 					<Dimensions x="AUTO_SIZE" y="40"/>
 					<Anchor point="TOP" relativeTo="$(parent)TopDivider" relativePoint="BOTTOM"/>
@@ -107,7 +123,6 @@
 						</Button>
 					</Controls>
 				</Control>
-				
 				<Control name="$(parent)SetupList" inherits="ZO_ScrollContainer">
 					<Dimensions x="AUTO_SIZE" y="AUTO_SIZE"/>
 					<Anchor point="TOP" relativeTo="$(parent)PageMenu" relativePoint="BOTTOM"/>
@@ -115,12 +130,10 @@
 						<!-- SETUP BOXES -->
 					</Controls>
 				</Control>
-				
 				<Texture name="$(parent)BottomDivider" textureFile="/esoui/art/miscellaneous/centerscreen_topdivider.dds">
 					<Dimensions x="360" y="2"/>
 					<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOM" offsetY="-32"/>
 				</Texture>
-				
 				<Control name="$(parent)BottomMenu">
 					<Dimensions x="AUTO_SIZE" y="36"/>
 					<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOM"/>
@@ -174,17 +187,14 @@
 			<Anchor point="CENTER" relativeTo="GUI_ROOT" relativePoint="CENTER"/>
 			<Controls>
 				<Backdrop name="$(parent)BG" inherits="ZO_DefaultBackdrop" alpha="0.7"></Backdrop>
-				
 				<Control name="$(parent)Dialog" mouseEnabled="true">
 					<Dimensions x="380" y="500"/>
 					<Anchor point="CENTER" relativeTo="$(parent)" relativePoint="CENTER"/>
 					<Controls>
 						<Backdrop name="$(parent)BG" inherits="ZO_DefaultBackdrop" alpha="0.95"> <AnchorFill/> </Backdrop>
-						
 						<Label name="$(parent)Title" font="ZoFontWinH1" verticalAlignment="TEXT_ALIGN_CENTER" horizontalAlignment="TEXT_ALIGN_CENTER">
 							<Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP" offsetY="25"/>
 						</Label>
-						
 						<Button name="$(parent)Hide" inherits="ZO_ButtonBehaviorClickSound">
 							<Dimensions x="24" y="24"/>
 							<Anchor point="TOPRIGHT" relativeTo="$(parent)" relativePoint="TOPRIGHT" offsetX="-5" offsetY="5"/>
@@ -193,7 +203,6 @@
 								mouseOver="/esoui/art/buttons/decline_over.dds"
 								disabled="/esoui/art/buttons/decline_disabled.dds"/>
 						</Button>
-						
 						<Control name="$(parent)Name">
 							<Dimensions x="280" y="50"/>
 							<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="50" offsetY="85"/>
@@ -215,7 +224,6 @@
 								</EditBox>
 							</Controls>
 						</Control>
-						
 						<Control name="$(parent)Condition">
 							<Dimensions x="280" y="100"/>
 							<Anchor point="TOP" relativeTo="$(parent)Name" relativePoint="BOTTOM" offsetY="25"/>
@@ -250,7 +258,6 @@
 								</Control>
 							</Controls>
 						</Control>
-						
 						<Button name="$(parent)Save" inherits="ZO_DefaultButton">
 							<Dimensions x="150" y="30"/>
 							<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOM" offsetY="-25"/>
@@ -264,7 +271,6 @@
 			<Anchor point="CENTER" relativeTo="GUI_ROOT" relativePoint="CENTER"/>
 			<Controls>
 				<Backdrop name="$(parent)BG" inherits="ZO_DefaultBackdrop" alpha="0.7"></Backdrop>
-				
 				<Control name="$(parent)Dialog" mouseEnabled="true">
 					<Dimensions x="400" y="500"/>
 					<Anchor point="CENTER" relativeTo="$(parent)" relativePoint="CENTER"/>
@@ -274,7 +280,6 @@
 						<Label name="$(parent)Title" font="ZoFontWinH1" verticalAlignment="TEXT_ALIGN_CENTER" horizontalAlignment="TEXT_ALIGN_CENTER">
 							<Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP" offsetY="25"/>
 						</Label>
-						
 						<Button name="$(parent)Hide" inherits="ZO_ButtonBehaviorClickSound">
 							<Dimensions x="24" y="24"/>
 							<Anchor point="TOPRIGHT" relativeTo="$(parent)" relativePoint="TOPRIGHT" offsetX="-5" offsetY="5"/>
@@ -283,7 +288,6 @@
 								mouseOver="/esoui/art/buttons/decline_over.dds"
 								disabled="/esoui/art/buttons/decline_disabled.dds"/>
 						</Button>
-						
 						<Control name="$(parent)List" inherits="ZO_ScrollList">
 							<Dimensions x="200" y="300"/>
 							<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="50" offsetY="95"/>
@@ -294,7 +298,6 @@
 								</Backdrop>
 							</Controls>
 						</Control>
-						
 						<Button name="$(parent)Up" inherits="ZO_ButtonBehaviorClickSound">
 							<Dimensions x="42" y="42"/>
 							<Anchor point="LEFT" relativeTo="$(parent)List" relativePoint="RIGHT" offsetX="50" offsetY="-50"/>
@@ -311,7 +314,6 @@
 								mouseOver="/esoui/art/worldmap/mapnav_downarrow_over.dds"
 								disabled="/esoui/art/worldmap/mapnav_downarrow_disabled.dds"/>
 						</Button>
-						
 						<Button name="$(parent)Save" inherits="ZO_DefaultButton">
 							<Dimensions x="150" y="30"/>
 							<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOM" offsetY="-25"/>

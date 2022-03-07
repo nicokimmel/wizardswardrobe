@@ -46,7 +46,6 @@ function WWM.InitSV()
 		},
 		printMessages = true,
 		overwriteWarning = true,
-		legacySelection = false,
 		inventoryMarker = true,
 		unequipEmpty = false,
 		chargeWeapons = false,
@@ -95,14 +94,6 @@ function WWM.InitAM()
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_LEGACYSELECTION),
-			getFunc = function() return WW.settings.legacySelection end,
-			setFunc = function(value) WW.settings.legacySelection = value end,
-			tooltip = GetString(WW_MENU_LEGACYSELECTION_TT),
-			requiresReload = true,
-		},
-		{
-			type = "checkbox",
 			name = GetString(WW_MENU_INVENTORYMARKER),
 			getFunc = function() return WW.settings.inventoryMarker end,
 			setFunc = function(value) WW.settings.inventoryMarker = value end,
@@ -124,8 +115,9 @@ function WWM.InitAM()
 		{
 			type = "button",
 			name = GetString(WW_MENU_RESETUI),
-			func = WW.gui.ResetWindow,
+			func = WW.gui.ResetUI,
 			warning = GetString(WW_MENU_RESETUI_TT),
+			requiresReload = true,
 		},
 		{
 			type = "divider",
@@ -209,7 +201,7 @@ function WWM.InitAM()
 			getFunc = function() return not WW.settings.panel.hidden end,
 			setFunc = function(value)
 						WW.settings.panel.hidden = not value
-						WW.gui.panel.fragment:Refresh()
+						WizardsWardrobePanel.fragment:Refresh()
 					  end,
 			tooltip = GetString(WW_MENU_PANEL_ENABLE_TT),
 		},
@@ -230,7 +222,7 @@ function WWM.InitAM()
 			getFunc = function() return WW.settings.panel.locked end,
 			setFunc = function(value)
 						WW.settings.panel.locked = value
-						WW.gui.panel:SetMovable(not value)
+						WizardsWardrobePanel:SetMovable(not value)
 					  end,
 			disabled = function() return WW.settings.panel.hidden end,
 		},

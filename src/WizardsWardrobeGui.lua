@@ -4,6 +4,14 @@ local WW = WizardsWardrobe
 WW.gui = WW.gui or {}
 local WWG = WW.gui
 
+local PANEL_WIDTH = 245
+local PANEL_HEIGHT = 70
+local PANEL_WIDTH_MINI = PANEL_WIDTH - 70
+local PANEL_HEIGHT_MINI = PANEL_HEIGHT - 30
+
+local PANEL_DEFAULT_TOP = ActionButton8:GetTop()  + 25
+local PANEL_DEFAULT_LEFT = ActionButton8:GetLeft() + ActionButton8:GetWidth() + 2
+
 local WINDOW_WIDTH = 358
 local WINDOW_HEIGHT = 665
 
@@ -24,6 +32,7 @@ function WWG.Init()
 	WWG.SetSceneManagement()
 	WWG.SetDialogManagement()
 	
+	WWG.SetupPanel()
 	WWG.SetupWindow()
 	WWG.SetupPageMenu()
 	WWG.SetupSetupList()
@@ -35,6 +44,11 @@ function WWG.Init()
 	WWG.SetupArrangeDialog()
 	
 	zo_callLater(function() WWG.OnWindowResize("stop") end, 250)
+end
+
+function WWG.RegisterEvents()
+	EVENT_MANAGER:RegisterForEvent(WWG.name, EVENT_PLAYER_DEAD, function() WizardsWardrobePanel.fragment:Refresh() end)
+	EVENT_MANAGER:RegisterForEvent(WWG.name, EVENT_PLAYER_ALIVE, function() WizardsWardrobePanel.fragment:Refresh() end)
 end
 
 function WWG.HandleFirstStart()
@@ -192,19 +206,16 @@ function WWG.SetDialogManagement()
 	end)
 end
 
-function WWG.SetupWindow()
-	WWG.fragment = ZO_SimpleSceneFragment:New(WizardsWardrobeWindow)
-	WizardsWardrobeWindow:SetDimensions(WW.settings.window.wizard.width, WW.settings.window.wizard.height)
-	WizardsWardrobeWindow:SetResizeHandleSize(8)
-	
-	WizardsWardrobeWindowTitleLabel:SetText(WW.displayName:upper())
-	
-	if os.date("%d%m") == "0104" then
-		WizardsWardrobeWindow:SetTransformRotationZ(math.rad(180))
-	end
-end
-
-function WWG.ResetWindow()
+function WWG.ResetUI()
+	WW.settings.panel = {
+		top = PANEL_DEFAULT_TOP,
+		left = PANEL_DEFAULT_LEFT,
+		locked = true,
+		hidden = false,
+		setup = true,
+	}
+	WizardsWardrobePanel:ClearAnchors()
+	WizardsWardrobePanel:SetAnchor(TOPLEFT, GUI_ROOT, TOPLEFT, PANEL_DEFAULT_LEFT, PANEL_DEFAULT_TOP)
 	WW.settings.window = {
 		wizard = {
 			width = WINDOW_WIDTH,
@@ -216,6 +227,98 @@ function WWG.ResetWindow()
 	WizardsWardrobeWindow:SetWidth(WINDOW_WIDTH)
 	WizardsWardrobeWindow:SetHeight(WINDOW_HEIGHT)
 	WWG.OnWindowResize("stop")
+end
+
+function WWG.SetupPanel()
+	WizardsWardrobePanel.fragment = ZO_SimpleSceneFragment:New(WizardsWardrobePanel)
+	WizardsWardrobePanel.fragment:SetConditional(function()
+		return not WW.settings.panel.hidden and not IsUnitDead("player")
+	end)
+	HUD_SCENE:AddFragment(WizardsWardrobePanel.fragment)
+	HUD_UI_SCENE:AddFragment(WizardsWardrobePanel.fragment)
+	zo_callLater(function() WizardsWardrobePanel.fragment:Refresh() end, 1)
+	
+	WizardsWardrobePanel:SetDrawLayer(2)
+	
+	WizardsWardrobePanelIcon:SetHandler("OnMouseEnter", function(self)
+		self:SetDesaturation(0.4)
+	end)
+	WizardsWardrobePanelIcon:SetHandler("OnMouseExit", function(self)
+		self:SetDesaturation(0)
+	end)
+	WizardsWardrobePanelIcon:SetHandler("OnMouseDown", function(self)
+		self:SetDesaturation(0.8)
+	end)
+	WizardsWardrobePanelIcon:SetHandler("OnMouseUp", function(self, mouseButton)
+		if MouseIsOver(self, 0, 0, 0, 0)
+			and mouseButton == MOUSE_BUTTON_INDEX_LEFT then
+			
+			SLASH_COMMANDS["/wizard"]()
+			self:SetDesaturation(0.4)
+		else
+			self:SetDesaturation(0)
+		end
+	end)
+	
+	WizardsWardrobePanelTopLabel:SetText(WW.displayName:upper())
+	WizardsWardrobePanelMiddleLabel:SetText("Version " .. WW.version)
+	WizardsWardrobePanelBottomLabel:SetText("@ownedbynico")
+	
+	if WW.settings.panel and WW.settings.panel.mini then
+		WizardsWardrobePanel:SetDimensions(PANEL_WIDTH_MINI, PANEL_HEIGHT_MINI)
+		WizardsWardrobePanelBG:SetHidden(true)
+		WizardsWardrobePanelIcon:SetHidden(true)
+		WizardsWardrobePanelTopLabel:SetHidden(true)
+		WizardsWardrobePanelMiddleLabel:SetAnchor(TOPLEFT, WizardsWardrobePanel, TOPLEFT)
+		WizardsWardrobePanelBottomLabel:SetAnchor(BOTTOMLEFT, WizardsWardrobePanel, BOTTOMLEFT)
+	end
+	
+	if WW.settings.panel and WW.settings.panel.top and WW.settings.panel.setup then
+		WizardsWardrobePanel:SetAnchor(TOPLEFT, GUI_ROOT, TOPLEFT, WW.settings.panel.left, WW.settings.panel.top)
+		WizardsWardrobePanel:SetMovable(not WW.settings.panel.locked)
+	else
+		WW.settings.panel = {
+			top = PANEL_DEFAULT_TOP,
+			left = PANEL_DEFAULT_LEFT,
+			locked = true,
+			hidden = false,
+			setup = true,
+		}
+		WizardsWardrobePanel:SetAnchor(TOPLEFT, GUI_ROOT, TOPLEFT, PANEL_DEFAULT_LEFT, PANEL_DEFAULT_TOP)
+	end
+end
+
+function WWG.OnPanelMove()
+	WW.settings.panel.top = WizardsWardrobePanel:GetTop()
+	WW.settings.panel.left = WizardsWardrobePanel:GetLeft()
+end
+
+function WWG.SetPanelText(zoneTag, pageName, setupName)
+	local middleText = string.format("%s / %s", zoneTag, pageName)
+	WizardsWardrobePanelMiddleLabel:SetText(middleText)
+	
+	local logColor = IsUnitInCombat("player") and WW.LOGTYPES.INFO or WW.LOGTYPES.NORMAL
+	local middleText = string.format("|c%s%s|r", logColor, setupName)
+	WizardsWardrobePanelBottomLabel:SetText(middleText)
+	
+	if IsUnitInCombat("player") then
+		WW.queue.Push(function()
+			middleText = string.format("|c%s%s|r", WW.LOGTYPES.NORMAL, setupName)
+			WizardsWardrobePanelBottomLabel:SetText(middleText)
+		end)
+	end
+end
+
+function WWG.SetupWindow()
+	WizardsWardrobeWindow.fragment = ZO_SimpleSceneFragment:New(WizardsWardrobeWindow)
+	WizardsWardrobeWindow:SetDimensions(WW.settings.window.wizard.width, WW.settings.window.wizard.height)
+	WizardsWardrobeWindow:SetResizeHandleSize(8)
+	
+	WizardsWardrobeWindowTitleLabel:SetText(WW.displayName:upper())
+	
+	if os.date("%d%m") == "0104" then
+		WizardsWardrobeWindow:SetTransformRotationZ(math.rad(180))
+	end
 end
 
 function WWG.OnWindowMove()
