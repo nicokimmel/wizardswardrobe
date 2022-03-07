@@ -19,14 +19,5 @@ function GEN.Reset()
 end
 
 function GEN.OnBossChange(bossName)
-	-- load substitute setup
-	if WW.settings.substitute.dungeons and GetCurrentZoneDungeonDifficulty() > 0
-		or WW.settings.substitute.overland and GetCurrentZoneDungeonDifficulty() == 0 then
-		
-		index = 2
-		if bossName == "" then
-			index = 1
-		end
-		WW.LoadSetupSubstitute(index)
-	end
+	WW.conditions.OnBossChange(bossName)
 end

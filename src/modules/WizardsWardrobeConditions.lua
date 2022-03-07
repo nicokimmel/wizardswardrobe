@@ -45,16 +45,33 @@ function WWC.LoadConditions()
 end
 
 function WWC.OnBossChange(bossName)
+	local substitute = true
 	if #bossName == 0 then
 		local entry = WWC.trashList[WWC.cache.boss] or WWC.trashList[WW.CONDITIONS.EVERYWHERE]
 		if entry and WW.settings.autoEquipSetups then
-			WW.LoadSetup(entry.zone, entry.pageId, entry.index, true)
+			substitute = WW.LoadSetup(entry.zone, entry.pageId, entry.index, true)
 		end
 	else
 		local entry = WWC.bossList[bossName]
 		if entry and WW.settings.autoEquipSetups then
-			WW.LoadSetup(entry.zone, entry.pageId, entry.index, true)
+			substitute = WW.LoadSetup(entry.zone, entry.pageId, entry.index, true)
 		end
 		WWC.cache.boss = bossName
 	end
+	if substitute then
+		WWC.LoadSubstitute(bossName)
+	end
+end
+
+function WWC.LoadSubstitute(bossName)
+	if WW.currentZone.tag == "GEN"
+		and not (WW.settings.substitute.dungeons and GetCurrentZoneDungeonDifficulty() > 0
+		or WW.settings.substitute.overland and GetCurrentZoneDungeonDifficulty() == 0) then
+		
+			d("nooope")
+		return
+	end
+	local index = 2
+	if #bossName == 0 then index = 1 end
+	WW.LoadSetupSubstitute(index)
 end

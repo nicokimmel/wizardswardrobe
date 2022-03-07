@@ -117,7 +117,6 @@ function WWM.InitAM()
 			name = GetString(WW_MENU_RESETUI),
 			func = WW.gui.ResetUI,
 			warning = GetString(WW_MENU_RESETUI_TT),
-			requiresReload = true,
 		},
 		{
 			type = "divider",
