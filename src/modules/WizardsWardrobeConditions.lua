@@ -45,7 +45,7 @@ function WWC.LoadConditions()
 end
 
 function WWC.OnBossChange(bossName)
-	local substitute = true
+	local substitute = false
 	if #bossName == 0 then
 		local entry = WWC.trashList[WWC.cache.boss] or WWC.trashList[WW.CONDITIONS.EVERYWHERE]
 		if entry and WW.settings.autoEquipSetups then
@@ -58,7 +58,7 @@ function WWC.OnBossChange(bossName)
 		end
 		WWC.cache.boss = bossName
 	end
-	if substitute then
+	if not substitute then
 		WWC.LoadSubstitute(bossName)
 	end
 end
