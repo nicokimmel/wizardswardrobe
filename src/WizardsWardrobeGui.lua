@@ -460,7 +460,7 @@ function WWG.OnZoneSelect(zone)
 end
 
 function WWG.SetupPageMenu()
-	WizardsWardrobeWindowPageMenuWarning:SetHandler("OnClicked", function(self, mouseButton)
+	WizardsWardrobeWindowPageMenuWarning:SetHandler("OnMouseUp", function(self, mouseButton)
 		if mouseButton == MOUSE_BUTTON_INDEX_LEFT then
 			local missingGear = WW.CheckGear(WW.selection.zone, WW.selection.pageId)
 			if #missingGear > 0 then

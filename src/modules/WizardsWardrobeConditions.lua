@@ -67,8 +67,6 @@ function WWC.LoadSubstitute(bossName)
 	if WW.currentZone.tag == "GEN"
 		and not (WW.settings.substitute.dungeons and GetCurrentZoneDungeonDifficulty() > 0
 		or WW.settings.substitute.overland and GetCurrentZoneDungeonDifficulty() == 0) then
-		
-			d("nooope")
 		return
 	end
 	local index = 2
