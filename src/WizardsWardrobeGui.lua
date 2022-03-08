@@ -1050,6 +1050,11 @@ function WWG.BuildPage(zone, pageId)
 		local setup = Setup:FromStorage(zone.tag, pageId, entry.index)
 		local control = WWG.AquireSetupControl(setup)
 	end
+	if zone.tag == "SUB" and #WWG.setupTable == 0 then
+		WWG.CreateDefaultSetups(zone, pageId)
+		WWG.BuildPage(zone, pageId)
+		return
+	end
 	WWG.RefreshPage()
 	WWG.OnWindowResize("stop")
 end
