@@ -13,7 +13,6 @@ local cpCooldown = 0
 local wipeChangeCooldown = false
 local bossLastName = "WW"
 local blockTrash = nil
-local pendingSetup = nil
 
 function WW.LoadSetup(zone, pageId, index, auto)
 	if not zone or not pageId or not index then
