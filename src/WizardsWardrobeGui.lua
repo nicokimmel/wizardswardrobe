@@ -750,6 +750,7 @@ function WWG.AquireSetupControl(setup)
 	end)
 	setupControl.save:SetHandler("OnClicked", function(self)
 		WW.SaveSetup(WW.selection.zone, WW.selection.pageId, index)
+		setup = Setup:FromStorage(WW.selection.zone.tag, WW.selection.pageId, index)
 		WWG.RefreshSetup(setupControl, setup)
 	end)
 	setupControl.preview:SetHandler("OnClicked", function(self)
@@ -1081,12 +1082,10 @@ function WWG.CreateDefaultSetups(zone, pageId)
 	for i, boss in ipairs(zone.bosses) do
 		local setup = Setup:FromStorage(zone.tag, pageId, i)
 		setup:SetName(boss.displayName or boss.name)
-		
 		setup:SetCondition({
 			boss = boss.name,
 			trash = (boss.name == GetString(WW_TRASH)) and WW.CONDITIONS.EVERYWHERE or nil
 		})
-		
 		setup:ToStorage(zone.tag, pageId, i)
 	end
 end
