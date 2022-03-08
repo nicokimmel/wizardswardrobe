@@ -606,7 +606,6 @@ function WW.OnZoneChange(_, _)
 			-- equip first setup
 			local firstSetupName = WW.currentZone.bosses[1]
 			if firstSetupName then
-				d(firstSetupName.name)
 				WW.OnBossChange(_, false, firstSetupName.name)
 			end
 		end

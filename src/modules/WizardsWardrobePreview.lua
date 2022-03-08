@@ -340,8 +340,6 @@ function WWP.ShowPreviewFromString(dataString, setupName)
 				local function onHover()
 					InitializeTooltip(ItemTooltip, WWP.preview, RIGHT, -12, 0, LEFT)
 					ItemTooltip:SetLink(itemLink)
-					d(itemLink)
-					d(traitId)
 				end
 				local function OnExit()
 					ClearTooltip(ItemTooltip)
