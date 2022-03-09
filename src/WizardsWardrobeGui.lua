@@ -710,6 +710,7 @@ function WWG.AquireSetupControl(setup)
 	local index = #WWG.setupTable
 	
 	setupControl:SetHidden(false)
+	setupControl.i = index
 	
 	setupControl.name:SetHandler("OnMouseEnter", function(self)
 		ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(WW_BUTTON_LABEL))
@@ -1205,7 +1206,8 @@ end
 
 function WWG.RefreshSetup(control, setup)
 	local color = (setup:IsDisabled() and 0.3 or 1)
-	control.name:SetText(setup:GetName():upper())
+	local name = string.format("|cC5C29E%s|r %s", control.i, setup:GetName():upper())
+	control.name:SetText(name)
 	control.name:SetColor(color, color, color, 1)
 	
 	for hotbarCategory = 0, 1 do
@@ -1424,7 +1426,8 @@ function WWG.ShowModifyDialog(setupControl, setup, index)
 	WizardsWardrobeModifyDialogSave:SetHandler("OnClicked", function(self)
 		local newName = WizardsWardrobeModifyDialogNameEdit:GetText()
 		if #newName == 0 then newName = GetString(WW_UNNAMED) end
-		setupControl.name:SetText(newName:upper())
+		local name = string.format("|cC5C29E%s|r %s", index, newName:upper())
+		setupControl.name:SetText(name)
 		setup:SetName(newName)
 		setup:SetCondition({
 			boss = newBoss,
