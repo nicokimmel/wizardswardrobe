@@ -100,6 +100,7 @@ local language = {
 	WW_BUTTON_PREVIEW = "Aperçu",
 	WW_BUTTON_SAVE = "Sauvegarder",
 	WW_BUTTON_MODIFY = "Modify",
+	WW_BUTTON_RENAME = "Éditer le nom",
 	WW_BUTTON_REARRANGE = "Rearrange",
 	WW_BUTTON_TOGGLEAUTOEQUIP = "Basculer l'équipement automatique",
 	WW_BUTTON_ADDPAGE = "Ajouter une page",

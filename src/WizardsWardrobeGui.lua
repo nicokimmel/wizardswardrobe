@@ -1276,7 +1276,7 @@ function WWG.ShowPageContextMenu(control)
 		AddMenuItem(GetString(WW_BUTTON_REARRANGE), function() WWG.ShowArrangeDialog(zone, pageId) end, MENU_ADD_OPTION_LABEL)
 	end
 	
-	AddMenuItem(GetString(WW_BUTTON_EDIT), function() WWG.RenamePage() end, MENU_ADD_OPTION_LABEL)
+	AddMenuItem(GetString(WW_BUTTON_RENAME), function() WWG.RenamePage() end, MENU_ADD_OPTION_LABEL)
 	
 	AddMenuItem(GetString(WW_DUPLICATE), function() WWG.DuplicatePage() end, MENU_ADD_OPTION_LABEL)
 	

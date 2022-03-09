@@ -100,6 +100,7 @@ local language = {
 	WW_BUTTON_PREVIEW = "Предпросмотр",
 	WW_BUTTON_SAVE = "Сохранить",
 	WW_BUTTON_MODIFY = "Modify",
+	WW_BUTTON_RENAME = "Редактировать название",
 	WW_BUTTON_REARRANGE = "Rearrange",
 	WW_BUTTON_TOGGLEAUTOEQUIP = "Автопереключение наборов",
 	WW_BUTTON_ADDPAGE = "Добавить страницу",

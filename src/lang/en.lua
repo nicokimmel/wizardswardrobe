@@ -100,6 +100,7 @@ local language = {
 	WW_BUTTON_PREVIEW = "Preview",
 	WW_BUTTON_SAVE = "Save",
 	WW_BUTTON_MODIFY = "Modify",
+	WW_BUTTON_RENAME = "Rename",
 	WW_BUTTON_REARRANGE = "Rearrange",
 	WW_BUTTON_TOGGLEAUTOEQUIP = "Toggle auto-equip",
 	WW_BUTTON_ADDPAGE = "Add page",
