@@ -1358,6 +1358,8 @@ function WWG.ShowModifyDialog(setupControl, setup, index)
 	local zone = WW.selection.zone
 	local pageId = WW.selection.pageId
 	
+	local condition = setup:GetCondition()
+	
 	local newBoss, newTrash
 	
 	WizardsWardrobeModifyDialogNameEdit:SetText(setup:GetName())
@@ -1368,6 +1370,11 @@ function WWG.ShowModifyDialog(setupControl, setup, index)
 		WizardsWardrobeModifyDialogConditionBossEdit:SetHidden(false)
 		WizardsWardrobeModifyDialogConditionTrashLabel:SetHidden(true)
 		WizardsWardrobeModifyDialogConditionTrashCombo:SetHidden(true)
+		
+		WizardsWardrobeModifyDialogConditionBossEdit:SetText(condition.boss or "")
+		WizardsWardrobeModifyDialogConditionBossEdit:SetHandler("OnTextChanged", function(self)
+			newBoss = self:GetText()
+		end)
 	else
 		local function OnBossCombo(selection)
 			newBoss = selection
@@ -1387,8 +1394,6 @@ function WWG.ShowModifyDialog(setupControl, setup, index)
 		
 		WizardsWardrobeModifyDialogConditionBossCombo:SetHidden(false)
 		WizardsWardrobeModifyDialogConditionBossEdit:SetHidden(true)
-		
-		local condition = setup:GetCondition()
 		
 		local bossCombo = WizardsWardrobeModifyDialogConditionBossCombo.m_comboBox
 		bossCombo:SetSortsItems(false)
