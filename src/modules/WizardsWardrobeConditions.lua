@@ -58,7 +58,7 @@ function WWC.OnBossChange(bossName)
 		end
 		WWC.cache.boss = bossName
 	end
-	if not substitute then
+	if not substitute and WW.settings.autoEquipSetups then
 		WWC.LoadSubstitute(bossName)
 	end
 end
