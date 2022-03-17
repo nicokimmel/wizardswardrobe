@@ -511,17 +511,17 @@ function WWG.SetupSetupList()
 	})
 	WWG.addSetupButtonSpacer = WWG.CreateLabel({
 		parent = scrollBox,
-		anchor = {TOPLEFT, scrollBox, TOPLEFT},
 		font = "ZoFontGame",
-		text = " "
+		text = " ",
+		anchor = {TOPLEFT, scrollBox, TOPLEFT},
 	})
 	
 	WWG.substituteExplain = WWG.CreateLabel({
 		parent = scrollBox,
-		constraint = 310,
-		anchor = {TOPLEFT, scrollBox, TOPLEFT},
 		font = "ZoFontGame",
 		text = GetString(WW_SUBSTITUTE_EXPLAIN),
+		constraint = 310,
+		anchor = {TOPLEFT, scrollBox, TOPLEFT},
 		hidden = true,
 	})
 end
@@ -565,11 +565,11 @@ end
 
 function WWG.CreateLabel(data)
 	local label = WINDOW_MANAGER:CreateControl(data.name, data.parent, CT_LABEL)
-	label:SetAnchor(unpack(data.anchor))
-	label:SetDimensionConstraints(AUTO_SIZE, AUTO_SIZE, data.constraint or AUTO_SIZE, AUTO_SIZE)
-	label:SetHidden(data.hidden or false)
 	label:SetFont(data.font)
 	label:SetText(data.text or "")
+	label:SetAnchor(unpack(data.anchor))
+	label:SetDimensionConstraints(AUTO_SIZE, AUTO_SIZE, data.constraint or AUTO_SIZE, data.oneline and label:GetFontHeight() or AUTO_SIZE)
+	label:SetHidden(data.hidden or false)
 	label:SetMouseEnabled(data.mouse or false)
 	if data.tooltip then WWG.SetTooltip(label, TOP, data.tooltip) end
 	return label
@@ -584,9 +584,10 @@ function WWG.CreateSetupPool()
 		
 		setup.name = WWG.CreateLabel({
 			parent = setup,
-			constraint = 255,
-			anchor = {TOPLEFT, setup, TOPLEFT},
 			font = "ZoFontWinH4",
+			anchor = {TOPLEFT, setup, TOPLEFT},
+			constraint = 252,
+			oneline = true,
 			mouse = true,
 		})
 		setup.dropdown = WWG.CreateButton({
