@@ -43,6 +43,8 @@ function WWG.Init()
 	WWG.SetupModifyDialog()
 	WWG.SetupArrangeDialog()
 	
+	WWG.RegisterEvents()
+	
 	zo_callLater(function() WWG.OnWindowResize("stop") end, 250)
 end
 
@@ -491,11 +493,11 @@ function WWG.SetupPageMenu()
 end
 
 function WWG.SetupSetupList()
-	local oldFunc = ZO_Scroll_UpdateScrollBar
+	local oldScrollFunction = ZO_Scroll_UpdateScrollBar
 	ZO_Scroll_UpdateScrollBar = function(self, forceUpdateBarValue)
 		local _, verticalExtents = self.scroll:GetScrollExtents()
 		if verticalExtents > 0 or self:GetName() ~= "WizardsWardrobeWindowSetupList" then
-			oldFunc(self, forceUpdateBarValue)
+			oldScrollFunction(self, forceUpdateBarValue)
 		else
 			ZO_Scroll_ResetToTop(self)
 			local scrollBarHeight = self.scrollbar:GetHeight() / self.scroll:GetScale()
