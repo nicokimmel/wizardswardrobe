@@ -276,7 +276,7 @@ function WW.GetFreeSlots(bag)
 	return freeSlotMap
 end
 
-function WW.MoveItems(itemTaskList)	
+function WW.MoveItems(itemTaskList)
 	for _, item in ipairs(itemTaskList) do
 		local itemTask = function()
 			if not item.destSlot then

@@ -1020,6 +1020,12 @@ function WWG.AquireSetupControl(setup)
 	return setupControl
 end
 
+function WWG.GetSetupControl(index)
+	local key = WWG.setupTable[index]
+	local setupControl = WWG.setupPool:AcquireObject(key)
+	return setupControl
+end
+
 function WWG.CreateSetup()
 	local index = #WWG.setupTable + 1
 	local tag = WW.selection.zone.tag
@@ -1177,8 +1183,7 @@ function WWG.RefreshPage()
 	local pageId = WW.selection.pageId
 	
 	for i = 1, #WWG.setupTable do
-		local key = WWG.setupTable[i]
-		local setupControl = WWG.setupPool:AcquireObject(key)
+		local setupControl = WWG.GetSetupControl(i)
 		local setup = Setup:FromStorage(zone.tag, pageId, i)
 		WWG.RefreshSetup(setupControl, setup)
 	end

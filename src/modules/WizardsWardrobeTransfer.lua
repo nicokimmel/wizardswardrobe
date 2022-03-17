@@ -20,7 +20,6 @@ function WWT.Export(tag, pageId, index)
 	local exportTable = {}
 	
 	exportTable.name = setup:GetName()
-	-- exportTable.custom = setup:GetCustom()
 	
 	-- skills
 	exportTable.skills = {}
@@ -71,7 +70,6 @@ function WWT.Import(jsonText, tag, pageId, index)
 	local setup = Setup:New()
 	
 	setup:SetName(importTable.name)
-	-- setup:SetCustom(importTable.custom)
 	
 	-- skills
 	local skillTable = {}
@@ -116,7 +114,8 @@ function WWT.Import(jsonText, tag, pageId, index)
 	setup:SetCP(cpTable)
 	
 	setup:ToStorage(tag, pageId, index)
-	WW.gui.RefreshSetup(WW.zones[tag], pageId, index)
+	local setupControl = WW.gui.GetSetupControl(index)
+	WW.gui.RefreshSetup(setupControl, setup)
 end
 
 function WWT.SearchItem(equipType, setId, prefTraitType, filter)
