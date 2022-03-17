@@ -366,8 +366,6 @@ function WWG.OnWindowResize(action)
 		
 		WizardsWardrobeWindowTopDivider:SetWidth(width)
 		WizardsWardrobeWindowBottomDivider:SetWidth(width)
-		
-		WizardsWardrobeWindowSetupList:GetNamedChild("ScrollBar"):SetHidden(false)
 	end
 	
 	local function OnResizeEnd()
@@ -378,10 +376,6 @@ function WWG.OnWindowResize(action)
 		
 		WW.settings.window.wizard.width = WizardsWardrobeWindow:GetWidth()
 		WW.settings.window.wizard.height = WizardsWardrobeWindow:GetHeight()
-		
-		zo_callLater(function ()
-			WizardsWardrobeWindowSetupList:GetNamedChild("ScrollBar"):SetHidden(false)
-		end, 50)
 	end
 	
 	local identifier = WW.name .. "WindowResize"
@@ -497,8 +491,20 @@ function WWG.SetupPageMenu()
 end
 
 function WWG.SetupSetupList()
-	-- always show scrollBar
-	--zo_callLater(function() WizardsWardrobeWindowSetupList:GetNamedChild("ScrollBar"):SetHidden(false) end, 1)
+	local oldFunc = ZO_Scroll_UpdateScrollBar
+	ZO_Scroll_UpdateScrollBar = function(self, forceUpdateBarValue)
+		local _, verticalExtents = self.scroll:GetScrollExtents()
+		if verticalExtents > 0 or self:GetName() ~= "WizardsWardrobeWindowSetupList" then
+			oldFunc(self, forceUpdateBarValue)
+		else
+			ZO_Scroll_ResetToTop(self)
+			local scrollBarHeight = self.scrollbar:GetHeight() / self.scroll:GetScale()
+			self.scrollbar:SetThumbTextureHeight(scrollBarHeight)
+			self.scrollbar:SetHidden(false)
+		end
+	end
+	
+	
 	local scrollBox = WizardsWardrobeWindowSetupList:GetNamedChild("ScrollChild")
 	
 	WWG.addSetupButton = WWG.CreateButton({
