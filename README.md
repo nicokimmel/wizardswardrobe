@@ -18,7 +18,7 @@
 
 ## Thanks to
 
-* **@Zeeces** for the name idea and the mental assistance
+* **@Zeeces** for the name idea and the mental support
 * **@File2606**, **@DSimonM**, **@JaneParn**, **@Chronix1753** for testing and rubber ducking
 * **@K1nor** for the russian translation
 * **@Alasthorn** for the french translation
