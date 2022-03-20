@@ -32,11 +32,6 @@ WW.GEARSLOTS = {
     EQUIP_SLOT_BACKUP_POISON,
 }
 
-WW.WEAPONSLOTS = {
-	[HOTBAR_CATEGORY_PRIMARY] = EQUIP_SLOT_MAIN_HAND,
-	[HOTBAR_CATEGORY_BACKUP] = EQUIP_SLOT_BACKUP_MAIN,
-}
-
 WW.GEARICONS = {
 	[EQUIP_SLOT_HEAD] = "/esoui/art/characterwindow/gearslot_head.dds",
     [EQUIP_SLOT_SHOULDERS] = "/esoui/art/characterwindow/gearslot_shoulders.dds",
