@@ -81,9 +81,18 @@ function WWG.HandleFirstStart()
 	if not WW.settings.changelogs then WW.settings.changelogs = {} end
 	
 	if not WW.settings.changelogs["v1.8.0"] then
-		WW.settings.changelogs["v1.8.0"] = true
-		
-		
+		EVENT_MANAGER:RegisterForUpdate(WWG.name .. "ChangelogCaptcha", 1000, function()
+			if not WW.settings.changelogs["v1.8.0"]
+				and not ZO_Dialogs_IsShowingDialog() then
+				
+				WWG.ShowEditDialog("ChangelogCaptcha", GetString(WW_CHANGELOG_CAPTCHA), "", function(input)
+					if input == "I LOVE CHANGELOGS" then
+						WW.settings.changelogs["v1.8.0"] = true
+						EVENT_MANAGER:UnregisterForUpdate(WWG.name .. "ChangelogCaptcha")
+					end
+				end)
+			end
+		end)
 	end
 end
 

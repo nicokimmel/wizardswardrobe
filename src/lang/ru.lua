@@ -90,6 +90,7 @@ local language = {
 	
 
 	-- USER INTERFACE
+	WW_CHANGELOG_CAPTCHA = "Attention! This update contains some major changes. Please read the latest changelogs on esoui.\nYou can find the link by clicking on the tooltip at the bottom right of the Wizards's window.\n\nPlease type |cFFFFFFI LOVE CHANGELOGS|c in the text field if you like reading changelogs.",
 	WW_HELP = "|cFFFFFF[ЛКМ]|r для загрузки, \n|cFFFFFF[Shift + ЛКМ]|r для сохранения и \n|cFFFFFF[CTRL + ЛКМ]|r для удаления\nДеактивированные наборы не загружаются автоматически.",
 	WW_BUTTON_SETTINGS = "Настройки",
 	WW_BUTTON_CLEARQUEUE = "Сбросить очередь\n(Можно использовать, если в очереди поставлено слишком много изменений сэтапа.)",

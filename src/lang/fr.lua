@@ -90,6 +90,7 @@ local language = {
 	
 	
 	-- USER INTERFACE
+	WW_CHANGELOG_CAPTCHA = "Attention! This update contains some major changes. Please read the latest changelogs on esoui.\nYou can find the link by clicking on the tooltip at the bottom right of the Wizards's window.\n\nPlease type |cFFFFFFI LOVE CHANGELOGS|c in the text field if you like reading changelogs.",
 	WW_HELP = "Un |cFFFFFF[Clic]|r pour charger, |cFFFFFF[Maj + Clic]|r pour enregistrer et |cFFFFFF[CTRL + Clic]|r pour supprimer.\nLes profils désactivés ne sont pas chargés automatiquement.",
 	WW_BUTTON_SETTINGS = "Paramètres",
 	WW_BUTTON_CLEARQUEUE = "Reinitialisé la file d'attente\n(A utiliser si trop de profils sont en file d'attente.)",
