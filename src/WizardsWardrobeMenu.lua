@@ -53,6 +53,7 @@ function WWM.InitSV()
 		fillPoisons = false,
 		eatBuffFood = false,
 		initialized = false,
+		changelogs = {},
 	})
 	
 	-- dont look at this

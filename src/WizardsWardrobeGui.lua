@@ -54,29 +54,37 @@ function WWG.RegisterEvents()
 end
 
 function WWG.HandleFirstStart()
-	local function HandleClickEvent(rawLink, mouseButton, linkText, linkStyle, linkType, dataString)
-		if linkType ~= WW.LINK_TYPES.URL then return end
-		if mouseButton == MOUSE_BUTTON_INDEX_LEFT then
-			if dataString == "esoui" then
-				RequestOpenUnsafeURL("https://www.esoui.com/downloads/info3170-WizardsWardrobe.html")
+	if not WW.settings.initialized then
+		local function HandleClickEvent(rawLink, mouseButton, linkText, linkStyle, linkType, dataString)
+			if linkType ~= WW.LINK_TYPES.URL then return end
+			if mouseButton == MOUSE_BUTTON_INDEX_LEFT then
+				if dataString == "esoui" then
+					RequestOpenUnsafeURL("https://www.esoui.com/downloads/info3170-WizardsWardrobe.html")
+				end
 			end
+			return true
 		end
-		return true
+		LibChatMessage:RegisterCustomChatLink(WW.LINK_TYPES.URL, function(linkStyle, linkType, data, displayText)
+			return ZO_LinkHandler_CreateLinkWithoutBrackets(displayText, nil, WW.LINK_TYPES.URL, data)
+		end)
+		LINK_HANDLER:RegisterCallback(LINK_HANDLER.LINK_MOUSE_UP_EVENT, HandleClickEvent)
+		LINK_HANDLER:RegisterCallback(LINK_HANDLER.LINK_CLICKED_EVENT, HandleClickEvent)
+		zo_callLater(function()
+				local urlLink = ZO_LinkHandler_CreateLink("esoui.com", nil, WW.LINK_TYPES.URL, "esoui")
+				local pattern = string.format("|c18bed8[|c65d3b0W|cb2e789W|cfffc61]|r |cFFFFFF%s|r", GetString(WW_MSG_FIRSTSTART))
+				local output = string.format(pattern, "|r" .. urlLink .. "|cFFFFFF")
+				CHAT_ROUTER:AddSystemMessage(output)
+				WW.settings.initialized = true
+		end, 500)
 	end
-	LibChatMessage:RegisterCustomChatLink(WW.LINK_TYPES.URL, function(linkStyle, linkType, data, displayText)
-		return ZO_LinkHandler_CreateLinkWithoutBrackets(displayText, nil, WW.LINK_TYPES.URL, data)
-	end)
-	LINK_HANDLER:RegisterCallback(LINK_HANDLER.LINK_MOUSE_UP_EVENT, HandleClickEvent)
-	LINK_HANDLER:RegisterCallback(LINK_HANDLER.LINK_CLICKED_EVENT, HandleClickEvent)
-	zo_callLater(function()
-		if not WW.settings.initialized then
-			local urlLink = ZO_LinkHandler_CreateLink("esoui.com", nil, WW.LINK_TYPES.URL, "esoui")
-			local pattern = string.format("|c18bed8[|c65d3b0W|cb2e789W|cfffc61]|r |cFFFFFF%s|r", GetString(WW_MSG_FIRSTSTART))
-			local output = string.format(pattern, "|r" .. urlLink .. "|cFFFFFF")
-			CHAT_ROUTER:AddSystemMessage(output)
-			WW.settings.initialized = true
-		end
-	end, 500)
+	
+	if not WW.settings.changelogs then WW.settings.changelogs = {} end
+	
+	if not WW.settings.changelogs["v1.8.0"] then
+		WW.settings.changelogs["v1.8.0"] = true
+		
+		
+	end
 end
 
 function WWG.SetSceneManagement()
