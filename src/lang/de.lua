@@ -90,7 +90,7 @@ local language = {
 	
 	
 	-- USER INTERFACE
-	WW_CHANGELOG_CAPTCHA = "Achtung! Dieses Update enthält einige große Änderungen. Bitte lies dir die aktuellen Changelogs auf esoui durch.\nDen Link findest du, indem du auf das ?-Tooltip rechts unten im Wizards's Fenster klickst.\n\nBitte gib |cFFFFFFI LOVE CHANGELOGS|r in das Textfeld ein, wenn du gerne Changelogs liest.",
+	WW_CHANGELOG = "Achtung! Dieses Update enthält einige große Änderungen. Bitte lies dir das aktuelle Änderungsprotokoll durch, da manche Dinge vielleicht nun anders funktionieren als gewohnt.",
 	WW_HELP = "Ein |cFFFFFF[Klick]|r zum Laden, |cFFFFFF[Shift + Klick]|r zum Speichern und |cFFFFFF[STRG + Klick]|r zum Löschen.\nDeaktivierte Setups werden nicht automatisch geladen.",
 	WW_BUTTON_SETTINGS = "Einstellungen",
 	WW_BUTTON_CLEARQUEUE = "Warteschlange zurücksetzen\n(Kann eingesetzt werden, falls zu viele Setwechsel eingereiht wurden.)",
