@@ -123,11 +123,20 @@ function WWT.SearchItem(equipType, setId, prefTraitType, filter)
 	if not setId or setId == 0 then return nil end
 	if not prefTraitType or prefTraitType == 0 then return nil end
 	local itemList = {}
-	for _, bag in ipairs({BAG_WORN, BAG_BACKPACK}) do
+	
+	local bagList = {BAG_WORN, BAG_BACKPACK}
+	local bankBag = GetBankingBag()
+	if IsBankOpen() and not WW.DISABLEDBAGS[bankBag] then
+		table.insert(bagList, bankBag)
+		if bankBag == BAG_BANK and IsESOPlusSubscriber() then
+			table.insert(bagList, BAG_SUBSCRIBER_BANK)
+		end
+	end
+	
+	for _, bag in ipairs(bagList) do
 		for slot = 0, GetBagSize(bag) do
 			local itemLink = GetItemLink(bag, slot, LINK_STYLE_DEFAULT)
 			
-			-- i guess we have to do this the hard way
 			local lookupEquipType = GetItemLinkEquipType(itemLink)
 			local lookupSetId = ({GetItemLinkSetInfo(itemLink, false)})[6]
 			local lookupTraitType = ({GetItemLinkTraitInfo(itemLink)})[1]

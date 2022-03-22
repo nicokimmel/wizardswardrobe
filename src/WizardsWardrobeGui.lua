@@ -1287,7 +1287,7 @@ function WWG.RefreshSetup(control, setup)
 	local cpText = setup:GetCPText()
 	WWG.SetTooltip(control.cp, RIGHT, cpText)
 	
-	if IsBankOpen() and not WW.banking.disabledBags[GetBankingBag()] then
+	if IsBankOpen() and not WW.DISABLEDBAGS[GetBankingBag()] then
 		control.banking:SetHidden(false)
 		WizardsWardrobeWindowPageMenuBank:SetHidden(false)
 	else

@@ -143,6 +143,13 @@ WW.CONDITIONS = {
 	EVERYWHERE = -1,
 }
 
+WW.DISABLEDBAGS = {
+	[BAG_GUILDBANK] = true,
+	[BAG_BUYBACK] = true,
+	[BAG_DELETE] = true,
+	[BAG_VIRTUAL] = true,
+}
+
 WW.MARKINVENTORIES = {
 	ZO_PlayerInventoryBackpack,
     ZO_PlayerBankBackpack,

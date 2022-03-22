@@ -5,13 +5,6 @@ WW.banking = {}
 local WWB = WW.banking
 local WWG = WW.gui
 
-WWB.disabledBags = {
-	[BAG_GUILDBANK] = true,
-	[BAG_BUYBACK] = true,
-	[BAG_DELETE] = true,
-	[BAG_VIRTUAL] = true,
-}
-
 function WWB.Init()
 	WWB.name = WW.name .. "Banking"
 	WWB.RegisterEvents()
@@ -19,7 +12,7 @@ end
 
 function WWB.RegisterEvents()
 	EVENT_MANAGER:RegisterForEvent(WWB.name, EVENT_OPEN_BANK, function(_, bankBag)
-		if not WWB.disabledBags[bankBag] then
+		if not WW.DISABLEDBAGS[bankBag] then
 			WWG.RefreshPage()
 		end
 	end)
@@ -30,7 +23,7 @@ end
 
 function WWB.WithdrawPage(zone, pageId)
 	local bankBag = GetBankingBag()
-	if WWB.disabledBags[bankBag] then return end
+	if WW.DISABLEDBAGS[bankBag] then return end
 	
 	local preGearTable = {}
 	local amount = 0
@@ -64,7 +57,7 @@ end
 
 function WWB.WithdrawSetup(zone, pageId, index)
 	local bankBag = GetBankingBag()
-	if WWB.disabledBags[bankBag] then return end
+	if WW.DISABLEDBAGS[bankBag] then return end
 	
 	local setup = Setup:FromStorage(zone.tag, pageId, index)
 	
@@ -95,7 +88,7 @@ end
 
 function WWB.DepositSetup(zone, pageId, index)
 	local bankBag = GetBankingBag()
-	if WWB.disabledBags[bankBag] then return end
+	if WW.DISABLEDBAGS[bankBag] then return end
 	
 	local setup = Setup:FromStorage(zone.tag, pageId, index)
 	local itemLocationTable = WW.GetItemLocation()
@@ -125,7 +118,7 @@ end
 
 function WWB.DepositPage(zone, pageId)
 	local bankBag = GetBankingBag()
-	if WWB.disabledBags[bankBag] then return end
+	if WW.DISABLEDBAGS[bankBag] then return end
 	
 	local itemLocationTable = WW.GetItemLocation()
 	
