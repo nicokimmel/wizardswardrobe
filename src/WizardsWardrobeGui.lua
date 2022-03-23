@@ -509,6 +509,7 @@ function WWG.SetupPageMenu()
 end
 
 function WWG.SetupSetupList()
+	-- always show scrollbar (set hidden to false only would show some errors)
 	local oldScrollFunction = ZO_Scroll_UpdateScrollBar
 	ZO_Scroll_UpdateScrollBar = function(self, forceUpdateBarValue)
 		local _, verticalExtents = self.scroll:GetScrollExtents()
@@ -516,15 +517,14 @@ function WWG.SetupSetupList()
 			oldScrollFunction(self, forceUpdateBarValue)
 		else
 			ZO_Scroll_ResetToTop(self)
+			self.scroll:SetFadeGradient(1, 0, 0, 0)
 			local scrollBarHeight = self.scrollbar:GetHeight() / self.scroll:GetScale()
 			self.scrollbar:SetThumbTextureHeight(scrollBarHeight)
 			self.scrollbar:SetHidden(false)
 		end
 	end
 	
-	
 	local scrollBox = WizardsWardrobeWindowSetupList:GetNamedChild("ScrollChild")
-	
 	WWG.addSetupButton = WWG.CreateButton({
 		parent = scrollBox,
 		size = 42,
@@ -539,7 +539,6 @@ function WWG.SetupSetupList()
 		text = " ",
 		anchor = {TOPLEFT, scrollBox, TOPLEFT},
 	})
-	
 	WWG.substituteExplain = WWG.CreateLabel({
 		parent = scrollBox,
 		font = "ZoFontGame",
@@ -1089,6 +1088,7 @@ function WWG.BuildPage(zone, pageId)
 	end
 	WWG.RefreshPage()
 	WWG.OnWindowResize("stop")
+	ZO_Scroll_ResetToTop(WizardsWardrobeWindowSetupList)
 end
 
 function WWG.CreatePage(zone, skipBuilding)
@@ -1154,11 +1154,12 @@ function WWG.DeletePage()
 	
 	table.remove(WW.pages[zone.tag], pageId)
 	if WW.setups[zone.tag] and WW.setups[zone.tag][pageId] then
+		-- does not get removed??
 		table.remove(WW.setups[zone.tag], pageId)
 	end
 	
 	WW.markers.BuildGearList()
-	WWG.BuildPage(WW.selection.zone, WW.selection.pageId)
+	WWG.BuildPage(zone, nextPageId)
 	
 	return nextPageId
 end
