@@ -393,7 +393,7 @@ function WWG.OnWindowResize(action)
 	
 	local function OnResizeEnd()
 		local rows = zo_floor(((WizardsWardrobeWindow:GetWidth() + 2) / SETUP_BOX_WIDTH) + 0.5)
-		local width = rows * SETUP_BOX_WIDTH + 8
+		local width = rows * SETUP_BOX_WIDTH + 10
 		WizardsWardrobeWindow:SetWidth(width)
 		OnResize()
 		
