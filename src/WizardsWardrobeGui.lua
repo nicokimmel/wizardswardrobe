@@ -54,6 +54,8 @@ function WWG.RegisterEvents()
 end
 
 function WWG.HandleFirstStart()
+	if not WW.settings.changelogs then WW.settings.changelogs = {} end
+	
 	if not WW.settings.initialized then
 		local function HandleClickEvent(rawLink, mouseButton, linkText, linkStyle, linkType, dataString)
 			if linkType ~= WW.LINK_TYPES.URL then return end
@@ -76,9 +78,11 @@ function WWG.HandleFirstStart()
 				CHAT_ROUTER:AddSystemMessage(output)
 				WW.settings.initialized = true
 		end, 500)
+		
+		-- dont show changelogs if first time
+		WW.settings.changelogs["v1.8.0"] = true
+		return
 	end
-	
-	if not WW.settings.changelogs then WW.settings.changelogs = {} end
 	
 	if not WW.settings.changelogs["v1.8.0"] then
 		EVENT_MANAGER:RegisterForUpdate(WWG.name .. "UpdateWarning", 1000, function()
