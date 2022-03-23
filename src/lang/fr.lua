@@ -91,7 +91,7 @@ local language = {
 	
 	-- USER INTERFACE
 	WW_CHANGELOG = "Attention! This update contains some major changes. Please read the current changelog as some things may now work differently from what they used to.",
-	WW_HELP = "Un |cFFFFFF[Clic]|r pour charger, |cFFFFFF[Maj + Clic]|r pour enregistrer et |cFFFFFF[CTRL + Clic]|r pour supprimer.\nLes profils désactivés ne sont pas chargés automatiquement.",
+	WW_BUTTON_HELP = "|cFFFFFF[Click]|r to open wiki",
 	WW_BUTTON_SETTINGS = "Paramètres",
 	WW_BUTTON_CLEARQUEUE = "Reinitialisé la file d'attente\n(A utiliser si trop de profils sont en file d'attente.)",
 	WW_BUTTON_UNDRESS = "Enlever tous les équipements",

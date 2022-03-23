@@ -573,7 +573,10 @@ function WWG.SetupBottomMenu()
 	WizardsWardrobeWindowBottomMenuPrebuff:SetHandler("OnClicked", function(self)
 		WW.prebuff.dialog:SetHidden(false)
 	end)
-	WWG.SetTooltip(WizardsWardrobeWindowBottomMenuHelp, TOP, GetString(WW_HELP))
+	WWG.SetTooltip(WizardsWardrobeWindowBottomMenuHelp, TOP, GetString(WW_BUTTON_HELP))
+	WizardsWardrobeWindowBottomMenuHelp:SetHandler("OnClicked", function(self)
+		RequestOpenUnsafeURL("https://github.com/nicokimmel/wizardswardrobe/wiki")
+	end)
 end
 
 function WWG.CreateButton(data)

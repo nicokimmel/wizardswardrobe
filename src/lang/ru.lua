@@ -91,7 +91,7 @@ local language = {
 
 	-- USER INTERFACE
 	WW_CHANGELOG = "Attention! This update contains some major changes. Please read the current changelog as some things may now work differently from what they used to.",
-	WW_HELP = "|cFFFFFF[ЛКМ]|r для загрузки, \n|cFFFFFF[Shift + ЛКМ]|r для сохранения и \n|cFFFFFF[CTRL + ЛКМ]|r для удаления\nДеактивированные наборы не загружаются автоматически.",
+	WW_BUTTON_HELP = "|cFFFFFF[Click]|r to open wiki",
 	WW_BUTTON_SETTINGS = "Настройки",
 	WW_BUTTON_CLEARQUEUE = "Сбросить очередь\n(Можно использовать, если в очереди поставлено слишком много изменений сэтапа.)",
 	WW_BUTTON_UNDRESS = "Раздеться",

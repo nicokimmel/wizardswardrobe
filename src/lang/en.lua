@@ -91,7 +91,7 @@ local language = {
 	
 	-- USER INTERFACE
 	WW_CHANGELOG = "Attention! This update contains some major changes. Please read the current changelog as some things may now work differently from what they used to.",
-	WW_HELP = "One |cFFFFFF[Click]|r to load, |cFFFFFF[Shift + Click]|r to save and |cFFFFFF[CTRL + Click]|r to delete.\nDeactivated setups are not loaded automatically.",
+	WW_BUTTON_HELP = "|cFFFFFF[Click]|r to open wiki",
 	WW_BUTTON_SETTINGS = "Settings",
 	WW_BUTTON_CLEARQUEUE = "Reset queue\n(Can be used if too many set changes have been queued.)",
 	WW_BUTTON_UNDRESS = "Undress",

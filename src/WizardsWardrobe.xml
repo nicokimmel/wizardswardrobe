@@ -148,7 +148,7 @@
 						</Button>
 						<Button name="$(parent)Queue" inherits="ZO_ButtonBehaviorClickSound">
 							<Dimensions x="36" y="36"/>
-							<Anchor point="LEFT" relativeTo="$(parent)Settings" relativePoint="RIGHT"/>
+							<Anchor point="LEFT" relativeTo="$(parent)Settings" relativePoint="RIGHT" offsetX="-4"/>
 							<Textures normal="/esoui/art/inventory/inventory_tabicon_crafting_up.dds"
 								pressed="/esoui/art/inventory/inventory_tabicon_crafting_down.dds"
 								mouseOver="/esoui/art/inventory/inventory_tabicon_crafting_over.dds"
@@ -156,7 +156,7 @@
 						</Button>
 						<Button name="$(parent)Undress" inherits="ZO_ButtonBehaviorClickSound">
 							<Dimensions x="36" y="36"/>
-							<Anchor point="LEFT" relativeTo="$(parent)Queue" relativePoint="RIGHT"/>
+							<Anchor point="LEFT" relativeTo="$(parent)Queue" relativePoint="RIGHT" offsetX="-4"/>
 							<Textures normal="/esoui/art/inventory/inventory_tabicon_armor_up.dds"
 								pressed="/esoui/art/inventory/inventory_tabicon_armor_down.dds"
 								mouseOver="/esoui/art/inventory/inventory_tabicon_armor_over.dds"
@@ -164,15 +164,15 @@
 						</Button>
 						<Button name="$(parent)Prebuff" inherits="ZO_ButtonBehaviorClickSound">
 							<Dimensions x="36" y="36"/>
-							<Anchor point="LEFT" relativeTo="$(parent)Undress" relativePoint="RIGHT"/>
+							<Anchor point="LEFT" relativeTo="$(parent)Undress" relativePoint="RIGHT" offsetX="-4"/>
 							<Textures normal="/esoui/art/progression/progression_indexicon_guilds_up.dds"
 								pressed="/esoui/art/progression/progression_indexicon_guilds_down.dds"
 								mouseOver="/esoui/art/progression/progression_indexicon_guilds_over.dds"
 								disabled="/esoui/art/progression/progression_indexicon_guilds_disabled.dds"/>
 						</Button>
 						<Button name="$(parent)Help" inherits="ZO_ButtonBehaviorClickSound">
-							<Dimensions x="36" y="36"/>
-							<Anchor point="RIGHT" relativeTo="$(parent)" relativePoint="RIGHT"/>
+							<Dimensions x="34" y="34"/>
+							<Anchor point="RIGHT" relativeTo="$(parent)" relativePoint="RIGHT" offsetX="2"/>
 							<Textures normal="/esoui/art/menubar/menubar_help_up.dds"
 								pressed="/esoui/art/menubar/menubar_help_down.dds"
 								mouseOver="/esoui/art/menubar/menubar_help_over.dds"

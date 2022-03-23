@@ -91,7 +91,7 @@ local language = {
 	
 	-- USER INTERFACE
 	WW_CHANGELOG = "Achtung! Dieses Update enthält einige große Änderungen. Bitte lies dir das aktuelle Änderungsprotokoll durch, da manche Dinge vielleicht nun anders funktionieren als gewohnt.",
-	WW_HELP = "Ein |cFFFFFF[Klick]|r zum Laden, |cFFFFFF[Shift + Klick]|r zum Speichern und |cFFFFFF[STRG + Klick]|r zum Löschen.\nDeaktivierte Setups werden nicht automatisch geladen.",
+	WW_BUTTON_HELP = "|cFFFFFF[Klick]|r um Wiki zu öffnen",
 	WW_BUTTON_SETTINGS = "Einstellungen",
 	WW_BUTTON_CLEARQUEUE = "Warteschlange zurücksetzen\n(Kann eingesetzt werden, falls zu viele Setwechsel eingereiht wurden.)",
 	WW_BUTTON_UNDRESS = "Ausrüstung ablegen",
