@@ -10,9 +10,7 @@ function WWC.Init()
 	WWC.bossList = {}
 	WWC.trashList = {}
 	
-	WWC.cache = {
-		boss = WW.CONDITIONS.EVERYWHERE
-	}
+	WWC.ResetCache()
 end
 
 function WWC.LoadConditions()
@@ -42,6 +40,12 @@ function WWC.LoadConditions()
 			
 		end
 	end
+end
+
+function WWC.ResetCache()
+	WWC.cache = {
+		boss = WW.CONDITIONS.EVERYWHERE
+	}
 end
 
 function WWC.OnBossChange(bossName)

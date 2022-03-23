@@ -584,6 +584,7 @@ function WW.OnZoneChange(_, _)
 	
 	-- reset old zone
 	WW.currentZone.Reset()
+	WW.conditions.ResetCache()
 	
 	if WW.lookupZones[zone] then
 		WW.currentZone = WW.lookupZones[zone]
