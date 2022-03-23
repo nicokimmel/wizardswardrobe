@@ -1110,10 +1110,10 @@ function WWG.CreatePage(zone, skipBuilding)
 	WW.pages[zone.tag][0].selected = nextPageId
 	WW.selection.pageId = nextPageId
 	
-	WWG.CreateDefaultSetups(WW.selection.zone, WW.selection.pageId)
+	WWG.CreateDefaultSetups(zone, nextPageId)
 	
 	if not skipBuilding then
-		WWG.BuildPage(WW.selection.zone, WW.selection.pageId)
+		WWG.BuildPage(zone, nextPageId)
 	end
 	
 	return nextPageId
