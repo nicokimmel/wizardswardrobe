@@ -1158,7 +1158,7 @@ function WWG.DeletePage()
 	
 	table.remove(WW.pages[zone.tag], pageId)
 	if WW.setups[zone.tag] and WW.setups[zone.tag][pageId] then
-		-- does not get removed??
+		WW.setups[zone.tag][pageId] = nil
 		table.remove(WW.setups[zone.tag], pageId)
 	end
 	
