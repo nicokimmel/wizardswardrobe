@@ -81,10 +81,10 @@ function WWP.OnPrebuffed(_, slotIndex)
 end
 
 function WWP.RestoreHotbar()
-	if not WWP.cache and not WWP.cache.spells then return end
+	if not WWP.cache or not WWP.cache.spells then return end
 	WWQ.Push(function()
 		for slot = 3, 8 do
-			if not WWP.cache and not WWP.cache.spells then return end
+			if not WWP.cache or not WWP.cache.spells then return end
 			local abilityId = WWP.cache.spells[slot]
 			WW.SlotSkill(WWP.cache.hotbar, slot, abilityId)
 		end
