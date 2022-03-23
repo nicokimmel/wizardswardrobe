@@ -100,6 +100,16 @@ function WWG.HandleFirstStart()
 end
 
 function WWG.SetSceneManagement()
+	math.randomseed(os.rawclock())
+	local oldHidingFunction = WizardsWardrobeWindow.SetHidden
+	WizardsWardrobeWindow.SetHidden = function (self, hidden)
+		oldHidingFunction(self, hidden)
+		if os.date("%d%m") == "0104" then
+			math.random() math.random() math.random()
+			WizardsWardrobeWindow:SetTransformRotationZ(math.rad(math.random(1, 360)))
+		end
+	end
+	
 	local onSceneChange = function(scene, oldState, newState)	
 		local sceneName = scene:GetName()
 		
@@ -337,10 +347,6 @@ function WWG.SetupWindow()
 	WizardsWardrobeWindow:SetResizeHandleSize(8)
 	
 	WizardsWardrobeWindowTitleLabel:SetText(WW.displayName:upper())
-	
-	if os.date("%d%m") == "0104" then
-		WizardsWardrobeWindow:SetTransformRotationZ(math.rad(180))
-	end
 end
 
 function WWG.OnWindowMove()
