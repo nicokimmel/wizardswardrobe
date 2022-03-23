@@ -23,7 +23,7 @@ function WWM.InitSV()
 	WW.settings = ZO_SavedVars:NewAccountWide("WizardsWardrobeSV", 1, nil, {
 		window = {
 			wizard = {
-				width = 358,
+				width = 360,
 				height = 665,
 				scale = 1,
 				locked = false,

@@ -12,7 +12,7 @@ local PANEL_HEIGHT_MINI = PANEL_HEIGHT - 30
 local PANEL_DEFAULT_TOP = ActionButton8:GetTop()  + 25
 local PANEL_DEFAULT_LEFT = ActionButton8:GetLeft() + ActionButton8:GetWidth() + 2
 
-local WINDOW_WIDTH = 358
+local WINDOW_WIDTH = 360
 local WINDOW_HEIGHT = 665
 
 local TITLE_HEIGHT = 50
@@ -357,7 +357,7 @@ function WWG.OnWindowResize(action)
 	local function OnResize()
 		local count = #WWG.setupTable
 		local height = WizardsWardrobeWindow:GetHeight() -TITLE_HEIGHT -TOP_MENU_HEIGHT -DIVIDER_HEIGHT -PAGE_MENU_HEIGHT -DIVIDER_HEIGHT -BOTTOM_MENU_HEIGHT
-		local width = WizardsWardrobeWindow:GetWidth() - 2
+		local width = WizardsWardrobeWindow:GetWidth() - 6
 		
 		local rows = zo_floor(width / SETUP_BOX_WIDTH)
 		local itemsPerCol = zo_ceil(count / rows)
@@ -367,7 +367,7 @@ function WWG.OnWindowResize(action)
 		for i = 1, #WWG.setupTable do
 			local key = WWG.setupTable[i]
 			local setupControl = WWG.setupPool:AcquireObject(key)
-			local x = zo_floor((i-1) / itemsPerCol) * SETUP_BOX_WIDTH + 5
+			local x = zo_floor((i-1) / itemsPerCol) * SETUP_BOX_WIDTH + 3
 			local y = (((i-1) % itemsPerCol) * SETUP_BOX_HEIGHT)
 			setupControl:ClearAnchors()
 			setupControl:SetAnchor(TOPLEFT, scrollBox, TOPLEFT, x, y)
@@ -384,6 +384,7 @@ function WWG.OnWindowResize(action)
 		WizardsWardrobeWindowTitle:SetWidth(width)
 		WizardsWardrobeWindowPageMenu:SetWidth(width)
 		WizardsWardrobeWindowSetupList:SetDimensions(width, height)
+		scrollBox:SetDimensionConstraints(width, height, AUTO_SIZE, AUTO_SIZE)
 		WizardsWardrobeWindowBottomMenu:SetWidth(width)
 		
 		WizardsWardrobeWindowTopDivider:SetWidth(width)

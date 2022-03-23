@@ -22,8 +22,8 @@
 		</TopLevelControl>
 		
 		<TopLevelControl name="WizardsWardrobeWindow" mouseEnabled="true" movable="true" hidden="true">
-			<Dimensions x="358" y="665"/>
-			<DimensionConstraints minX="358" minY="358" maxX="AUTO_SIZE" maxY="AUTO_SIZE"/>
+			<Dimensions x="360" y="665"/>
+			<DimensionConstraints minX="360" minY="360" maxX="AUTO_SIZE" maxY="AUTO_SIZE"/>
 			<Anchor point="CENTER" relativeTo="GUI_ROOT" relativePoint="CENTER"/>
 			<OnMoveStop>WizardsWardrobe.gui.OnWindowMove()</OnMoveStop>
 			<OnResizeStart>WizardsWardrobe.gui.OnWindowResize("start")</OnResizeStart>
