@@ -873,9 +873,7 @@ function WWG.AquireSetupControl(setup)
 		local bagId = GetCursorBagId()
 		local slotIndex = GetCursorSlotIndex()
 		
-		if bagId ~= BAG_BACKPACK then return false end
-		
-		local foodLink = GetItemLink(BAG_BACKPACK, slotIndex, LINK_STYLE_DEFAULT)
+		local foodLink = GetItemLink(bagId, slotIndex, LINK_STYLE_DEFAULT)
 		local foodId = GetItemLinkItemId(foodLink)
 		
 		if not WW.BUFFFOOD[foodId] then
