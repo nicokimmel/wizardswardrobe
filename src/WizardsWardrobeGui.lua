@@ -1160,17 +1160,21 @@ function WWG.DeletePage()
 	local zone = WW.selection.zone
 	local pageId = WW.selection.pageId
 	
+	-- this is a workaround for empty pages
+	-- dont ask me why
+	if #WWG.setupTable == 0 then
+		WWG.CreateSetup()
+	end
+	
 	local nextPageId = pageId - 1
 	if nextPageId < 1 then nextPageId = pageId end
 	
 	WW.pages[zone.tag][0].selected = nextPageId
 	WW.selection.pageId = nextPageId
 	
+	WW.setups[zone.tag][pageId] = nil
+	table.remove(WW.setups[zone.tag], pageId)
 	table.remove(WW.pages[zone.tag], pageId)
-	if WW.setups[zone.tag] and WW.setups[zone.tag][pageId] then
-		WW.setups[zone.tag][pageId] = nil
-		table.remove(WW.setups[zone.tag], pageId)
-	end
 	
 	WW.markers.BuildGearList()
 	WWG.BuildPage(zone, nextPageId)
