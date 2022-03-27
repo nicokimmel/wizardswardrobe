@@ -43,9 +43,11 @@ end
 function WWM.GetTooltip(itemData)
 	local text = {}
 	for _, data in ipairs(itemData) do
-		local pageName = WW.pages[data.tag][data.pageId].name
-		local setupName = WW.setups[data.tag][data.pageId][data.index].name
-		table.insert(text, string.format("%s (%s, %s)", setupName, data.tag, pageName))
+		if data and data.tag and data.pageId and data.index then
+			local pageName = WW.pages[data.tag][data.pageId].name
+			local setupName = WW.setups[data.tag][data.pageId][data.index].name
+			table.insert(text, string.format("%s (%s, %s)", setupName, data.tag, pageName))
+		end
 	end
 	return table.concat(text, "\n")
 end
