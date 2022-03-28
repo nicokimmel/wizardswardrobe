@@ -36,7 +36,7 @@ local language = {
 	WW_MSG_NOTENOUGHSOULGEMS = "Недостаточно камней душ в вашем инвентаре!",
 	WW_MSG_NOPOISONS = "Не удалось найти яды в вашем инвентаре!",
 	WW_MSG_IMPORTSUCCESS = "Все предметы успешно импортированы.",
-	WW_MSG_IMPORTGEARENOENT = "Not all items could be imported. Make sure you have all of the items in your inventory or in your bank. Traits don't matter.",
+	WW_MSG_IMPORTGEARENOENT = "Какие-то предметы не могут быть импортированы. Убедитесь, что в вашем инвентаре или банке есть все необходимые предметы. Особенности не имеют значения.",
 	WW_MSG_WITHDRAW_SETUP = "Перемещение набора [%s] из банка.",
 	WW_MSG_WITHDRAW_PAGE = "Перемещение всех наборов [%s] из банка.",
 	WW_MSG_WITHDRAW_FULL = "Не удалось переместить предметы. Убедитесь, что в вашем инвентаре достаточно места.",
@@ -50,7 +50,7 @@ local language = {
 	WW_MSG_FOOD_COMBAT = "Ваш бафф еды закончился посреди боя. WW обновит баф от %s после сражения, если это потребуется.",
 	WW_MSG_NOFOOD = "В инвентаре не найдена указанная вами еда.",
 	
-
+	
 	-- ADDON MENU
 	WW_MENU_GENERAL = "Настройки",
 	WW_MENU_PRINTCHAT = "Писать уведомления в чат",
@@ -88,24 +88,24 @@ local language = {
 	WW_MENU_BUFFFOOD = "Автоматически обновлять бафф еды",
 	WW_MENU_BUFFFOOD_TT = "Автоматически использует подходящую провизию когда ее бафф заканчивается. Работает только в испытаниях и подземельях.\nЗагляните в \"WizardsWardrobeConst.lua\", чтобы узнать, какие расходники поддерживаются. Их добавление в процессе.",
 	
-
+	
 	-- USER INTERFACE
-	WW_CHANGELOG = "Attention! This update contains some major changes. Please read the current changelog as some things may now work differently from what they used to.",
-	WW_BUTTON_HELP = "|cFFFFFF[Click]|r to open wiki",
+	WW_CHANGELOG = "Внимание! Эта версия Wizard's Wardrobe содержит некоторые важные изменения. Пожалуйста, ознакомьтесь с текущим журналом обновления, так как некоторые вещи теперь могут работать не так, как раньше.",
+	WW_BUTTON_HELP = "|cFFFFFF[Нажмите]|r, чтобы открыть Wiki.",
 	WW_BUTTON_SETTINGS = "Настройки",
 	WW_BUTTON_CLEARQUEUE = "Сбросить очередь\n(Можно использовать, если в очереди поставлено слишком много изменений сэтапа.)",
 	WW_BUTTON_UNDRESS = "Раздеться",
-	WW_BUTTON_PREBUFF = "Prebuff",
+	WW_BUTTON_PREBUFF = "Пребафф",
 	WW_BUTTON_LABEL = "|cFFFFFF[ЛКМ]|r загрузить набор",
 	WW_BUTTON_BANKING = "|cFFFFFF[ЛКМ]|r для снятия экипировки\n|cFFFFFF[Shift + ЛКМ]|r для складывания экипировки в банк",
 	WW_BUTTON_PREVIEW = "Предпросмотр",
 	WW_BUTTON_SAVE = "Сохранить",
-	WW_BUTTON_MODIFY = "Modify",
+	WW_BUTTON_MODIFY = "Изменить",
 	WW_BUTTON_RENAME = "Редактировать название",
-	WW_BUTTON_REARRANGE = "Rearrange",
+	WW_BUTTON_REARRANGE = "Порядок сэтапов",
 	WW_BUTTON_TOGGLEAUTOEQUIP = "Автопереключение наборов",
 	WW_BUTTON_ADDPAGE = "Добавить страницу",
-	WW_BUTTON_ADDSETUP = "Add setup",
+	WW_BUTTON_ADDSETUP = "Добавить сэтап",
 	WW_BUTTON_GEAR = "Экипировка не сохранена!\nНажмите |cFFFFFF[Shift + ЛКМ]|r, чтобы сохранить текущую экипировку, или перетащите ее элементы на эту кнопку.",
 	WW_BUTTON_SKILLS = "Навыки не сохранены!\nНажмите |cFFFFFF[Shift + ЛКМ]|r, чтобы сохранить текущие панели умений, или перетащите навыки в соответствующие ячейки сэтапа.",
 	WW_BUTTON_CP = "Звезды системы героя не сохранены!\nНажмите |cFFFFFF[Shift + ЛКМ]|r, чтобы сохранить текущие панели звезд.",
@@ -118,11 +118,11 @@ local language = {
 	WW_DISABLE = "Деактивировать",
 	WW_MISSING_GEAR_TT = "Отсутствуют следующие предметы:\n\n%s\n\n|cFFFFFF[ЛКМ]|r, чтобы обновить",
 	WW_SUBSTITUTE_EXPLAIN = "Эти настройки загружаются, если на выбранном сэтапе нет сохраненных настроек.\nЕсли вы не хотите использовать эту функцию, просто оставьте это поле пустым.",
-	WW_CONDITION_NAME = "Name",
-	WW_CONDITION_BOSS = "Boss",
-	WW_CONDITION_AFTER = "After",
-	WW_CONDITION_NONE = "None",
-	WW_CONDITION_EVERYWHERE = "Everywhere",
+	WW_CONDITION_NAME = "Назв.",
+	WW_CONDITION_BOSS = "Босс",
+	WW_CONDITION_AFTER = "После",
+	WW_CONDITION_NONE = "Нет",
+	WW_CONDITION_EVERYWHERE = "Повсюду",
 	WW_IMPORT = "Импорт",
 	WW_IMPORT_HELP = "Вставить |cFFFFFF[CTRL + V]|r экспортируемый текст здесь. Убедитесь, что текст не изменен, иначе импорт может завершиться неудачно.\nВам понадобятся все предметы в инвентаре. Особенности экспортированных наборов будут иметь приоритет, но если предмет в инвентаре не имеет правильную особенность, будут использоваться предмет с «неверной» особенностью.",
 	WW_IMPORT_TT = "|cFF0000Внимание! Это перезапишет выбранные наборы.|r",
@@ -140,39 +140,39 @@ local language = {
 	WW_PAGE = "Страница %s",
 	WW_EMPTY = "Пусто",
 	WW_UNNAMED = "Безымянный",
-	WW_TRASH = "Треш",
-
+	WW_TRASH = "Зачистка",
+	
 	WW_GENERAL = "Общее",
-
+	
 	WW_SUB_NAME = "Альтернативные Наборы",
 	WW_SUB_BOSS = "Альтернативный Босс",
-	WW_SUB_TRASH = "Альтернативный Треш",
-
+	WW_SUB_TRASH = "Альтернативная Зачистка",
+	
 	WW_PVP_NAME = "PvP",
-
+	
 	WW_AA_NAME = "Этерианский Архив",
 	WW_AA_STORMATRO = "Грозовой Атронах",
 	WW_AA_STONEATRO = "Каменный Атронах",
 	WW_AA_VARLARIEL = "Варлариэль",
 	WW_AA_MAGE = "Маг",
-
+	
 	WW_SO_NAME = "Санктум-Офидия",
 	WW_SO_MANTIKORA = "Одержимая Мантикора",
 	WW_SO_TROLL = "Тролль Камнелом",
 	WW_SO_OZARA = "Озара",
 	WW_SO_SERPENT = "Змей",
-
+	
 	WW_HRC_NAME = "Цитадель Хель-Ра",
 	WW_HRC_RAKOTU = "Ра-Коту",
 	WW_HRC_LOWER = "Йокеда Рок'дун",
 	WW_HRC_UPPER = "Йокеда Кай",
 	WW_HRC_WARRIOR = "Воин",
-
+	
 	WW_MOL_NAME = "Пасть Лоркаджа",
 	WW_MOL_ZHAJHASSA = "Жай'хасса Забытый",
 	WW_MOL_TWINS = "Братья-близнецы",
 	WW_MOL_RAKKHAT = "Ракхат",
-
+	
 	WW_HOF_NAME = "Залы Фабрикации",
 	WW_HOF_HUNTERKILLER = "Охотники-убийцы Негатрикс",
 	WW_HOF_HUNTERKILLER_DN = "Охотники-убийцы",
@@ -181,41 +181,41 @@ local language = {
 	WW_HOF_COMMITEE = "Реактор",
 	WW_HOF_COMMITEE_DN = "Комитет",
 	WW_HOF_GENERAL = "Сборочный Генерал",
-
+	
 	WW_AS_NAME = "Изоляционный Санктуарий",
 	WW_AS_OLMS = "Святой Олмс",
 	WW_AS_FELMS = "Святой Фелмс",
 	WW_AS_LLOTHIS = "Святой Ллотис",
-
+	
 	WW_CR_NAME = "Клаудрест",
 	WW_CR_GALENWE = "Тень Галенве",
 	WW_CR_RELEQUEN = "Тень Релеквина",
 	WW_CR_SIRORIA = "Тень Сирории",
 	WW_CR_ZMAJA = "З'Маджа",
-
+	
 	WW_SS_NAME = "Солнечный Шпиль",
 	WW_SS_LOKKESTIIZ = "Локкестииз",
 	WW_SS_YOLNAHKRIIN = "Йолнакриин",
 	WW_SS_NAHVIINTAAS = "Наавинтас",
-
+	
 	WW_KA_NAME = "Эгида Кин",
 	WW_KA_YANDIR = "Яндир Мясник",
 	WW_KA_VROL = "Капитан Врол",
 	WW_KA_FALGRAVN = "Лорд Фальгравн",
-
+	
 	WW_RG_NAME = "Каменная Роща",
 	WW_RG_OAXILTSO = "Оазилцо",
 	WW_RG_BAHSEI = "Басей Вестница Пламени",
 	WW_RG_XALVAKKA = "Залвакка",
 	WW_RG_SNAKE = "Нежится-со-Змеями",
 	WW_RG_ASHTITAN = "Пепельный титан",
-
+	
 	WW_MSA_NAME = "Вихревая Арена",
-
+	
 	WW_VH_NAME = "Дебри Ватешранов",
-
+	
 	WW_DSA_NAME = "Драгонстар Арена",
-
+	
 	WW_BRP_NAME = "Тюрьма Черная Роза",
 	WW_BRP_FIRST = "Боевой маг Эннодиус",
 	WW_BRP_SECOND = "Укрощает-Зверя",
@@ -223,7 +223,7 @@ local language = {
 	WW_BRP_FOURTH = "Все боссы",
 	WW_BRP_FIFTH = "Дракех Освобожденный",
 	WW_BRP_FINALROUND = "Финальный Раунд",
-
+	
 	
 	-- KEYBINDS
 	SI_BINDING_NAME_WW_HOTKEY_SHOW_UI = "Открыть Wizard's Wardrobe",
@@ -240,6 +240,9 @@ local language = {
 	SI_BINDING_NAME_WW_HOTKEY_SETUP_10 = "Набор 10",
 	SI_BINDING_NAME_WW_HOTKEY_SETUP_11 = "Набор 11",
 	SI_BINDING_NAME_WW_HOTKEY_SETUP_12 = "Набор 12",
+	SI_BINDING_NAME_WW_HOTKEY_SETUP_13 = "Набор 13",
+	SI_BINDING_NAME_WW_HOTKEY_SETUP_14 = "Набор 14",
+	SI_BINDING_NAME_WW_HOTKEY_SETUP_15 = "Набор 15",
 	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_1 = "Пребафф 1",
 	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_2 = "Пребафф 2",
 	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_3 = "Пребафф 3",
