@@ -63,7 +63,9 @@ function WWQ.Reset()
 end
 
 function WWQ.StartQueue()
-	if WWQ.Size() > 0 and not IsUnitInCombat("player") then
-		WWQ.Run()
-	end
+	zo_callLater(function()
+		if WWQ.Size() > 0 and not IsUnitInCombat("player") then
+			WWQ.Run()
+		end
+	end, 800)
 end
