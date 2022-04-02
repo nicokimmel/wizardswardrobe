@@ -121,6 +121,7 @@ WW.BUFFFOOD = {
 	[68236] = 61260,    -- Firsthold Fruit and Cheese Plate
 	[68237] = 61260,    -- Thrice-Baked Gorapple Pie
 	[68238] = 61260,    -- Tomato Garlic Chutney
+	[87691] = 84709,	-- Crunchy Spider Skewer
 	
 	[112425] = 86673, 	-- Lava Foot Soup-and-Saltrice
 	[120763] = 89957,	-- Dubious Camoran Throne
