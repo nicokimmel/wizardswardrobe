@@ -498,6 +498,7 @@ function WWG.SetupPageMenu()
 			end
 		end
 	end)
+	WWG.SetTooltip(WizardsWardrobeWindowPageMenuBank, TOP, GetString(WW_BUTTON_BANKING))
 	WizardsWardrobeWindowPageMenuBank:SetHandler("OnClicked", function(self)
 		if IsShiftKeyDown() then
 			WW.banking.DepositPage(WW.selection.zone, WW.selection.pageId)
