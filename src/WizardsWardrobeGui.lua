@@ -1096,6 +1096,7 @@ function WWG.BuildPage(zone, pageId)
 	WWG.RefreshPage()
 	WWG.OnWindowResize("stop")
 	ZO_Scroll_ResetToTop(WizardsWardrobeWindowSetupList)
+	WW.conditions.LoadConditions()
 end
 
 function WWG.CreatePage(zone, skipBuilding)
@@ -1230,8 +1231,6 @@ function WWG.RefreshPage()
 	
 	if pageId == 1 then WizardsWardrobeWindowPageMenuLeft:SetEnabled(false) else WizardsWardrobeWindowPageMenuLeft:SetEnabled(true) end
 	if pageId == #WW.pages[zone.tag] then WizardsWardrobeWindowPageMenuRight:SetEnabled(false) else WizardsWardrobeWindowPageMenuRight:SetEnabled(true) end
-	
-	WW.conditions.LoadConditions()
 	
 	local missingGear = WW.CheckGear(zone, pageId)
 	if #missingGear > 0 then
@@ -1587,7 +1586,6 @@ function WWG.RearrangeSetups(sortTable, zone, pageId)
 			WW.setups[zone.tag][pageId][newIndex] = pageCopy[oldIndex]
 		end
 	end
-	WW.conditions.LoadConditions()
 	WWG.BuildPage(zone, pageId)
 	WizardsWardrobeArrange:SetHidden(true)
 end
