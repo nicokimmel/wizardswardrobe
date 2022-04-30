@@ -136,8 +136,33 @@ function WWG.SetSceneManagement()
 	end
 	SCENE_MANAGER:RegisterCallback("SceneStateChanged", onSceneChange)
 	
+	ZO_QuickSlot_Keyboard_TopLevel:SetHandler("OnShow", function(self)
+		local quickslot = {
+			GetName = function(GetName)
+				return "inventoryQuickslot"
+			end
+		}
+		local inventoryScene = SCENE_MANAGER:GetScene("inventory")
+		onSceneChange(inventoryScene, SCENE_SHOWN, SCENE_HIDING)
+		onSceneChange(quickslot, SCENE_HIDDEN, SCENE_SHOWING)
+	end)
+	ZO_QuickSlot_Keyboard_TopLevel:SetHandler("OnHide", function(self)
+		local quickslot = {
+			GetName = function(GetName)
+				return "inventoryQuickslot"
+			end
+		}
+		local inventoryScene = SCENE_MANAGER:GetScene("inventory")
+		if inventoryScene:IsShowing() then
+			onSceneChange(quickslot, SCENE_SHOWN, SCENE_HIDING)
+			onSceneChange(inventoryScene, SCENE_HIDDEN, SCENE_SHOWING)
+		else
+			onSceneChange(quickslot, SCENE_SHOWN, SCENE_HIDING)
+		end
+	end)
+	
 	-- quickslot tab will act like a independent scene
-	QUICKSLOT_FRAGMENT:RegisterCallback("StateChange", function(oldState, newState)
+	--[[QUICKSLOT_FRAGMENT:RegisterCallback("StateChange", function(oldState, newState)
 		local quickslot = {
 			GetName = function(GetName)
 				return "inventoryQuickslot"
@@ -155,7 +180,7 @@ function WWG.SetSceneManagement()
 				onSceneChange(quickslot, SCENE_SHOWN, SCENE_HIDING)
 			end
 		end
-	end)
+	end)]]
 	
 	CALLBACK_MANAGER:RegisterCallback("LAM-PanelControlsCreated", function(panel)
 		if panel:GetName() ~= "WizardsWardrobeMenu" then return end
@@ -183,7 +208,7 @@ function WWG.SetSceneManagement()
 			WizardsWardrobeWindow:SetHidden(not WizardsWardrobeWindow:IsHidden())
 			return
 		end
-		if sceneName == "inventory" and QUICKSLOT_FRAGMENT:IsShowing() then
+		if sceneName == "inventory" and not ZO_QuickSlot_Keyboard_TopLevel:IsHidden() then
 			sceneName = "inventoryQuickslot"
 		end
 		local savedScene = WW.settings.window[sceneName]
