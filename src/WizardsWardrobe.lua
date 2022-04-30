@@ -74,6 +74,8 @@ function WW.SaveSetup(zone, pageId, index, skip)
 	
 	setup:ToStorage(zone.tag, pageId, index)
 	
+	WW.gui.RefreshSetup(WW.gui.GetSetupControl(index), setup)
+	
 	WW.Log(GetString(WW_MSG_SAVESETUP), WW.LOGTYPES.NORMAL, "FFFFFF", setup:GetName())
 end
 

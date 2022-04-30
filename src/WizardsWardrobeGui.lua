@@ -136,6 +136,7 @@ function WWG.SetSceneManagement()
 	end
 	SCENE_MANAGER:RegisterCallback("SceneStateChanged", onSceneChange)
 	
+	--[[ quickslot tab will internally act like a independent scene
 	ZO_QuickSlot_Keyboard_TopLevel:SetHandler("OnShow", function(self)
 		local quickslot = {
 			GetName = function(GetName)
@@ -158,27 +159,6 @@ function WWG.SetSceneManagement()
 			onSceneChange(inventoryScene, SCENE_HIDDEN, SCENE_SHOWING)
 		else
 			onSceneChange(quickslot, SCENE_SHOWN, SCENE_HIDING)
-		end
-	end)
-	
-	-- quickslot tab will act like a independent scene
-	--[[QUICKSLOT_FRAGMENT:RegisterCallback("StateChange", function(oldState, newState)
-		local quickslot = {
-			GetName = function(GetName)
-				return "inventoryQuickslot"
-			end
-		}
-		local inventoryScene = SCENE_MANAGER:GetScene("inventory")
-		if newState == SCENE_SHOWING then
-			onSceneChange(inventoryScene, SCENE_SHOWN, SCENE_HIDING)
-			onSceneChange(quickslot, SCENE_HIDDEN, SCENE_SHOWING)
-		elseif newState == SCENE_HIDING then
-			if inventoryScene:IsShowing() then
-				onSceneChange(quickslot, SCENE_SHOWN, SCENE_HIDING)
-				onSceneChange(inventoryScene, SCENE_HIDDEN, SCENE_SHOWING)
-			else
-				onSceneChange(quickslot, SCENE_SHOWN, SCENE_HIDING)
-			end
 		end
 	end)]]
 	
@@ -208,9 +188,9 @@ function WWG.SetSceneManagement()
 			WizardsWardrobeWindow:SetHidden(not WizardsWardrobeWindow:IsHidden())
 			return
 		end
-		if sceneName == "inventory" and not ZO_QuickSlot_Keyboard_TopLevel:IsHidden() then
-			sceneName = "inventoryQuickslot"
-		end
+		--if sceneName == "inventory" and not ZO_QuickSlot_Keyboard_TopLevel:IsShowing() then
+		--	sceneName = "inventoryQuickslot"
+		--end
 		local savedScene = WW.settings.window[sceneName]
 		if savedScene then
 			if savedScene.hidden then
@@ -913,6 +893,7 @@ function WWG.AquireSetupControl(setup)
 	end
 	setupControl.food:SetHandler("OnReceiveDrag", OnFoodDrag)
 	setupControl.food:SetHandler("OnClicked", function(self, mouseButton)
+		setup = Setup:FromStorage(WW.selection.zone.tag, WW.selection.pageId, index)
 		if OnFoodDrag(self) then return end
 		if mouseButton == MOUSE_BUTTON_INDEX_LEFT then
 			if IsShiftKeyDown() then
@@ -1010,6 +991,7 @@ function WWG.AquireSetupControl(setup)
 	end
 	setupControl.gear:SetHandler("OnReceiveDrag", OnGearDrag)
 	setupControl.gear:SetHandler("OnClicked", function(self, mouseButton)
+		setup = Setup:FromStorage(WW.selection.zone.tag, WW.selection.pageId, index)
 		if OnGearDrag(self) then return end
 		if mouseButton == MOUSE_BUTTON_INDEX_LEFT then
 			if IsShiftKeyDown() then
@@ -1032,6 +1014,7 @@ function WWG.AquireSetupControl(setup)
 	end)
 	
 	setupControl.skill:SetHandler("OnClicked", function(self, mouseButton)
+		setup = Setup:FromStorage(WW.selection.zone.tag, WW.selection.pageId, index)
 		if mouseButton == MOUSE_BUTTON_INDEX_LEFT then
 			if IsShiftKeyDown() then
 				WW.SaveSkills(setup)
@@ -1053,6 +1036,7 @@ function WWG.AquireSetupControl(setup)
 	end)
 	
 	setupControl.cp:SetHandler("OnClicked", function(self, mouseButton)
+		setup = Setup:FromStorage(WW.selection.zone.tag, WW.selection.pageId, index)
 		if mouseButton == MOUSE_BUTTON_INDEX_LEFT then
 			if IsShiftKeyDown() then
 				WW.SaveCP(setup)
