@@ -1,6 +1,6 @@
 <GuiXml>
 	<Controls>
-		<TopLevelControl name="WizardsWardrobePanel" mouseEnabled="true" movable="false" clampedToScreen="true" hidden="true">
+		<TopLevelControl name="WizardsWardrobePanel" tier="HIGH" layer="OVERLAY" mouseEnabled="true" movable="false" clampedToScreen="true" hidden="true">
 			<Dimensions x="245" y="70"/>
 			<OnMoveStop>WizardsWardrobe.gui.OnPanelMove()</OnMoveStop>
 			<Controls>
@@ -21,7 +21,7 @@
 			</Controls>
 		</TopLevelControl>
 		
-		<TopLevelControl name="WizardsWardrobeWindow" mouseEnabled="true" movable="true" hidden="true">
+		<TopLevelControl name="WizardsWardrobeWindow" tier="HIGH" layer="CONTROLS" mouseEnabled="true" movable="true" hidden="true">
 			<Dimensions x="360" y="665"/>
 			<DimensionConstraints minX="360" minY="360" maxX="AUTO_SIZE" maxY="AUTO_SIZE"/>
 			<Anchor point="CENTER" relativeTo="GUI_ROOT" relativePoint="CENTER"/>
@@ -183,7 +183,7 @@
 			</Controls>
 		</TopLevelControl>
 		
-		<TopLevelControl name="WizardsWardrobeModify" mouseEnabled="true" movable="false" hidden="true">
+		<TopLevelControl name="WizardsWardrobeModify" tier="HIGH" layer="OVERLAY" mouseEnabled="true" movable="false" hidden="true">
 			<Anchor point="CENTER" relativeTo="GUI_ROOT" relativePoint="CENTER"/>
 			<Controls>
 				<Backdrop name="$(parent)BG" inherits="ZO_DefaultBackdrop" alpha="0.7"></Backdrop>
@@ -267,7 +267,7 @@
 			</Controls>
 		</TopLevelControl>
 		
-		<TopLevelControl name="WizardsWardrobeArrange" mouseEnabled="true" movable="false" hidden="true">
+		<TopLevelControl name="WizardsWardrobeArrange" tier="HIGH" layer="OVERLAY" mouseEnabled="true" movable="false" hidden="true">
 			<Anchor point="CENTER" relativeTo="GUI_ROOT" relativePoint="CENTER"/>
 			<Controls>
 				<Backdrop name="$(parent)BG" inherits="ZO_DefaultBackdrop" alpha="0.7"></Backdrop>
