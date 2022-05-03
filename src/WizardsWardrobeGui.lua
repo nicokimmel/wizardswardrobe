@@ -9,7 +9,7 @@ local PANEL_HEIGHT = 70
 local PANEL_WIDTH_MINI = PANEL_WIDTH - 70
 local PANEL_HEIGHT_MINI = PANEL_HEIGHT - 30
 
-local PANEL_DEFAULT_TOP = ActionButton8:GetTop()  + 25
+local PANEL_DEFAULT_TOP = ActionButton8:GetTop() - 10
 local PANEL_DEFAULT_LEFT = ActionButton8:GetLeft() + ActionButton8:GetWidth() + 2
 
 local WINDOW_WIDTH = 360
@@ -268,8 +268,6 @@ function WWG.SetupPanel()
 	HUD_SCENE:AddFragment(WizardsWardrobePanel.fragment)
 	HUD_UI_SCENE:AddFragment(WizardsWardrobePanel.fragment)
 	zo_callLater(function() WizardsWardrobePanel.fragment:Refresh() end, 1)
-	
-	WizardsWardrobePanel:SetDrawLayer(2)
 	
 	WizardsWardrobePanelIcon:SetHandler("OnMouseEnter", function(self)
 		self:SetDesaturation(0.4)
