@@ -10,8 +10,8 @@ function WWT.Init()
 	WWT.CreateTransferDialog()
 end
 
-function WWT.Export(tag, pageId, index)
-	local setup = Setup:FromStorage(tag, pageId, index)
+function WWT.Export(zone, pageId, index)
+	local setup = Setup:FromStorage(zone.tag, pageId, index)
 	
 	if setup:IsEmpty() then
 		return
@@ -55,7 +55,7 @@ function WWT.Export(tag, pageId, index)
 	return json.encode(exportTable)
 end
 
-function WWT.Import(jsonText, tag, pageId, index)
+function WWT.Import(jsonText, zone, pageId, index)
 	
 	if not jsonText or #jsonText == 0 then
 		return
@@ -113,9 +113,8 @@ function WWT.Import(jsonText, tag, pageId, index)
 	end
 	setup:SetCP(cpTable)
 	
-	setup:ToStorage(tag, pageId, index)
-	local setupControl = WW.gui.GetSetupControl(index)
-	WW.gui.RefreshSetup(setupControl, setup)
+	setup:ToStorage(zone.tag, pageId, index)
+	WW.gui.BuildPage(zone, pageId, false)
 end
 
 function WWT.SearchItem(equipType, setId, prefTraitType, filter)
@@ -168,8 +167,8 @@ function WWT.SearchItem(equipType, setId, prefTraitType, filter)
 	return nil
 end
 
-function WWT.ShowExportDialog(tag, pageId, index)
-	local text = WWT.Export(tag, pageId, index)
+function WWT.ShowExportDialog(zone, pageId, index)
+	local text = WWT.Export(zone, pageId, index)
 	WWG.SetTooltip(WWT.helpButton, TOP, GetString(WW_EXPORT_HELP))
 	WWT.title:SetText(GetString(WW_EXPORT):upper())
 	WWT.editBox:SetText(tostring(text or ""))
@@ -180,7 +179,7 @@ function WWT.ShowExportDialog(tag, pageId, index)
 	WWT.editBox:SelectAll()
 end
 
-function WWT.ShowImportDialog(tag, pageId, index)
+function WWT.ShowImportDialog(zone, pageId, index)
 	WWG.SetTooltip(WWT.helpButton, TOP, GetString(WW_IMPORT_HELP))
 	WWT.title:SetText(GetString(WW_IMPORT):upper())
 	WWT.editBox:Clear()
@@ -191,7 +190,7 @@ function WWT.ShowImportDialog(tag, pageId, index)
 	WWT.importButton:SetHandler("OnClicked", function(self)
 		WWT.dialogWindow:SetHidden(true)
 		local text = WWT.editBox:GetText()
-		WWT.Import(text, tag, pageId, index)
+		WWT.Import(text, zone, pageId, index)
 	end)
 end
 

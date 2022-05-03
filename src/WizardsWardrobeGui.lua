@@ -136,7 +136,7 @@ function WWG.SetSceneManagement()
 	end
 	SCENE_MANAGER:RegisterCallback("SceneStateChanged", onSceneChange)
 	
-	--[[ quickslot tab will internally act like a independent scene
+	-- quickslot tab will internally act like a independent scene
 	ZO_QuickSlot_Keyboard_TopLevel:SetHandler("OnShow", function(self)
 		local quickslot = {
 			GetName = function(GetName)
@@ -160,7 +160,7 @@ function WWG.SetSceneManagement()
 		else
 			onSceneChange(quickslot, SCENE_SHOWN, SCENE_HIDING)
 		end
-	end)]]
+	end)
 	
 	CALLBACK_MANAGER:RegisterCallback("LAM-PanelControlsCreated", function(panel)
 		if panel:GetName() ~= "WizardsWardrobeMenu" then return end
@@ -1091,7 +1091,7 @@ function WWG.ClearPage()
 	WWG.setupTable = {}
 end
 
-function WWG.BuildPage(zone, pageId)
+function WWG.BuildPage(zone, pageId, scroll)
 	WWG.ClearPage()
 	for entry in WW.PageIterator(zone, pageId) do
 		local setup = Setup:FromStorage(zone.tag, pageId, entry.index)
@@ -1104,8 +1104,10 @@ function WWG.BuildPage(zone, pageId)
 	end
 	WWG.RefreshPage()
 	WWG.OnWindowResize("stop")
-	ZO_Scroll_ResetToTop(WizardsWardrobeWindowSetupList)
 	WW.conditions.LoadConditions()
+	if scroll then
+		ZO_Scroll_ResetToTop(WizardsWardrobeWindowSetupList)
+	end
 end
 
 function WWG.CreatePage(zone, skipBuilding)
@@ -1126,7 +1128,7 @@ function WWG.CreatePage(zone, skipBuilding)
 	WWG.CreateDefaultSetups(zone, nextPageId)
 	
 	if not skipBuilding then
-		WWG.BuildPage(zone, nextPageId)
+		WWG.BuildPage(zone, nextPageId, true)
 	end
 	
 	return nextPageId
@@ -1156,7 +1158,7 @@ function WWG.DuplicatePage()
 	WW.setups[zone.tag][cloneId] = {}
 	ZO_DeepTableCopy(WW.setups[zone.tag][pageId], WW.setups[zone.tag][cloneId])
 	
-	WWG.BuildPage(WW.selection.zone, WW.selection.pageId)
+	WWG.BuildPage(WW.selection.zone, WW.selection.pageId, true)
 end
 
 function WWG.DeletePage()
@@ -1180,7 +1182,7 @@ function WWG.DeletePage()
 	table.remove(WW.pages[zone.tag], pageId)
 	
 	WW.markers.BuildGearList()
-	WWG.BuildPage(zone, nextPageId)
+	WWG.BuildPage(zone, nextPageId, true)
 	
 	return nextPageId
 end
@@ -1212,7 +1214,7 @@ function WWG.PageLeft()
 	local prevPage = WW.selection.pageId - 1
 	WW.selection.pageId = prevPage
 	WW.pages[WW.selection.zone.tag][0].selected = prevPage
-	WWG.BuildPage(WW.selection.zone, WW.selection.pageId)
+	WWG.BuildPage(WW.selection.zone, WW.selection.pageId, true)
 end
 
 function WWG.PageRight()
@@ -1222,7 +1224,7 @@ function WWG.PageRight()
 	local nextPage = WW.selection.pageId + 1
 	WW.selection.pageId = nextPage
 	WW.pages[WW.selection.zone.tag][0].selected = nextPage
-	WWG.BuildPage(WW.selection.zone, WW.selection.pageId)
+	WWG.BuildPage(WW.selection.zone, WW.selection.pageId, true)
 end
 
 function WWG.RefreshPage()
@@ -1365,8 +1367,8 @@ function WWG.ShowSetupContextMenu(control, index)
 	AddMenuItem(GetString(WW_CUSTOMCODE), function() WW.code.ShowCodeDialog(zone, pageId, index) end, MENU_ADD_OPTION_LABEL)
 	
 	-- IMPORT / EXPORT
-	AddMenuItem(GetString(WW_IMPORT), function() WW.transfer.ShowImportDialog(zone.tag, pageId, index) end, MENU_ADD_OPTION_LABEL)
-	AddMenuItem(GetString(WW_EXPORT), function() WW.transfer.ShowExportDialog(zone.tag, pageId, index) end, MENU_ADD_OPTION_LABEL)
+	AddMenuItem(GetString(WW_IMPORT), function() WW.transfer.ShowImportDialog(zone, pageId, index) end, MENU_ADD_OPTION_LABEL)
+	AddMenuItem(GetString(WW_EXPORT), function() WW.transfer.ShowExportDialog(zone, pageId, index) end, MENU_ADD_OPTION_LABEL)
 	
 	-- ENABLE / DISABLE
 	--if setup:IsDisabled() then
@@ -1595,6 +1597,6 @@ function WWG.RearrangeSetups(sortTable, zone, pageId)
 			WW.setups[zone.tag][pageId][newIndex] = pageCopy[oldIndex]
 		end
 	end
-	WWG.BuildPage(zone, pageId)
+	WWG.BuildPage(zone, pageId, true)
 	WizardsWardrobeArrange:SetHidden(true)
 end
