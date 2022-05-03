@@ -785,7 +785,7 @@ function WWG.AquireSetupControl(setup)
 	end)
 	setupControl.modify:SetEnabled(not (WW.selection.zone.tag == "SUB"))
 	setupControl.modify:SetHandler("OnClicked", function(self)
-		WWG.ShowModifyDialog(setupControl, setup, index)
+		WWG.ShowModifyDialog(setupControl, index)
 	end)
 	setupControl.save:SetHandler("OnClicked", function(self)
 		WW.SaveSetup(WW.selection.zone, WW.selection.pageId, index)
@@ -1408,9 +1408,11 @@ function WWG.SetupModifyDialog()
 	table.insert(WWG.dialogList, WizardsWardrobeModify)
 end
 
-function WWG.ShowModifyDialog(setupControl, setup, index)
+function WWG.ShowModifyDialog(setupControl, index)
 	local zone = WW.selection.zone
 	local pageId = WW.selection.pageId
+	
+	local setup = Setup:FromStorage(zone.tag, pageId, index)
 	
 	local condition = setup:GetCondition()
 	

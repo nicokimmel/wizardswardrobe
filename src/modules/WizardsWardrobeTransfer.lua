@@ -114,7 +114,7 @@ function WWT.Import(jsonText, zone, pageId, index)
 	setup:SetCP(cpTable)
 	
 	setup:ToStorage(zone.tag, pageId, index)
-	WW.gui.BuildPage(zone, pageId, false)
+	WW.gui.RefreshSetup(WW.gui.GetSetupControl(index), setup)
 end
 
 function WWT.SearchItem(equipType, setId, prefTraitType, filter)
