@@ -32,9 +32,10 @@ end
 
 function WWQ.Push(task, delay)
 	if delay and delay > 0 then
-		zo_callLater(function()
-			WWQ.Push(task)
-		end, delay)
+		local delayedFunction = function()
+			zo_callLater(task, delay)
+		end
+		WWQ.Push(delayedFunction)
 		return
 	end
 	
