@@ -23,20 +23,87 @@ SS.bosses = {
 	},
 }
 
+SS.LOCATIONS = {
+	LOKKESTIIZ = {
+		x1 = 112000,
+		x2 = 118000,
+		y1 = 55500,
+		y2 = 56500,
+		z1 = 100700,
+		z2 = 109900,
+	},
+	YOLNAHKRIIN = {
+		x1 = 93500,
+		x2 = 101500,
+		y1 = 49000,
+		y2 = 50500,
+		z1 = 103500,
+		z2 = 115600,
+	},
+	NAHVIINTAAS = {
+		x1 = 102200,
+		x2 = 109300,
+		y1 = 63000,
+		y2 = 64800,
+		z1 = 84700,
+		z2 = 96700,
+	},
+}
+
 function SS.Init()
-	SS.lastBoss = ""
+	EVENT_MANAGER:UnregisterForEvent(WW.name, EVENT_BOSSES_CHANGED)
+	EVENT_MANAGER:RegisterForUpdate(WW.name .. SS.tag .. "MovementLoop", 2000, SS.OnMovement)
+	EVENT_MANAGER:RegisterForEvent(WW.name .. SS.tag, EVENT_PLAYER_COMBAT_STATE, SS.OnCombatChange)
 end
 
 function SS.Reset()
+	EVENT_MANAGER:UnregisterForEvent(WW.name .. SS.tag, EVENT_PLAYER_COMBAT_STATE)
+	EVENT_MANAGER:UnregisterForUpdate(WW.name .. SS.tag .. "MovementLoop")
+	EVENT_MANAGER:RegisterForEvent(WW.name, EVENT_BOSSES_CHANGED, WW.OnBossChange)
+end
+
+function SS.OnCombatChange(_, inCombat)
+	if inCombat then
+		EVENT_MANAGER:UnregisterForUpdate(WW.name .. SS.tag .. "MovementLoop")
+	else
+		EVENT_MANAGER:RegisterForUpdate(WW.name .. SS.tag .. "MovementLoop", 2000, SS.OnMovement)
+	end
+end
+
+function SS.OnMovement()
+	local bossName = SS.GetBossByLocation()
+	if not bossName then return end
+	WW.OnBossChange(_, true, bossName)
+end
+
+function SS.GetBossByLocation()
+	local zone, x, y, z = GetUnitWorldPosition("player")
 	
+	if zone ~= SS.id then return nil end
+	
+	if x > SS.LOCATIONS.LOKKESTIIZ.x1 and x < SS.LOCATIONS.LOKKESTIIZ.x2
+		and y > SS.LOCATIONS.LOKKESTIIZ.y1 and y < SS.LOCATIONS.LOKKESTIIZ.y2
+		and z > SS.LOCATIONS.LOKKESTIIZ.z1 and z < SS.LOCATIONS.LOKKESTIIZ.z2 then
+		
+		return GetString(WW_SS_LOKKESTIIZ)
+		
+	elseif x > SS.LOCATIONS.YOLNAHKRIIN.x1 and x < SS.LOCATIONS.YOLNAHKRIIN.x2
+		and y > SS.LOCATIONS.YOLNAHKRIIN.y1 and y < SS.LOCATIONS.YOLNAHKRIIN.y2
+		and z > SS.LOCATIONS.YOLNAHKRIIN.z1 and z < SS.LOCATIONS.YOLNAHKRIIN.z2 then
+		
+		return GetString(WW_SS_YOLNAHKRIIN)
+	
+	elseif x > SS.LOCATIONS.NAHVIINTAAS.x1 and x < SS.LOCATIONS.NAHVIINTAAS.x2
+		and y > SS.LOCATIONS.NAHVIINTAAS.y1 and y < SS.LOCATIONS.NAHVIINTAAS.y2
+		and z > SS.LOCATIONS.NAHVIINTAAS.z1 and z < SS.LOCATIONS.NAHVIINTAAS.z2 then
+		
+		return GetString(WW_SS_NAHVIINTAAS)
+	
+	else
+		return GetString(WW_TRASH)
+	end
 end
 
 function SS.OnBossChange(bossName)
-	if SS.lastBoss == GetString(WW_SS_NAHVIINTAAS) and bossName == "" then
-		-- might be a portal bug
-		return
-	end
-	SS.lastBoss = bossName
-	
 	WW.conditions.OnBossChange(bossName)
 end
