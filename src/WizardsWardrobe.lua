@@ -102,6 +102,26 @@ function WW.DeleteSetup(zone, pageId, index)
 	WW.Log(GetString(WW_MSG_DELETESETUP), WW.LOGTYPES.NORMAL, "FFFFFF", setupName)
 end
 
+function WW.ClearSetup(zone, pageId, index)
+	local setup = Setup:FromStorage(zone.tag, pageId, index)
+	local setupName = setup:GetName()
+	
+	setup:Clear()
+	setup:SetName(setupName)
+	setup:ToStorage(zone.tag, pageId, index)
+		
+	WW.markers.BuildGearList()
+	WW.conditions.LoadConditions()
+	
+	if zone.tag == WW.selection.zone.tag
+		and pageId == WW.selection.pageId then
+		
+		WW.gui.BuildPage(zone, pageId)
+	end
+	
+	WW.Log(GetString(WW_MSG_DELETESETUP), WW.LOGTYPES.NORMAL, "FFFFFF", setupName)
+end
+
 function WW.LoadSkills(setup)
 	local skillTask = function()
 		local skillTable = setup:GetSkills()

@@ -1381,6 +1381,11 @@ function WWG.ShowSetupContextMenu(control, index)
 			PlaySound(SOUNDS.DEFER_NOTIFICATION)
 			WW.DeleteSetup(zone, pageId, index)
 		end, MENU_ADD_OPTION_LABEL, "ZoFontGameBold", ZO_ColorDef:New(1, 0, 0, 1), ZO_ColorDef:New(1, 0, 0, 1))
+	else
+		AddMenuItem(GetString(WW_DELETE):upper(), function()
+			PlaySound(SOUNDS.DEFER_NOTIFICATION)
+			WW.ClearSetup(zone, pageId, index)
+		end, MENU_ADD_OPTION_LABEL, "ZoFontGameBold", ZO_ColorDef:New(1, 0, 0, 1), ZO_ColorDef:New(1, 0, 0, 1))
 	end
 	
 	-- lets fix some ZOS bugs(?)
