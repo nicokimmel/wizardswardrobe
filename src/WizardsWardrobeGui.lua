@@ -1329,7 +1329,7 @@ function WWG.ShowPageContextMenu(control)
 	
 	AddMenuItem(GetString(WW_DUPLICATE), function() WWG.DuplicatePage() end, MENU_ADD_OPTION_LABEL)
 	
-	local deleteColor = #WW.pages[zone.tag] > 1 and ZO_ColorDef:New(1, 0, 0, 1) or ZO_ColorDef:New(0.17, 0.17, 0.17, 1)
+	local deleteColor = #WW.pages[zone.tag] > 1 and ZO_ColorDef:New(1, 0, 0, 1) or ZO_ColorDef:New(0.35, 0.35, 0.35, 1)
 	AddMenuItem(GetString(WW_DELETE):upper(), function()
 		if #WW.pages[zone.tag] > 1 then
 			local pageName = WW.pages[zone.tag][pageId].name
