@@ -188,9 +188,9 @@ function WWG.SetSceneManagement()
 			WizardsWardrobeWindow:SetHidden(not WizardsWardrobeWindow:IsHidden())
 			return
 		end
-		--if sceneName == "inventory" and not ZO_QuickSlot_Keyboard_TopLevel:IsShowing() then
-		--	sceneName = "inventoryQuickslot"
-		--end
+		if sceneName == "inventory" and not ZO_QuickSlot_Keyboard_TopLevel:IsShowing() then
+			sceneName = "inventoryQuickslot"
+		end
 		local savedScene = WW.settings.window[sceneName]
 		if savedScene then
 			if savedScene.hidden then
@@ -1329,6 +1329,7 @@ function WWG.ShowPageContextMenu(control)
 	
 	AddMenuItem(GetString(WW_DUPLICATE), function() WWG.DuplicatePage() end, MENU_ADD_OPTION_LABEL)
 	
+	local deleteColor = #WW.pages[zone.tag] > 1 and ZO_ColorDef:New(1, 0, 0, 1) or ZO_ColorDef:New(0.17, 0.17, 0.17, 1)
 	AddMenuItem(GetString(WW_DELETE):upper(), function()
 		if #WW.pages[zone.tag] > 1 then
 			local pageName = WW.pages[zone.tag][pageId].name
@@ -1337,7 +1338,7 @@ function WWG.ShowPageContextMenu(control)
 				WWG.DeletePage()
 			end)
 		end
-	end, MENU_ADD_OPTION_LABEL, "ZoFontGameBold", ZO_ColorDef:New(1, 0, 0, 1), ZO_ColorDef:New(1, 0, 0, 1))
+	end, MENU_ADD_OPTION_LABEL, "ZoFontGameBold", deleteColor, deleteColor)
 	
 	-- lets fix some ZOS bugs(?)
 	if control:GetWidth() >= ZO_Menu.width then
