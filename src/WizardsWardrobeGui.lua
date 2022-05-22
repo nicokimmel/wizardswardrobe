@@ -1175,7 +1175,6 @@ function WWG.DeletePage()
 	WW.pages[zone.tag][0].selected = nextPageId
 	WW.selection.pageId = nextPageId
 	
-	WW.setups[zone.tag][pageId] = nil
 	table.remove(WW.setups[zone.tag], pageId)
 	table.remove(WW.pages[zone.tag], pageId)
 	
