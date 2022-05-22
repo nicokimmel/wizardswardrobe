@@ -1,6 +1,6 @@
 <GuiXml>
 	<Controls>
-		<TopLevelControl name="WizardsWardrobePanel" tier="MEDIUM" layer="OVERLAY" mouseEnabled="true" movable="false" clampedToScreen="true" hidden="true">
+		<TopLevelControl name="WizardsWardrobePanel" tier="LOW" layer="CONTROLS" mouseEnabled="true" movable="false" clampedToScreen="true" hidden="true">
 			<Dimensions x="245" y="70"/>
 			<OnMoveStop>WizardsWardrobe.gui.OnPanelMove()</OnMoveStop>
 			<Controls>
@@ -21,7 +21,7 @@
 			</Controls>
 		</TopLevelControl>
 		
-		<TopLevelControl name="WizardsWardrobeWindow" tier="HIGH" layer="CONTROLS" mouseEnabled="true" movable="true" hidden="true">
+		<TopLevelControl name="WizardsWardrobeWindow" tier="MEDIUM" layer="CONTROLS" mouseEnabled="true" movable="true" hidden="true">
 			<Dimensions x="360" y="665"/>
 			<DimensionConstraints minX="360" minY="360" maxX="AUTO_SIZE" maxY="AUTO_SIZE"/>
 			<Anchor point="CENTER" relativeTo="GUI_ROOT" relativePoint="CENTER"/>
