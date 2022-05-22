@@ -44,6 +44,10 @@ function WWM.InitSV()
 			overland = false,
 			dungeons = false,
 		},
+		fixes = {
+			surfingWeapons = false,
+		},
+		changelogs = {},
 		printMessages = true,
 		overwriteWarning = true,
 		inventoryMarker = true,
@@ -53,7 +57,6 @@ function WWM.InitSV()
 		fillPoisons = false,
 		eatBuffFood = false,
 		initialized = false,
-		changelogs = {},
 	})
 	
 	-- dont look at this
@@ -273,6 +276,15 @@ function WWM.InitAM()
 						WW.food.RegisterEvents()
 					  end,
 			tooltip = GetString(WW_MENU_BUFFFOOD_TT),
+		},
+		{
+			type = "checkbox",
+			name = GetString(WW_MENU_FIXES_FIXSURFINGWEAPONS),
+			getFunc = function() return WW.settings.fixes.surfingWeapons end,
+			setFunc = function(value)
+						WW.settings.fixes.surfingWeapons = value
+					  end,
+			tooltip = GetString(WW_MENU_FIXES_FIXSURFINGWEAPONS_TT),
 		},
 	}
 	

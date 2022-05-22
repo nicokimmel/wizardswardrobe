@@ -87,6 +87,8 @@ local language = {
 	WW_MENU_FILLPOISONS_TT = "Автоматически пытается пополнить яды из инвентаря.\n|H1:item:76827:308:50:0:0:0:0:0:0:0:0:0:0:0:0:36:1:0:0:0:138240|h|h также меняется с |H1:item:79690:6:1:0:0:0:0:0:0:0:0:0:0:0:1:36:0:1:0:0:0|h|h и наоборот если иное не доступно.",
 	WW_MENU_BUFFFOOD = "Автоматически обновлять бафф еды",
 	WW_MENU_BUFFFOOD_TT = "Автоматически использует подходящую провизию когда ее бафф заканчивается. Работает только в испытаниях и подземельях.\nЗагляните в \"WizardsWardrobeConst.lua\", чтобы узнать, какие расходники поддерживаются. Их добавление в процессе.",
+	WW_MENU_FIXES_FIXSURFINGWEAPONS = "Fix surfing on weapons",
+	WW_MENU_FIXES_FIXSURFINGWEAPONS_TT = "This will toggle \"Hide Your Helm\" twice every zone swap in order to fix the weapon surf bug.",
 	
 	
 	-- USER INTERFACE

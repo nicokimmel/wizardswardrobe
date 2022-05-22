@@ -87,6 +87,8 @@ local language = {
 	WW_MENU_FILLPOISONS_TT = "Automatically tries to refill poisons from the inventory.\n|H1:item:76827:308:50:0:0:0:0:0:0:0:0:0:0:0:0:36:1:0:0:0:138240|h|h is also exchanged with |H1:item:79690:6:1:0:0:0:0:0:0:0:0:0:0:0:1:36:0:1:0:0:0|h|h (and vice versa) if otherwise not available.",
 	WW_MENU_BUFFFOOD = "Automatically renew buff food",
 	WW_MENU_BUFFFOOD_TT = "Automatically eats the matching food again when it runs out. Only works in trials and dungeons.\nLook into \"WizardsWardrobeConst.lua\" to see which foods are supported. More to come.",
+	WW_MENU_FIXES_FIXSURFINGWEAPONS = "Fix surfing on weapons",
+	WW_MENU_FIXES_FIXSURFINGWEAPONS_TT = "This will toggle \"Hide Your Helm\" twice every zone swap in order to fix the weapon surf bug.",
 	
 	
 	-- USER INTERFACE

@@ -55,3 +55,14 @@ function WWF.FlipShoulders()
 		end
 	end)
 end
+
+function WWF.FixSurfingWeapons()	
+	local collectibleId = GetActiveCollectibleByType(COLLECTIBLE_CATEGORY_TYPE_HAT)
+	if collectibleId == 0 then collectibleId = 5002 end
+	
+	UseCollectible(collectibleId)
+	
+	zo_callLater(function()
+		UseCollectible(collectibleId)	
+	end, 1500 + GetLatency())
+end

@@ -87,6 +87,8 @@ local language = {
 	WW_MENU_FILLPOISONS_TT = "Versucht automatisch Gifte aus dem Inventar nachzulegen.\n|H1:item:76827:308:50:0:0:0:0:0:0:0:0:0:0:0:0:36:1:0:0:0:138240|h|h wird auch mit |H1:item:79690:6:1:0:0:0:0:0:0:0:0:0:0:0:1:36:0:1:0:0:0|h|h ausgetauscht (und andersrum) wenn sonst nicht vorhanden.",
 	WW_MENU_BUFFFOOD = "Bufffood automatisch verlängern",
 	WW_MENU_BUFFFOOD_TT = "Isst automatisch wieder das passende Bufffood, wenn es ausläuft. Funktioniert nur in Raids und Dungeons.\nSchau in \"WizardsWardrobeConst.lua\" nach welche Bufffoods aktuell supported werden.",
+	WW_MENU_FIXES_FIXSURFINGWEAPONS = "Fix surfing on weapons",
+	WW_MENU_FIXES_FIXSURFINGWEAPONS_TT = "This will toggle \"Hide Your Helm\" twice every zone swap in order to fix the weapon surf bug.",
 	
 	
 	-- USER INTERFACE

@@ -628,6 +628,10 @@ function WW.OnZoneChange(_, _)
 		-- change ui if loaded
 		WW.gui.OnZoneSelect(WW.currentZone)
 		
+		if WW.settings.fixes.surfingWeapons then
+			WW.fixes.FixSurfingWeapons()
+		end
+		
 		if WW.settings.autoEquipSetups
 			and not isFirstZoneAfterReload
 			and WW.currentZone.tag ~= "PVP" then

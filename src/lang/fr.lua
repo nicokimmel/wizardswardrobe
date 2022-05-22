@@ -87,6 +87,8 @@ local language = {
 	WW_MENU_FILLPOISONS_TT = "Tenter automatiquement d'équiper les poisons de l'inventaire.\n|H1:item:76827:308:50:0:0:0:0:0:0:0:0:0:0:0:0:36:1:0:0:0:138240|h|h est également échangé avec |H1:item:79690:6:1:0:0:0:0:0:0:0:0:0:0:0:1:36:0:1:0:0:0|h|h (et vice versa) si autrement non disponible.",
 	WW_MENU_BUFFFOOD = "Renouvelle automatiquement le buff de nourriture",
 	WW_MENU_BUFFFOOD_TT = "Consomme automatiquement la nourriture correspondants lorsque le buff se termine. Ne fonctionne que dans les épreuves et les donjons.\nRegardez dans \"WizardsWardrobeConst.lua\" pour voir quelles nourriture sont pris en charge. Plus à venir.",
+	WW_MENU_FIXES_FIXSURFINGWEAPONS = "Fix surfing on weapons",
+	WW_MENU_FIXES_FIXSURFINGWEAPONS_TT = "This will toggle \"Hide Your Helm\" twice every zone swap in order to fix the weapon surf bug.",
 	
 	
 	-- USER INTERFACE
