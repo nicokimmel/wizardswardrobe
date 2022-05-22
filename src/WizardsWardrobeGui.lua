@@ -1378,7 +1378,7 @@ function WWG.ShowSetupContextMenu(control, index)
 	-- DELETE
 	AddMenuItem(GetString(WW_DELETE):upper(), function()
 		PlaySound(SOUNDS.DEFER_NOTIFICATION)
-		if WW.selection.zone.tag ~= "SUB" then
+		if WW.selection.zone.tag == "SUB" then
 			WW.ClearSetup(zone, pageId, index)
 		else
 			WW.DeleteSetup(zone, pageId, index)
