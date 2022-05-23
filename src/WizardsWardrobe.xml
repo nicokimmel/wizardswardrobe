@@ -183,7 +183,7 @@
 			</Controls>
 		</TopLevelControl>
 		
-		<TopLevelControl name="WizardsWardrobeModify" tier="HIGH" layer="OVERLAY" mouseEnabled="true" movable="false" hidden="true">
+		<TopLevelControl name="WizardsWardrobeModify" tier="MEDIUM" layer="OVERLAY" mouseEnabled="true" movable="false" hidden="true">
 			<Anchor point="CENTER" relativeTo="GUI_ROOT" relativePoint="CENTER"/>
 			<Controls>
 				<Backdrop name="$(parent)BG" inherits="ZO_DefaultBackdrop" alpha="0.7"></Backdrop>
