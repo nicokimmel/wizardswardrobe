@@ -36,7 +36,10 @@ function WWT.Export(zone, pageId, index)
 	for _, gearSlot in ipairs(WW.GEARSLOTS) do
 		local savedGear = setup:GetGearInSlot(gearSlot)
 		if savedGear then
-			if GetItemLinkItemType(savedGear.link) ~= ITEMTYPE_POISON then -- exclude poisons
+			if gearSlot == EQUIP_SLOT_POISON
+				or gearSlot == EQUIP_SLOT_BACKUP_POISON
+				or gearSlot == EQUIP_SLOT_COSTUME then
+				
 				exportTable.gear[tostring(gearSlot)] = {
 					GetItemLinkEquipType(savedGear.link), -- equipType
 					({GetItemLinkSetInfo(savedGear.link, false)})[6], -- setId
