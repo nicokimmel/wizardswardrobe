@@ -24,7 +24,7 @@ end
 
 local function CreateDropdown(control, parent)
     local dropdown = WINDOW_MANAGER:CreateControl(control:GetName() .. "Dropdown", control, CT_CONTROL)
-    dropdown:SetDrawTier(DT_MEDIUM)
+    dropdown:SetDrawTier(DT_HIGH)
     dropdown:SetWidth(control:SetWidth())
     dropdown:SetHidden(true)
     dropdown.Toggle = function(self) self:SetHidden(not self:IsHidden()) end
@@ -73,8 +73,8 @@ function GridComboBox:New(name, parent)
     local dropdown = self.control.controls.dropdown
     local function FactoryItem()
         local item = WINDOW_MANAGER:CreateControl(nil, dropdown, CT_BUTTON)
-        item.tag = WINDOW_MANAGER:CreateControl(nil, item, CT_LABEL)
-        item.frame = WINDOW_MANAGER:CreateControl(nil, item, CT_TEXTURE)
+        item.tag = WINDOW_MANAGER:CreateControl(nil, dropdown, CT_LABEL)
+        item.frame = WINDOW_MANAGER:CreateControl(nil, dropdown, CT_TEXTURE)
         return item
     end
     local function ResetItem(item)
@@ -139,16 +139,23 @@ function GridComboBox:AddItem(data)
     item:SetClickSound(SOUNDS.DEFAULT_CLICK)
     item:SetState(BSTATE_NORMAL)
     item:SetHandler("OnClicked", function() self:Select(index) end)
-    item:SetDrawTier(DT_MEDIUM)
+    item:SetDrawLayer(DL_CONTROLS)
+	item:SetDrawLevel(2)
+	
     item.tag:SetHidden(false)
     item.tag:SetAnchor(CENTER, item, CENTER, 0, 0)
     item.tag:SetText(data.tag)
     item.tag:SetFont("ZoFontWinH2")
+    item.tag:SetDrawLayer(DL_CONTROLS)
+	item.tag:SetDrawLevel(3)
+	
     item.frame:SetHidden(false)
 	item.frame:SetDimensions(self.itemSize, self.itemSize)
 	item.frame:SetAnchor(CENTER, item, CENTER, 0, 0)
 	item.frame:SetTexture("/esoui/art/actionbar/abilityframe64_up.dds")
-    item.frame:SetDrawTier(DT_HIGH)
+    item.frame:SetDrawLayer(DL_CONTROLS)
+	item.frame:SetDrawLevel(4)
+	
     item.data = data
     
     table.insert(self.items, key)
