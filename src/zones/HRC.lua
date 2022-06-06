@@ -4,7 +4,7 @@ local HRC = WW.zones["HRC"]
 
 HRC.name = GetString(WW_HRC_NAME)
 HRC.tag = "HRC"
-HRC.icon = "/WizardsWardrobe/assets/zones/hrc.dds"
+HRC.icon = "/esoui/art/icons/achievement_update11_dungeons_001.dds"
 HRC.priority = 3
 HRC.id = 636
 

@@ -4,7 +4,7 @@ local GEN = WW.zones["GEN"]
 
 GEN.name = GetString(WW_GENERAL)
 GEN.tag = "GEN"
-GEN.icon = "/WizardsWardrobe/assets/zones/gen.dds"
+GEN.icon = "/esoui/art/icons/achievement_u26_skyrim_trial_flavor_2.dds"
 GEN.priority = -2
 GEN.id = -1
 

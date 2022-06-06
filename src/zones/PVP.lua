@@ -4,7 +4,7 @@ local PVP = WW.zones["PVP"]
 
 PVP.name = GetString(WW_PVP_NAME)
 PVP.tag = "PVP"
-PVP.icon = "/WizardsWardrobe/assets/zones/pvp.dds"
+PVP.icon = "/esoui/art/icons/achievement_071.dds"
 PVP.priority = 0
 PVP.id = {
 	[181] = true,	-- Cyrodiil

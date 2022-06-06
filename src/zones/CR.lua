@@ -4,7 +4,7 @@ local CR = WW.zones["CR"]
 
 CR.name = GetString(WW_CR_NAME)
 CR.tag = "CR"
-CR.icon = "/WizardsWardrobe/assets/zones/cr.dds"
+CR.icon = "/esoui/art/icons/achievement_su_karnwasten_groupevent.dds"
 CR.priority = 7
 CR.id = 1051
 

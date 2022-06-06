@@ -4,7 +4,7 @@ local AA = WW.zones["AA"]
 
 AA.name = GetString(WW_AA_NAME)
 AA.tag = "AA"
-AA.icon = "/WizardsWardrobe/assets/zones/aa.dds"
+AA.icon = "/esoui/art/icons/achievement_update11_dungeons_002.dds"
 AA.priority = 1
 AA.id = 638
 

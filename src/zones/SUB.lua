@@ -4,7 +4,7 @@ local SUB = WW.zones["SUB"]
 
 SUB.name = GetString(WW_SUB_NAME)
 SUB.tag = "SUB"
-SUB.icon = "/WizardsWardrobe/assets/zones/sub.dds"
+SUB.icon = "/esoui/art/icons/achievement_u23_skillmaster_darkbrotherhood.dds"
 SUB.priority = -1
 SUB.id = -1
 

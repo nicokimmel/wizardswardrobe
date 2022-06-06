@@ -4,7 +4,7 @@ local HOF = WW.zones["HOF"]
 
 HOF.name = GetString(WW_HOF_NAME)
 HOF.tag = "HOF"
-HOF.icon = "/WizardsWardrobe/assets/zones/hof.dds"
+HOF.icon = "/esoui/art/icons/achievement_vvardenfel_036.dds"
 HOF.priority = 5
 HOF.id = 975
 

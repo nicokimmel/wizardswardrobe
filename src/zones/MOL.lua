@@ -4,7 +4,7 @@ local MOL = WW.zones["MOL"]
 
 MOL.name = GetString(WW_MOL_NAME)
 MOL.tag = "MOL"
-MOL.icon = "/WizardsWardrobe/assets/zones/mol.dds"
+MOL.icon = "/esoui/art/icons/achievement_thievesguild_004.dds"
 MOL.priority = 4
 MOL.id = 725
 

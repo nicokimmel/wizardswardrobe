@@ -4,7 +4,7 @@ local KA = WW.zones["KA"]
 
 KA.name = GetString(WW_KA_NAME)
 KA.tag = "KA"
-KA.icon = "/WizardsWardrobe/assets/zones/ka.dds"
+KA.icon = "/esoui/art/icons/achievement_u26_skyrim_vtrial_meta.dds"
 KA.priority = 9
 KA.id = 1196
 

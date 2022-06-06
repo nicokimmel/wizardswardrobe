@@ -4,7 +4,7 @@ local SO = WW.zones["SO"]
 
 SO.name = GetString(WW_SO_NAME)
 SO.tag = "SO"
-SO.icon = "/WizardsWardrobe/assets/zones/so.dds"
+SO.icon = "/esoui/art/icons/achievement_darkbrotherhood_038.dds"
 SO.priority = 2
 SO.id = 639
 
