@@ -55,4 +55,5 @@ zones/CR.lua
 zones/SS.lua
 zones/KA.lua
 zones/RG.lua
+zones/DSR.lua
 zones/BRP.lua

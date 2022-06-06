@@ -5,7 +5,7 @@ local BRP = WW.zones["BRP"]
 BRP.name = GetString(WW_BRP_NAME)
 BRP.tag = "BRP"
 BRP.icon = "/esoui/art/icons/achievement_blackrose_veteran.dds"
-BRP.priority = 14
+BRP.priority = 12
 BRP.id = 1082
 
 BRP.bosses = {

@@ -212,6 +212,12 @@ local language = {
 	WW_RG_SNAKE = "Sonnt-in-Schlangen",
 	WW_RG_ASHTITAN = "Aschtitan",
 	
+	WW_DSR_NAME = "Grauenssegelriff",
+	WW_DSR_LYLANAR = "Lylanar",
+	WW_DSR_LYLANAR_DN = "Lylanar und Turlassil",
+	WW_DSR_GUARDIAN = "Riffwächter",
+	WW_DSR_TALERIA = "Gezeitengeborene Taleria",
+	
 	WW_MSA_NAME = "Mahlstrom-Arena",
 	
 	WW_VH_NAME = "Grund des Vateshran",

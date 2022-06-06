@@ -212,6 +212,12 @@ local language = {
 	WW_RG_SNAKE = "Basks-In-Snakes",
 	WW_RG_ASHTITAN = "Ash Titan",
 	
+	WW_DSR_NAME = "Dreadsail Reef",
+	WW_DSR_LYLANAR = "Lylanar",
+	WW_DSR_LYLANAR_DN = "Lylanar and Turlassil",
+	WW_DSR_GUARDIAN = "Reef Guardian",
+	WW_DSR_TALERIA = "Tideborn Taleria",
+	
 	WW_MSA_NAME = "Maelstrom Arena",
 	
 	WW_VH_NAME = "Vateshran Hollows",
