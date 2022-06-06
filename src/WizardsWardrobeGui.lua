@@ -137,28 +137,23 @@ function WWG.SetSceneManagement()
 	SCENE_MANAGER:RegisterCallback("SceneStateChanged", onSceneChange)
 	
 	-- quickslot tab will internally act like a independent scene
-	ZO_QuickSlot_Keyboard_TopLevel:SetHandler("OnShow", function(self)
+	KEYBOARD_QUICKSLOT_FRAGMENT:RegisterCallback("StateChange", function(oldState, newState)
 		local quickslot = {
 			GetName = function(GetName)
 				return "inventoryQuickslot"
 			end
 		}
 		local inventoryScene = SCENE_MANAGER:GetScene("inventory")
-		onSceneChange(inventoryScene, SCENE_SHOWN, SCENE_HIDING)
-		onSceneChange(quickslot, SCENE_HIDDEN, SCENE_SHOWING)
-	end)
-	ZO_QuickSlot_Keyboard_TopLevel:SetHandler("OnHide", function(self)
-		local quickslot = {
-			GetName = function(GetName)
-				return "inventoryQuickslot"
+		if newState == SCENE_SHOWING then
+			onSceneChange(inventoryScene, SCENE_SHOWN, SCENE_HIDING)
+			onSceneChange(quickslot, SCENE_HIDDEN, SCENE_SHOWING)
+		elseif newState == SCENE_HIDING then
+			if inventoryScene:IsShowing() then
+				onSceneChange(quickslot, SCENE_SHOWN, SCENE_HIDING)
+				onSceneChange(inventoryScene, SCENE_HIDDEN, SCENE_SHOWING)
+			else
+				onSceneChange(quickslot, SCENE_SHOWN, SCENE_HIDING)
 			end
-		}
-		local inventoryScene = SCENE_MANAGER:GetScene("inventory")
-		if inventoryScene:IsShowing() then
-			onSceneChange(quickslot, SCENE_SHOWN, SCENE_HIDING)
-			onSceneChange(inventoryScene, SCENE_HIDDEN, SCENE_SHOWING)
-		else
-			onSceneChange(quickslot, SCENE_SHOWN, SCENE_HIDING)
 		end
 	end)
 	
@@ -188,7 +183,7 @@ function WWG.SetSceneManagement()
 			WizardsWardrobeWindow:SetHidden(not WizardsWardrobeWindow:IsHidden())
 			return
 		end
-		if sceneName == "inventory" and not ZO_QuickSlot_Keyboard_TopLevel:IsShowing() then
+		if sceneName == "inventory" and KEYBOARD_QUICKSLOT_FRAGMENT:IsShowing() then
 			sceneName = "inventoryQuickslot"
 		end
 		local savedScene = WW.settings.window[sceneName]
@@ -349,6 +344,9 @@ end
 function WWG.OnWindowMove()
 	local scene = SCENE_MANAGER:GetCurrentScene()
 	local sceneName = scene:GetName()
+	if sceneName == "inventory" and KEYBOARD_QUICKSLOT_FRAGMENT:IsShowing() then
+		sceneName = "inventoryQuickslot"
+	end
 	WW.settings.window[sceneName] = {
 		top = WizardsWardrobeWindow:GetTop(),
 		left = WizardsWardrobeWindow:GetLeft(),
