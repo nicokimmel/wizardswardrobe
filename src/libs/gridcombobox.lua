@@ -1,7 +1,7 @@
 local function CreateLabel(parent)
     local label = WINDOW_MANAGER:CreateControl(parent:GetName() .. "Label", parent, CT_LABEL)
     label:SetAnchor(TOPLEFT, parent, TOPLEFT, 0, -4)
-    label:SetFont("ZoFontGame")    
+    label:SetFont("ZoFontGame")
     return label
 end
 
@@ -43,8 +43,8 @@ local function CreateControl(name, parent)
         dropdown = CreateDropdown(control, parent),
     }
     
-    control.controls.backdrop:SetMouseEnabled(true)
-    control.controls.backdrop:SetHandler("OnMouseUp", function(self, mouseButton)
+    control.controls.label:SetMouseEnabled(true)
+    control.controls.label:SetHandler("OnMouseUp", function(self, mouseButton)
         if MouseIsOver(self, 0, 0, 0, 0) and mouseButton == MOUSE_BUTTON_INDEX_LEFT then
 			control.controls.dropdown:Toggle()
 		end
@@ -104,6 +104,7 @@ end
 function GridComboBox:SetDimensions(width, height)
     self.control:SetDimensions(width, height)
     self.control.controls.dropdown:SetWidth(width)
+    self.control.controls.label:SetWidth(width - 20)
 end
 
 function GridComboBox:SetHidden(hidden)
@@ -146,7 +147,7 @@ function GridComboBox:AddItem(data)
     item.tag:SetAnchor(CENTER, item, CENTER, 0, 0)
     item.tag:SetText(data.tag)
     item.tag:SetFont("ZoFontWinH2")
-    item.tag:SetDrawLayer(DL_CONTROLS)
+    item.tag:SetDrawLayer(DL_OVERLAY)
 	item.tag:SetDrawLevel(3)
 	
     item.frame:SetHidden(false)
