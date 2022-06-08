@@ -213,10 +213,12 @@ local language = {
 	WW_RG_ASHTITAN = "Ash Titan",
 	
 	WW_DSR_NAME = "Dreadsail Reef",
-	WW_DSR_LYLANAR = "Lylanar",
-	WW_DSR_LYLANAR_DN = "Lylanar and Turlassil",
+	WW_DSR_LYLANARTURLASSIL = "Lylanar",
+	WW_DSR_LYLANARTURLASSIL_DN = "Lylanar and Turlassil",
 	WW_DSR_GUARDIAN = "Reef Guardian",
 	WW_DSR_TALERIA = "Tideborn Taleria",
+	WW_DSR_SAILRIPPER = "Sail Ripper",
+	WW_DSR_BOWBREAKER = "Bow Breaker",
 	
 	WW_MSA_NAME = "Maelstrom Arena",
 	

@@ -13,14 +13,20 @@ DSR.bosses = {
 		name = GetString(WW_TRASH),
 	},
 	[2] = {
-		displayName = GetString(WW_DSR_LYLANAR_DN),
-		name = GetString(WW_DSR_LYLANAR),
+		displayName = GetString(WW_DSR_LYLANARTURLASSIL_DN),
+		name = GetString(WW_DSR_LYLANARTURLASSIL),
 	},
 	[3] = {
 		name = GetString(WW_DSR_GUARDIAN),
 	},
 	[4] = {
 		name = GetString(WW_DSR_TALERIA),
+	},
+	[5] = {
+		name = GetString(WW_DSR_SAILRIPPER),
+	},
+	[6] = {
+		name = GetString(WW_DSR_BOWBREAKER),
 	},
 }
 

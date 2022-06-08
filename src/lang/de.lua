@@ -213,10 +213,12 @@ local language = {
 	WW_RG_ASHTITAN = "Aschtitan",
 	
 	WW_DSR_NAME = "Grauenssegelriff",
-	WW_DSR_LYLANAR = "Lylanar",
-	WW_DSR_LYLANAR_DN = "Lylanar und Turlassil",
+	WW_DSR_LYLANARTURLASSIL = "Lylanar",
+	WW_DSR_LYLANARTURLASSIL_DN = "Lylanar und Turlassil",
 	WW_DSR_GUARDIAN = "Riffwächter",
 	WW_DSR_TALERIA = "Gezeitengeborene Taleria",
+	WW_DSR_SAILRIPPER = "Segelreißerin",
+	WW_DSR_BOWBREAKER = "Bogenbrecher",
 	
 	WW_MSA_NAME = "Mahlstrom-Arena",
 	
