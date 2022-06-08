@@ -79,6 +79,7 @@ function WWP.CreatePreviewWindow()
 		
 		local gearIcon = WINDOW_MANAGER:CreateControl(gearBox:GetName() .. "Icon" .. gearIndex, gearBox, CT_TEXTURE)
 		WWP.gear[gearIndex].icon = gearIcon
+		gearIcon:SetDrawLayer(DL_CONTROLS)
 		gearIcon:SetDimensions(36, 36)
 		gearIcon:SetAnchor(TOPLEFT, gearBox, TOPLEFT, 10, 10 + (38 * (gearIndex-1)))
 		gearIcon:SetTexture(WW.GEARICONS[gearSlot])
@@ -86,6 +87,7 @@ function WWP.CreatePreviewWindow()
 		gearIcon:SetDrawLevel(2)
 		
 		local gearFrame = WINDOW_MANAGER:CreateControl(gearBox:GetName() .. "Frame" .. gearIndex, gearBox, CT_TEXTURE)
+		gearFrame:SetDrawLayer(DL_CONTROLS)
 		gearFrame:SetDimensions(36, 36)
 		gearFrame:SetAnchor(CENTER, gearIcon, CENTER, 0, 0)
 		gearFrame:SetTexture("/esoui/art/actionbar/abilityframe64_up.dds")
@@ -93,6 +95,7 @@ function WWP.CreatePreviewWindow()
 		
 		local gearLabel = WINDOW_MANAGER:CreateControl(gearBox:GetName() .. "Name" .. gearIndex, gearBox, CT_LABEL)
 		WWP.gear[gearIndex].label = gearLabel
+		gearLabel:SetDrawLayer(DL_CONTROLS)
 		gearLabel:SetAnchor(LEFT, gearIcon, RIGHT, 5, 0)
 		gearLabel:SetDimensionConstraints(AUTO_SIZE, AUTO_SIZE, 439, 42)
 		gearLabel:SetFont("ZoFontGame")
@@ -113,6 +116,7 @@ function WWP.CreatePreviewWindow()
 		for skillIndex = 0, 5 do
 			local skillIcon = WINDOW_MANAGER:CreateControl(skillBox:GetName() .. "Icon" .. hotbarIndex .. skillIndex, skillBox, CT_TEXTURE)
 			WWP.skills[hotbarIndex][skillIndex+3] = skillIcon
+			skillIcon:SetDrawLayer(DL_CONTROLS)
 			skillIcon:SetDimensions(40, 40)
 			skillIcon:SetAnchor(TOPLEFT, skillBox, TOPLEFT, 10 + (42 * skillIndex), 10 + (42 * hotbarIndex))
 			skillIcon:SetTexture("/esoui/art/itemtooltip/eso_itemtooltip_emptyslot.dds")
@@ -120,6 +124,7 @@ function WWP.CreatePreviewWindow()
 			skillIcon:SetDrawLevel(2)
 			
 			local skillFrame = WINDOW_MANAGER:CreateControl(skillBox:GetName() .. "Frame" .. hotbarIndex .. skillIndex, skillBox, CT_TEXTURE)
+			skillFrame:SetDrawLayer(DL_CONTROLS)
 			skillFrame:SetDimensions(40, 40)
 			skillFrame:SetAnchor(CENTER, skillIcon, CENTER, 0, 0)
 			skillFrame:SetTexture("/esoui/art/actionbar/abilityframe64_up.dds")
@@ -139,6 +144,7 @@ function WWP.CreatePreviewWindow()
 	
 	local foodIcon = WINDOW_MANAGER:CreateControl(foodBox:GetName() .. "Icon", foodBox, CT_TEXTURE)
 	WWP.foodIcon = foodIcon
+	foodIcon:SetDrawLayer(DL_CONTROLS)
 	foodIcon:SetDimensions(40, 40)
 	foodIcon:SetAnchor(TOPLEFT, foodBox, TOPLEFT, 10, 10)
 	foodIcon:SetTexture("/esoui/art/itemtooltip/eso_itemtooltip_emptyslot.dds")
@@ -146,6 +152,7 @@ function WWP.CreatePreviewWindow()
 	foodIcon:SetDrawLevel(2)
 	
 	local foodFrame = WINDOW_MANAGER:CreateControl(foodBox:GetName() .. "Frame", foodBox, CT_TEXTURE)
+	foodFrame:SetDrawLayer(DL_CONTROLS)
 	foodFrame:SetDimensions(40, 40)
 	foodFrame:SetAnchor(CENTER, foodIcon, CENTER, 0, 0)
 	foodFrame:SetTexture("/esoui/art/actionbar/abilityframe64_up.dds")
@@ -153,6 +160,7 @@ function WWP.CreatePreviewWindow()
 	
 	local foodLabel = WINDOW_MANAGER:CreateControl(foodBox:GetName() .. "Label", foodBox, CT_LABEL)
 	WWP.foodLabel = foodLabel
+	foodLabel:SetDrawLayer(DL_CONTROLS)
 	foodLabel:SetAnchor(LEFT, foodIcon, RIGHT, 5, 0)
 	foodLabel:SetDimensionConstraints(AUTO_SIZE, AUTO_SIZE, 205, 42)
 	foodLabel:SetFont("ZoFontGame")
@@ -169,12 +177,14 @@ function WWP.CreatePreviewWindow()
 	cpBoxBG:SetAnchorFill(cpBox)
 	for cpIndex = 1, 12 do
 		local cpIcon = WINDOW_MANAGER:CreateControl(cpBox:GetName() .. "Icon" .. cpIndex, cpBox, CT_TEXTURE)
+		cpIcon:SetDrawLayer(DL_CONTROLS)
 		cpIcon:SetDimensions(20, 20)
 		cpIcon:SetAnchor(TOPLEFT, cpBox, TOPLEFT, 10, 10 + (28 * (cpIndex-1)))
 		cpIcon:SetTexture(WW.CPICONS[cpIndex])
 		cpIcon:SetDrawLevel(2)
 		
 		local cpFrame = WINDOW_MANAGER:CreateControl(cpBox:GetName() .. "Frame" .. cpIndex, cpBox, CT_TEXTURE)
+		cpFrame:SetDrawLayer(DL_CONTROLS)
 		cpFrame:SetDimensions(26, 26)
 		cpFrame:SetAnchor(CENTER, cpIcon, CENTER, 0, 0)
 		cpFrame:SetTexture("/esoui/art/champion/actionbar/champion_bar_slot_frame.dds")
@@ -182,6 +192,7 @@ function WWP.CreatePreviewWindow()
 		
 		local cpLabel = WINDOW_MANAGER:CreateControl(cpBox:GetName() .. "Label" .. cpIndex, cpBox, CT_LABEL)
 		WWP.cp[cpIndex] = cpLabel
+		cpLabel:SetDrawLayer(DL_CONTROLS)
 		cpLabel:SetAnchor(LEFT, cpIcon, RIGHT, 5, 0)
 		cpLabel:SetFont("ZoFontGame")
 		cpLabel:SetText("CP" .. cpIndex)

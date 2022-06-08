@@ -85,7 +85,7 @@
 						<Label name="$(parent)Label" font="ZoFontWinH3" verticalAlignment="TEXT_ALIGN_CENTER" horizontalAlignment="TEXT_ALIGN_CENTER">
 							<Anchor point="CENTER" relativeTo="$(parent)" relativePoint="CENTER"/>
 						</Label>
-						<Texture name="$(parent)Warning" hidden="true" mouseEnabled="true" textureFile="/esoui/art/miscellaneous/eso_icon_warning.dds" color="FFFF00">
+						<Texture name="$(parent)Warning" layer="CONTROLS" hidden="true" mouseEnabled="true" textureFile="/esoui/art/miscellaneous/eso_icon_warning.dds" color="FFFF00">
 							<Dimensions x="32" y="32"/>
 							<Anchor point="RIGHT" relativeTo="$(parent)Label" relativePoint="LEFT"/>
 						</Texture>

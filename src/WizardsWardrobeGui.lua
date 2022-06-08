@@ -666,6 +666,7 @@ function WWG.CreateSetupPool()
 				local y = hotbarCategory * 42 + 25
 				
 				local skill = WINDOW_MANAGER:CreateControl(nil, setup, CT_TEXTURE)
+				skill:SetDrawLayer(DL_CONTROLS)
 				skill:SetDimensions(40, 40)
 				skill:SetAnchor(TOPLEFT, setup, TOPLEFT, x, y)
 				skill:SetDrawLevel(2)
@@ -674,6 +675,7 @@ function WWG.CreateSetupPool()
 				skills[hotbarCategory][slotIndex] = skill
 				
 				local frame = WINDOW_MANAGER:CreateControl(nil, skill, CT_TEXTURE)
+				frame:SetDrawLayer(DL_CONTROLS)
 				frame:SetDimensions(40, 40)
 				frame:SetAnchor(CENTER, skill, CENTER, 0, 0)
 				frame:SetDrawLevel(3)

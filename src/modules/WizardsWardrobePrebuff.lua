@@ -220,6 +220,7 @@ function WWP.CreatePrebuffWindow()
 		
 		for slot = 1, 6 do
 			local skill = WINDOW_MANAGER:CreateControl(prebuffBox:GetName() .. "Skill" .. slot, prebuffBox, CT_TEXTURE)
+			skill:SetDrawLayer(DL_CONTROLS)
 			skill:SetDimensions(40, 40)
 			skill:SetAnchor(CENTER, prebuffBox, LEFT, 25 + slot * 42, 0)
 			skill:SetMouseEnabled(true)
@@ -295,6 +296,7 @@ function WWP.CreatePrebuffWindow()
 			skill:SetTexture(abilityIcon)
 			
 			local frame = WINDOW_MANAGER:CreateControl(skill:GetName() .. "Frame", skill, CT_TEXTURE)
+			frame:SetDrawLayer(DL_CONTROLS)
 			frame:SetDimensions(40, 40)
 			frame:SetAnchor(CENTER, skill, CENTER, 0, 0)
 			frame:SetTexture("/esoui/art/actionbar/abilityframe64_up.dds")
