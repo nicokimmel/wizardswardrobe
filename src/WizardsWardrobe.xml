@@ -5,7 +5,7 @@
 			<OnMoveStop>WizardsWardrobe.gui.OnPanelMove()</OnMoveStop>
 			<Controls>
 				<Backdrop name="$(parent)BG" inherits="ZO_MinorMungeBackdrop_SemiTransparentBlack" alpha="0.5"> <AnchorFill/> </Backdrop>
-				<Texture name="$(parent)Icon" textureFile="/WizardsWardrobe/assets/icon64.dds" mouseEnabled="true">
+				<Texture name="$(parent)Icon" layer="CONTROLS" textureFile="/WizardsWardrobe/assets/icon64.dds" mouseEnabled="true">
 					<Dimensions x="46" y="46"/>
 					<Anchor point="LEFT" relativeTo="$(parent)" relativePoint="LEFT" offsetX="10"/>
 				</Texture>
