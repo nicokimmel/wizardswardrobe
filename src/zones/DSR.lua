@@ -96,9 +96,6 @@ end
 function DSR.OnMovement()
 	local bossName = DSR.GetBossByLocation()
 	if not bossName then return end
-	
-	d(bossName)
-	
 	WW.OnBossChange(_, true, bossName)
 end
 
