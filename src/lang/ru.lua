@@ -211,6 +211,14 @@ local language = {
 	WW_RG_XALVAKKA = "Залвакка",
 	WW_RG_SNAKE = "Нежится-со-Змеями",
 	WW_RG_ASHTITAN = "Пепельный титан",
+
+	WW_DSR_NAME = "Риф Зловещих Парусов",
+	WW_DSR_LYLANARTURLASSIL = "Лиланар",
+	WW_DSR_LYLANARTURLASSIL_DN = "Лиланар и Турлассил",
+	WW_DSR_GUARDIAN = "Страж Рифа",
+	WW_DSR_TALERIA = "Талерия Рожденная Приливом",
+	WW_DSR_SAILRIPPER = "Разрывательница Парусов",
+	WW_DSR_BOWBREAKER = "Крушитель Форштевней",
 	
 	WW_MSA_NAME = "Вихревая Арена",
 	
