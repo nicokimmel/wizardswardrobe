@@ -325,12 +325,6 @@ function WW.MoveItems(itemTaskList)
 		end
 		WWQ.Push(itemTask, item.delay)
 	end
-	WWQ.Push(function()
-		PLAYER_INVENTORY:RefreshAllInventorySlots(INVENTORY_BACKPACK)
-		PLAYER_INVENTORY:UpdateList(INVENTORY_BACKPACK)
-		SHARED_INVENTORY:RefreshInventory(BAG_BACKPACK)
-		SHARED_INVENTORY:RefreshInventory(BAG_WORN)
-	end, 1000)
 end
 
 function WW.HasMythic()
