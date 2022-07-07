@@ -701,7 +701,24 @@ function WW.Init()
 		end
 		table.insert(WW.lookupBuffFood[abilityId], itemId)
 	end
-		
+	
+	for i, trait in ipairs(WW.TRAITS) do
+		local char = tostring(WW.PREVIEWTABLE.CHARACTERS[i])
+		WW.PREVIEWTABLE.TRAITS[trait] = char
+		WW.PREVIEWTABLE.TRAITS[char] = trait
+	end
+	
+	local bufffoodCache = {}
+	for food, _ in pairs(WW.BUFFFOOD) do
+		table.insert(bufffoodCache, food)
+	end
+	table.sort(bufffoodCache)
+	for i, food in ipairs(bufffoodCache) do
+		local char = tostring(WW.PREVIEWTABLE.CHARACTERS[i])
+		WW.PREVIEWTABLE.FOOD[food] = char
+		WW.PREVIEWTABLE.FOOD[char] = food
+	end
+	
 	WW.currentZone = WW.zones["GEN"]
 	WW.currentZoneId = 0
 	
