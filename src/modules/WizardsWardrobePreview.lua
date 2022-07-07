@@ -336,7 +336,7 @@ function WWP.ShowPreviewFromString(dataString, setupName)
 			if gearSlot ~= EQUIP_SLOT_POISON
 				and gearSlot ~= EQUIP_SLOT_BACKUP_POISON then
 				
-				traitId = WW.PREVIEWTABLE.TRAITS[dataString:sub(ptr, ptr)]
+				traitId = WW.PREVIEW.TRAITS[dataString:sub(ptr, ptr)]
 				ptr = ptr + 1
 			end
 			
@@ -432,7 +432,7 @@ function WWP.ShowPreviewFromString(dataString, setupName)
 	end
 	
 	-- FOOD
-	local foodId = WW.PREVIEWTABLE.FOOD[dataString:sub(ptr, ptr)]
+	local foodId = WW.PREVIEW.FOOD[dataString:sub(ptr, ptr)]
 	ptr = ptr + 1
 	if tonumber(foodId) > 0 then
 		local itemLink = string.format("|H0:item:%d:%d:%d:%d:%d:%d:0:0:0:0:0:0:0:0:0:%d:%d:%d:%d:%d:%d|h|h", foodId, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -482,7 +482,7 @@ function WWP.PrintPreviewString(zone, pageId, index)
 				and gearSlot ~= EQUIP_SLOT_BACKUP_POISON then
 				
 				local traitId = GetItemLinkTraitInfo(link)
-				table.insert(data, WW.PREVIEWTABLE.TRAITS[traitId])
+				table.insert(data, WW.PREVIEW.TRAITS[traitId])
 			end
 		end
 	end
@@ -500,7 +500,7 @@ function WWP.PrintPreviewString(zone, pageId, index)
 		table.insert(data, string.format("%03d", cpId))
 	end
 	
-	table.insert(data, WW.PREVIEWTABLE.FOOD[setup:GetFood().id or 0])
+	table.insert(data, WW.PREVIEW.FOOD[setup:GetFood().id or 0])
 	
 	local linkData = table.concat(data, "")
 	

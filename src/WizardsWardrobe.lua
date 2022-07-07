@@ -703,9 +703,9 @@ function WW.Init()
 	end
 	
 	for i, trait in ipairs(WW.TRAITS) do
-		local char = tostring(WW.PREVIEWTABLE.CHARACTERS[i])
-		WW.PREVIEWTABLE.TRAITS[trait] = char
-		WW.PREVIEWTABLE.TRAITS[char] = trait
+		local char = tostring(WW.PREVIEW.CHARACTERS[i])
+		WW.PREVIEW.TRAITS[trait] = char
+		WW.PREVIEW.TRAITS[char] = trait
 	end
 	
 	local bufffoodCache = {}
@@ -714,9 +714,9 @@ function WW.Init()
 	end
 	table.sort(bufffoodCache)
 	for i, food in ipairs(bufffoodCache) do
-		local char = tostring(WW.PREVIEWTABLE.CHARACTERS[i])
-		WW.PREVIEWTABLE.FOOD[food] = char
-		WW.PREVIEWTABLE.FOOD[char] = food
+		local char = tostring(WW.PREVIEW.CHARACTERS[i])
+		WW.PREVIEW.FOOD[food] = char
+		WW.PREVIEW.FOOD[char] = food
 	end
 	
 	WW.currentZone = WW.zones["GEN"]

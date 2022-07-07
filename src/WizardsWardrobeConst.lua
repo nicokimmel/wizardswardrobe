@@ -196,7 +196,7 @@ WW.TRAITS = {
 	ITEM_TRAIT_TYPE_WEAPON_TRAINING,
 }
 
-WW.PREVIEWTABLE = {
+WW.PREVIEW = {
 	CHARACTERS = {
 		"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
 		"m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x",
