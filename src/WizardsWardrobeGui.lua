@@ -749,12 +749,14 @@ function WWG.AquireSetupControl(setup)
 	setupControl.i = index
 	
 	setupControl.name:SetHandler("OnMouseEnter", function(self)
+		setup = Setup:FromStorage(WW.selection.zone.tag, WW.selection.pageId, index)
 		ZO_Tooltips_ShowTextTooltip(self, TOP, GetString(WW_BUTTON_LABEL))
 		if not setup:IsDisabled() then
 		 	self:SetColor(1, 0.5, 0.5, 1)
 		end
 	end)
 	setupControl.name:SetHandler("OnMouseExit", function(self)
+		setup = Setup:FromStorage(WW.selection.zone.tag, WW.selection.pageId, index)
 		ZO_Tooltips_HideTextTooltip()
 		local color = 1
 		if setup:IsDisabled() then
@@ -808,6 +810,8 @@ function WWG.AquireSetupControl(setup)
 				if IsUnitInCombat("player") then return	end -- would fail at protected call anyway
 				if GetCursorContentType() ~= MOUSE_CONTENT_EMPTY then return end
 				
+				setup = Setup:FromStorage(WW.selection.zone.tag, WW.selection.pageId, index)
+				
 				local abilityId = setup:GetSkills()[hotbarCategory][slotIndex]
 				if not abilityId then return end
 				
@@ -840,6 +844,8 @@ function WWG.AquireSetupControl(setup)
 				end
 				
 				ClearCursor()
+				
+				setup = Setup:FromStorage(WW.selection.zone.tag, WW.selection.pageId, index)
 				
 				local previousAbilityId = setup:GetSkills()[hotbarCategory][slotIndex]
 				setup:SetSkill(hotbarCategory, slotIndex, abilityId)
@@ -878,6 +884,8 @@ function WWG.AquireSetupControl(setup)
 			WW.Log(GetString(WW_MSG_NOTFOOD), WW.LOGTYPES.ERROR)
 			return false
 		end
+		
+		setup = Setup:FromStorage(WW.selection.zone.tag, WW.selection.pageId, index)
 		
 		WW.SaveFood(setup, slotIndex)
 		setup:ToStorage(WW.selection.zone.tag, WW.selection.pageId, index)
@@ -936,6 +944,8 @@ function WWG.AquireSetupControl(setup)
 				gearSlot = EQUIP_SLOT_BACKUP_POISON
 			end
 		end
+		
+		setup = Setup:FromStorage(WW.selection.zone.tag, WW.selection.pageId, index)
 		
 		local gearTable = setup:GetGear()
 		
