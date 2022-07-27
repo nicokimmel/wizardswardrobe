@@ -18,7 +18,7 @@ function WW.LoadSetup(zone, pageId, index, auto)
 	if not zone or not pageId or not index then
 		return false
 	end
-		
+	
 	local setup = Setup:FromStorage(zone.tag, pageId, index)
 	
 	if setup:IsEmpty() then
@@ -89,7 +89,7 @@ function WW.DeleteSetup(zone, pageId, index)
 		
 		table.remove(WW.setups[zone.tag][pageId], index)
 	end
-		
+	
 	WW.markers.BuildGearList()
 	WW.conditions.LoadConditions()
 	
@@ -109,7 +109,7 @@ function WW.ClearSetup(zone, pageId, index)
 	setup:Clear()
 	setup:SetName(setupName)
 	setup:ToStorage(zone.tag, pageId, index)
-		
+	
 	WW.markers.BuildGearList()
 	WW.conditions.LoadConditions()
 	
@@ -560,7 +560,7 @@ function WW.OnBossChange(_, isBoss, manualBossName)
 	if #bossName == 0 and #sideBoss > 0 then
 		bossName = sideBoss
 	end
-		
+	
 	if blockTrash and #bossName == 0 then
 		--d("Trash is being blocked.")
 		return
