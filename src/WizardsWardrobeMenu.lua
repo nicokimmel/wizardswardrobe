@@ -48,7 +48,7 @@ function WWM.InitSV()
 			surfingWeapons = false,
 		},
 		changelogs = {},
-		printMessages = true,
+		printMessages = 'chat',
 		overwriteWarning = true,
 		inventoryMarker = true,
 		unequipEmpty = false,
@@ -58,6 +58,13 @@ function WWM.InitSV()
 		eatBuffFood = false,
 		initialized = false,
 	})
+
+	-- migrate printMessage settings
+	if WW.settings.printMessages == true then
+		WW.settings.printMessages = 'chat'
+	elseif WW.settings.printMessages == false then
+		WW.settings.printMessages = 'off'
+	end
 	
 	-- dont look at this
 	WW.settings.autoEquipSetups = WW.storage.autoEquipSetups
@@ -84,10 +91,13 @@ function WWM.InitAM()
 			name = GetString(WW_MENU_GENERAL),
 		},
 		{
-			type = "checkbox",
+			type = "dropdown",
 			name = GetString(WW_MENU_PRINTCHAT),
+			choices = { GetString(WW_MENU_PRINTCHAT_OFF), GetString(WW_MENU_PRINTCHAT_CHAT), GetString(WW_MENU_PRINTCHAT_ALERT) },
+			choicesValues = { 'off', 'chat', 'alert' },
 			getFunc = function() return WW.settings.printMessages end,
 			setFunc = function(value) WW.settings.printMessages = value end,
+			tooltip = GetString(WW_MENU_PRINTCHAT_TT),
 		},
 		{
 			type = "checkbox",
@@ -291,3 +301,4 @@ function WWM.InitAM()
 	WWM.panel = LibAddonMenu2:RegisterAddonPanel("WizardsWardrobeMenu", panelData)
 	LibAddonMenu2:RegisterOptionControls("WizardsWardrobeMenu", optionData)
 end
+
