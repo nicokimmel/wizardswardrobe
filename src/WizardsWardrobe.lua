@@ -325,6 +325,9 @@ function WW.MoveItems(itemTaskList)
 		end
 		WWQ.Push(itemTask, item.delay)
 	end
+	WWQ.Push(function()
+		INVENTORY_FRAGMENT:FireCallbacks("StateChange", SCENE_FRAGMENT_HIDDEN, SCENE_FRAGMENT_SHOWING)
+	end, 500)
 end
 
 function WW.HasMythic()
