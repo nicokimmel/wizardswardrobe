@@ -100,14 +100,19 @@ function WW.IsWipe()
 end
 
 function WW.Log(logMessage, logType, formatColor, ...)
-	if WW.settings.printMessages then
+	if WW.settings.printMessages == 'chat' or WW.settings.printMessages == 'alert' then
 		if not logType then logType = WW.LOGTYPES.NORMAL end
 		if not formatColor then formatColor = "FFFFFF" end
 		logMessage = string.format(logMessage, ...)
 		logMessage = string.gsub(logMessage, "%[", "|c" .. formatColor .. "[")
 		logMessage = string.gsub(logMessage, "%]", "]|c" .. logType)
 		logMessage = string.format("|c18bed8[|c65d3b0W|cb2e789W|cfffc61]|r|c%s %s|r", logType, logMessage)
-		CHAT_ROUTER:AddSystemMessage(logMessage)
+
+		if (WW.settings.printMessages == 'alert') then
+			ZO_Alert(UI_ALERT_CATEGORY_ALERT, nil, logMessage)
+		else
+			CHAT_ROUTER:AddSystemMessage(logMessage)
+		end
 	end
 end
 

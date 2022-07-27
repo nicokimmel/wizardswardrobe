@@ -53,7 +53,11 @@ local language = {
 	
 	-- ADDON MENU
 	WW_MENU_GENERAL = "General",
-	WW_MENU_PRINTCHAT = "Print messages into chat",
+	WW_MENU_PRINTCHAT = "Print messages",
+	WW_MENU_PRINTCHAT_TT = "Prints messages about loaded setups into the chat or the alert notifications",
+	WW_MENU_PRINTCHAT_OFF = "Disabled",
+	WW_MENU_PRINTCHAT_CHAT = "Chat",
+	WW_MENU_PRINTCHAT_ALERT = "Alert",
 	WW_MENU_OVERWRITEWARNING = "Show warning on overwrite",
 	WW_MENU_OVERWRITEWARNING_TT = "Shows a warning if an already saved setup is overwritten.",
 	WW_MENU_INVENTORYMARKER = "Inventory marker",
