@@ -48,7 +48,7 @@ function WWM.InitSV()
 			surfingWeapons = false,
 		},
 		changelogs = {},
-		printMessages = 'chat',
+		printMessages = "chat",
 		overwriteWarning = true,
 		inventoryMarker = true,
 		unequipEmpty = false,
@@ -61,9 +61,9 @@ function WWM.InitSV()
 
 	-- migrate printMessage settings
 	if WW.settings.printMessages == true then
-		WW.settings.printMessages = 'chat'
+		WW.settings.printMessages = "chat"
 	elseif WW.settings.printMessages == false then
-		WW.settings.printMessages = 'off'
+		WW.settings.printMessages = "off"
 	end
 	
 	-- dont look at this
@@ -94,7 +94,7 @@ function WWM.InitAM()
 			type = "dropdown",
 			name = GetString(WW_MENU_PRINTCHAT),
 			choices = { GetString(WW_MENU_PRINTCHAT_OFF), GetString(WW_MENU_PRINTCHAT_CHAT), GetString(WW_MENU_PRINTCHAT_ALERT) },
-			choicesValues = { 'off', 'chat', 'alert' },
+			choicesValues = { "off", "chat", "alert" },
 			getFunc = function() return WW.settings.printMessages end,
 			setFunc = function(value) WW.settings.printMessages = value end,
 			tooltip = GetString(WW_MENU_PRINTCHAT_TT),
