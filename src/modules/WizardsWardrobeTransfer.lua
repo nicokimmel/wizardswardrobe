@@ -55,6 +55,9 @@ function WWT.Export(zone, pageId, index)
 		exportTable.cp[tostring(slotIndex)] = setup:GetCP()[slotIndex]
 	end
 	
+	-- food
+	exportTable.food = setup:GetFood().id
+	
 	return json.encode(exportTable)
 end
 
@@ -85,7 +88,7 @@ function WWT.Import(jsonText, zone, pageId, index)
 	end
 	setup:SetSkills(skillTable)
 	
-	--gear
+	-- gear
 	local gearTable = {mythic = nil}
 	local filter = {}
 	local missing = false
@@ -109,12 +112,24 @@ function WWT.Import(jsonText, zone, pageId, index)
 	if missing then WW.Log(GetString(WW_MSG_IMPORTGEARENOENT), WW.LOGTYPES.ERROR) else WW.Log(GetString(WW_MSG_IMPORTSUCCESS)) end
 	setup:SetGear(gearTable)
 	
-	--cp
+	-- cp
 	local cpTable = {}
 	for slotIndex = 1, 12 do
 		cpTable[slotIndex] = importTable.cp[tostring(slotIndex)]
 	end
 	setup:SetCP(cpTable)
+	
+	-- food
+	foodIndex = WW.FindFood({importTable.food})
+	if foodIndex then
+		local foodLink = GetItemLink(BAG_BACKPACK, foodIndex, LINK_STYLE_DEFAULT)
+		local foodId = GetItemLinkItemId(foodLink)
+		
+		setup:SetFood({
+			link = foodLink,
+			id = foodId,
+		})
+	end
 	
 	setup:ToStorage(zone.tag, pageId, index)
 	WW.gui.RefreshSetup(WW.gui.GetSetupControl(index), setup)
