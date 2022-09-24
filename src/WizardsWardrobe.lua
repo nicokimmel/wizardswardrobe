@@ -5,7 +5,7 @@ local WWQ = WW.queue
 WW.name = "WizardsWardrobe"
 WW.simpleName = "Wizard's Wardrobe"
 WW.displayName = "|c18bed8W|c26c2d1i|c35c6c9z|c43cac2a|c52cebar|c60d1b3d|c6fd5ab'|c7dd9a4s|c8cdd9d |c9ae195W|ca8e58ea|cb7e986r|cc5ed7fd|cd4f077r|ce2f470o|cf1f868b|cfffc61e|r"
-WW.version = "1.9.4"
+WW.version = "1.9.5"
 WW.zones = {}
 
 local cancelAnimation = false
@@ -325,9 +325,6 @@ function WW.MoveItems(itemTaskList)
 		end
 		WWQ.Push(itemTask, item.delay)
 	end
-	WWQ.Push(function()
-		INVENTORY_FRAGMENT:FireCallbacks("StateChange", SCENE_FRAGMENT_HIDDEN, SCENE_FRAGMENT_SHOWING)
-	end, 500)
 end
 
 function WW.HasMythic()
