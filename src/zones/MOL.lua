@@ -7,6 +7,7 @@ MOL.tag = "MOL"
 MOL.icon = "/esoui/art/icons/achievement_thievesguild_004.dds"
 MOL.priority = 4
 MOL.id = 725
+MOL.node = 258
 
 MOL.bosses = {
 	[1] = {

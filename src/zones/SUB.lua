@@ -7,6 +7,7 @@ SUB.tag = "SUB"
 SUB.icon = "/esoui/art/icons/achievement_u23_skillmaster_darkbrotherhood.dds"
 SUB.priority = -1
 SUB.id = -1
+SUB.node = -1
 
 SUB.bosses = {
 	[1] = {

@@ -7,6 +7,7 @@ BRP.tag = "BRP"
 BRP.icon = "/esoui/art/icons/achievement_blackrose_veteran.dds"
 BRP.priority = 12
 BRP.id = 1082
+BRP.node = 378
 
 BRP.bosses = {
 	[1] = {

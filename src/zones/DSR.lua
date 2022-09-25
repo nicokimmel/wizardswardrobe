@@ -7,6 +7,7 @@ DSR.tag = "DSR"
 DSR.icon = "/esoui/art/icons/u34_vtrial_meta.dds"
 DSR.priority = 11
 DSR.id = 1344
+DSR.node = 488
 
 DSR.bosses = {
 	[1] = {

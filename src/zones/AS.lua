@@ -7,6 +7,7 @@ AS.tag = "AS"
 AS.icon = "/esoui/art/icons/achievement_update16_029.dds"
 AS.priority = 6
 AS.id = 1000
+AS.node = 346
 
 AS.bosses = {
 	[1] = {

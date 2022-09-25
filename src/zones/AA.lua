@@ -7,6 +7,7 @@ AA.tag = "AA"
 AA.icon = "/esoui/art/icons/achievement_update11_dungeons_002.dds"
 AA.priority = 1
 AA.id = 638
+AA.node = 231
 
 AA.bosses = {
 	[1] = {

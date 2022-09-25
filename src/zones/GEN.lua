@@ -7,6 +7,7 @@ GEN.tag = "GEN"
 GEN.icon = "/esoui/art/icons/achievement_u26_skyrim_trial_flavor_2.dds"
 GEN.priority = -2
 GEN.id = -1
+GEN.node = -1
 
 GEN.bosses = {}
 

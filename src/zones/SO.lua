@@ -7,6 +7,7 @@ SO.tag = "SO"
 SO.icon = "/esoui/art/icons/achievement_darkbrotherhood_038.dds"
 SO.priority = 2
 SO.id = 639
+SO.node = 232
 
 SO.bosses = {
 	[1] = {

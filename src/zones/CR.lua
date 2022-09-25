@@ -7,6 +7,7 @@ CR.tag = "CR"
 CR.icon = "/esoui/art/icons/achievement_su_karnwasten_groupevent.dds"
 CR.priority = 7
 CR.id = 1051
+CR.node = 364
 
 CR.bosses = {
 	[1] = {

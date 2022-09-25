@@ -7,6 +7,7 @@ RG.tag = "RG"
 RG.icon = "/esoui/art/icons/achievement_u30_vtrial_meta.dds"
 RG.priority = 10
 RG.id = 1263
+RG.node = 468
 
 RG.bosses = {
 	[1] = {

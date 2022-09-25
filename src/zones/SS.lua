@@ -7,6 +7,7 @@ SS.tag = "SS"
 SS.icon = "/esoui/art/icons/achievement_els_sunspire_hardmode_all.dds"
 SS.priority = 8
 SS.id = 1121
+SS.node = 399
 
 SS.bosses = {
 	[1] = {

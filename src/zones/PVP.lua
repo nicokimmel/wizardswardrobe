@@ -20,6 +20,7 @@ PVP.id = {
 	[517] = true,	-- Eld Angavar
 	[518] = true,	-- Eld Angavar (?)
 }
+PVP.node = -1
 
 PVP.bosses = {}
 

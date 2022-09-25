@@ -418,9 +418,9 @@ function WWG.SetupTopMenu()
 	
 	local selection = GridComboBox:New("$(parent)Selection", WizardsWardrobeWindow)
 	selection:SetAnchor(LEFT, WizardsWardrobeWindowTopMenu, LEFT, 16)
-	selection:SetDimensions(240, 16)
+	selection:SetDimensions(208, 16)
 	selection:SetItemsPerRow(4)
-    selection:SetItemSize(57)
+    selection:SetItemSize(49)
 	selection:SetItemSpacing(4)
 	selection:ClearItems()
 	for _, zone in ipairs(WWG.GetSortedZoneList()) do
@@ -434,6 +434,41 @@ function WWG.SetupTopMenu()
 		})
 	end
 	WWG.zoneSelection = selection
+	
+	WizardsWardrobeWindowTopMenuTeleportTrial:SetHandler("OnClicked", function(self)
+		local nodeId = WW.selection.zone.node
+		if nodeId < 0 then return end
+		
+		if IsUnitGrouped("player") then
+			for i = 1, GetGroupSize() do
+				local groupTag = GetGroupUnitTagByIndex(i)
+				if IsUnitOnline(groupTag) then
+					local zoneId = GetUnitWorldPosition(groupTag)
+					if zoneId == WW.selection.zone.id and CanJumpToGroupMember(groupTag) then
+						local displayName = GetUnitDisplayName(groupTag)
+						WW.Log(GetString(WW_MSG_TELEPORT_PLAYER), WW.LOGTYPES.NORMAL, nil, displayName)
+						JumpToGroupMember(displayName)
+						return
+					end
+				end
+			end
+		end
+		
+		if not HasCompletedFastTravelNodePOI(nodeId) then
+			WW.Log(GetString(WW_MSG_TELEPORT_WAYSHRINE_ERROR), WW.LOGTYPES.ERROR)
+			return
+		end
+		
+		WW.Log(GetString(WW_MSG_TELEPORT_WAYSHRINE), WW.LOGTYPES.NORMAL)
+		FastTravelToNode(nodeId)
+	end)
+	WWG.SetTooltip(WizardsWardrobeWindowTopMenuTeleportTrial, TOP, GetString(WW_BUTTON_TELEPORT))
+	
+	WizardsWardrobeWindowTopMenuTeleportHouse:SetHandler("OnClicked", function(self)
+		WW.Log(GetString(WW_MSG_TELEPORT_HOUSE), WW.LOGTYPES.NORMAL)
+		RequestJumpToHouse(GetHousingPrimaryHouse())
+	end)
+	WWG.SetTooltip(WizardsWardrobeWindowTopMenuTeleportHouse, TOP, GetString(WW_BUTTON_TELEPORT))
 	
 	WizardsWardrobeWindowTopMenuAddPage:SetHandler("OnClicked", function(self)
 		WWG.CreatePage(WW.selection.zone)
@@ -475,6 +510,21 @@ function WWG.OnZoneSelect(zone)
 	local isSubstitute = zone.tag == "SUB"
 	WWG.substituteExplain:SetHidden(not isSubstitute)
 	WWG.addSetupButton:SetHidden(isSubstitute)
+	
+	if zone.tag == "GEN"
+		or zone.tag == "SUB"
+		or zone.tag == "PVP" then
+		
+		WizardsWardrobeWindowTopMenuTeleportTrial:SetHidden(true)
+		WizardsWardrobeWindowTopMenuTeleportHouse:SetHidden(false)
+	else
+		WizardsWardrobeWindowTopMenuTeleportTrial:SetHidden(false)
+		WizardsWardrobeWindowTopMenuTeleportHouse:SetHidden(true)
+	end
+	
+	WizardsWardrobeWindowTopMenuTeleportTrial:SetEnabled(not IsInAvAZone())
+	WizardsWardrobeWindowTopMenuTeleportTrial:SetDesaturation(IsInAvAZone() and 1 or 0)
+	WizardsWardrobeWindowTopMenuTeleportHouse:SetEnabled(not IsInAvAZone())
 end
 
 function WWG.SetupPageMenu()

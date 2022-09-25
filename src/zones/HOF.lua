@@ -7,6 +7,7 @@ HOF.tag = "HOF"
 HOF.icon = "/esoui/art/icons/achievement_vvardenfel_036.dds"
 HOF.priority = 5
 HOF.id = 975
+HOF.node = 331
 
 HOF.bosses = {
 	[1] = {

@@ -7,6 +7,7 @@ KA.tag = "KA"
 KA.icon = "/esoui/art/icons/achievement_u26_skyrim_vtrial_meta.dds"
 KA.priority = 9
 KA.id = 1196
+KA.node = 434
 
 KA.bosses = {
 	[1] = {

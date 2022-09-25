@@ -103,8 +103,12 @@ end
 
 function GridComboBox:SetDimensions(width, height)
     self.control:SetDimensions(width, height)
-    self.control.controls.dropdown:SetWidth(width)
     self.control.controls.label:SetWidth(width - 20)
+    
+    local dropdownHeight = (zo_floor(#self.items / self.itemsPerRow) + 1) * (self.itemSize + self.itemSpacing)
+    self.control.controls.dropdown:SetHeight(dropdownHeight)
+    local dropdownWidth = self.itemsPerRow * self.itemSize + (self.itemsPerRow - 1) * self.itemSpacing
+    self.control.controls.dropdown:SetWidth(dropdownWidth)
 end
 
 function GridComboBox:SetHidden(hidden)
@@ -198,9 +202,7 @@ function GridComboBox:Refresh()
     local dropdownHeight = (zo_floor(itemCount / self.itemsPerRow) + 1) * (self.itemSize + self.itemSpacing)
     self.control.controls.dropdown:SetHeight(dropdownHeight)
     local dropdownWidth = self.itemsPerRow * self.itemSize + (self.itemsPerRow - 1) * self.itemSpacing
-    if dropdownWidth > self.control:GetWidth() then
-        self.control.controls.dropdown:SetWidth(dropdownWidth)
-    end
+    self.control.controls.dropdown:SetWidth(dropdownWidth)
 end
 
 function GridComboBox:ToggleDropdown()

@@ -72,6 +72,21 @@
 								mouseOver="/esoui/art/crafting/smithing_tabicon_armorset_over.dds"
 								disabled="/esoui/art/buttons/closebutton_disabled.dds"/>
 						</Button>
+						<Button name="$(parent)TeleportHouse" inherits="ZO_ButtonBehaviorClickSound">
+							<Dimensions x="36" y="36"/>
+							<Anchor point="RIGHT" relativeTo="$(parent)AutoEquip" relativePoint="LEFT"/>
+							<Textures normal="/esoui/art/guild/tabicon_home_up.dds"
+								pressed="/esoui/art/guild/tabicon_home_down.dds"
+								mouseOver="/esoui/art/guild/tabicon_home_over.dds"
+								disabled="/esoui/art/guild/tabicon_home_disabled.dds"/>
+						</Button>
+						<Button name="$(parent)TeleportTrial" inherits="ZO_ButtonBehaviorClickSound">
+							<Dimensions x="36" y="36"/>
+							<Anchor point="RIGHT" relativeTo="$(parent)AutoEquip" relativePoint="LEFT"/>
+							<Textures normal="/esoui/art/help/help_tabicon_questassistance_up.dds"
+								pressed="/esoui/art/help/help_tabicon_questassistance_down.dds"
+								mouseOver="/esoui/art/help/help_tabicon_questassistance_over.dds"/>
+						</Button>
 					</Controls>
 				</Control>
 				<Texture name="$(parent)TopDivider" textureFile="/esoui/art/miscellaneous/centerscreen_topdivider.dds">
