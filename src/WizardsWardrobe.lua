@@ -619,8 +619,10 @@ function WW.OnZoneChange(_, _)
 	zo_callLater(function()
 		-- init new zone
 		WW.currentZone.Init()
-		-- change ui if loaded
-		WW.gui.OnZoneSelect(WW.currentZone)
+		-- change ui if loaded, only swap if trial zone
+		if isFirstZoneAfterReload or WW.currentZone.tag ~= "GEN" then
+			WW.gui.OnZoneSelect(WW.currentZone)
+		end
 		
 		if WW.settings.fixes.surfingWeapons then
 			WW.fixes.FixSurfingWeapons()
