@@ -34,8 +34,8 @@
 					<Dimensions x="AUTO_SIZE" y="50"/>
 					<Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP"/>
 					<Controls>
-						<Label name="$(parent)Label" font="ZoFontWinH2">
-							<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="15" offsetY="15"/>
+						<Label name="$(parent)Label" font="$(BOLD_FONT)|$(KB_26)|soft-shadow-thick">
+							<Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP" offsetY="15"/>
 						</Label>
 						<Button name="$(parent)Hide" inherits="ZO_ButtonBehaviorClickSound">
 							<Dimensions x="24" y="24"/>
