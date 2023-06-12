@@ -228,6 +228,12 @@ local language = {
 	WW_DSR_TALERIA = "Tideborn Taleria",
 	WW_DSR_SAILRIPPER = "Sail Ripper",
 	WW_DSR_BOWBREAKER = "Bow Breaker",
+
+	WW_SE_NAME                 = "Sanity's Edge",
+	WW_SE_DESCENDER            = "Spiral Descender",
+	WW_SE_YASEYLA              = "Exarchanic Yaseyla",
+	WW_SE_TWELVANE             = "Archwizard Twelvane",
+	WW_SE_ANSUUL               = "Ansuul the Tormentor",
 	
 	WW_MSA_NAME = "Maelstrom Arena",
 	

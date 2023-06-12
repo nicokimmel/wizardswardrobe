@@ -228,6 +228,12 @@ local language = {
 	WW_DSR_TALERIA = "Gezeitengeborene Taleria",
 	WW_DSR_SAILRIPPER = "Segelreißerin",
 	WW_DSR_BOWBREAKER = "Bogenbrecher",
+
+	WW_SE_NAME                 = "Rand des Wahnsinns",
+	WW_SE_DESCENDER			   = "Gewundender Herablasser",
+	WW_SE_YASEYLA              = "Exarchanikerin Yaseyla",
+	WW_SE_TWELVANE             = "Erzzaubermeisterin Twelvane",
+	WW_SE_ANSUUL               = "Ansuul die Quälende",
 	
 	WW_MSA_NAME = "Mahlstrom-Arena",
 	
