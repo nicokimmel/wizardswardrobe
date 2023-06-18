@@ -5,7 +5,7 @@ local WWQ = WW.queue
 WW.name = "WizardsWardrobe"
 WW.simpleName = "Wizard's Wardrobe"
 WW.displayName = "|c18bed8W|c26c2d1i|c35c6c9z|c43cac2a|c52cebar|c60d1b3d|c6fd5ab'|c7dd9a4s|c8cdd9d |c9ae195W|ca8e58ea|cb7e986r|cc5ed7fd|cd4f077r|ce2f470o|cf1f868b|cfffc61e|r"
-WW.version = "1.11.0"
+WW.version = "1.12.0"
 WW.zones = {}
 
 local cancelAnimation = false
@@ -275,12 +275,14 @@ function WW.LoadGear(setup)
 		else
 			-- unequip if option is set to true
 			if WW.settings.unequipEmpty then
-				table.insert(itemTaskList, {
-					sourceBag = BAG_WORN,
-					sourceSlot = gearSlot,
-					destBag = BAG_BACKPACK,
-					destSlot = nil,
-				})
+				if gearSlot ~= EQUIP_SLOT_COSTUME or ((gearSlot == EQUIP_SLOT_COSTUME) and WW.settings.ignoreTabards == false) then
+					table.insert(itemTaskList, {
+						sourceBag = BAG_WORN,
+						sourceSlot = gearSlot,
+						destBag = BAG_BACKPACK,
+						destSlot = nil,
+					})
+				end
 			end
 		end
 	end
