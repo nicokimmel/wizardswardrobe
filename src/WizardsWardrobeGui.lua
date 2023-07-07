@@ -216,10 +216,6 @@ function WWG.SetSceneManagement()
 			}
 		end
 	end
-	
-	if os.date("%d%m") == "0104" then
-		WizardsWardrobeWindow:SetTransformRotationZ(math.rad(180))
-	end
 end
 
 function WWG.SetDialogManagement()
