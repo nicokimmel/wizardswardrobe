@@ -51,6 +51,7 @@ function WWM.InitSV()
 		printMessages = "chat",
 		overwriteWarning = true,
 		inventoryMarker = true,
+		ignoreTabards = true,
 		unequipEmpty = false,
 		chargeWeapons = false,
 		repairArmor = false,
@@ -121,6 +122,16 @@ function WWM.InitAM()
 			setFunc = function(value) WW.settings.unequipEmpty = value end,
 			tooltip = GetString(WW_MENU_UNEQUIPEMPTY_TT),
 		},
+		{
+			type = "checkbox",
+			name = GetString(WW_MENU_IGNORE_TABARDS),
+			getFunc = function() return WW.settings.ignoreTabards end,
+			setFunc = function(value) WW.settings.ignoreTabards = value end,
+			tooltip = GetString(WW_MENU_IGNORE_TABARDS_TT),
+			disabled = function() return not WW.settings.unequipEmpty end, -- only enabled if unequip empty is true
+
+		},
+
 		{
 			type = "divider",
 			height = 15,
