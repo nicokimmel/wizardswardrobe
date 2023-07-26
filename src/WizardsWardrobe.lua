@@ -298,8 +298,8 @@ function WW.LoadGear( setup )
 				end
 			end
 		else
-			-- unequip if option is set to true
-			if WW.settings.unequipEmpty then
+			-- unequip if option is set to true, but ignore tabards if set to do so
+			if WW.settings.unequipEmpty and (gearSlot ~= EQUIP_SLOT_COSTUME or ((gearSlot == EQUIP_SLOT_COSTUME) and WW.settings.ignoreTabards == false)) then
 				table.insert( itemTaskList, {
 					sourceBag = BAG_WORN,
 					sourceSlot = gearSlot,
