@@ -1,28 +1,75 @@
 <Bindings>
 	<Layer name="SI_KEYBINDINGS_LAYER_GENERAL">
 		<Category name="Wizard's Wardrobe">
-			<Action name="WW_HOTKEY_SHOW_UI"><Down>SLASH_COMMANDS["/wizard"]()</Down></Action>
-			<Action name="WW_HOTKEY_FIXES_FLIP_SHOULDERS"><Down>WizardsWardrobe.fixes.FlipShoulders()</Down></Action>
-			<Action name="WW_HOTKEY_SETUP_1"><Down>WizardsWardrobe.LoadSetupCurrent(1, false)</Down></Action>
-			<Action name="WW_HOTKEY_SETUP_2"><Down>WizardsWardrobe.LoadSetupCurrent(2, false)</Down></Action>
-			<Action name="WW_HOTKEY_SETUP_3"><Down>WizardsWardrobe.LoadSetupCurrent(3, false)</Down></Action>
-			<Action name="WW_HOTKEY_SETUP_4"><Down>WizardsWardrobe.LoadSetupCurrent(4, false)</Down></Action>
-			<Action name="WW_HOTKEY_SETUP_5"><Down>WizardsWardrobe.LoadSetupCurrent(5, false)</Down></Action>
-			<Action name="WW_HOTKEY_SETUP_6"><Down>WizardsWardrobe.LoadSetupCurrent(6, false)</Down></Action>
-			<Action name="WW_HOTKEY_SETUP_7"><Down>WizardsWardrobe.LoadSetupCurrent(7, false)</Down></Action>
-			<Action name="WW_HOTKEY_SETUP_8"><Down>WizardsWardrobe.LoadSetupCurrent(8, false)</Down></Action>
-			<Action name="WW_HOTKEY_SETUP_9"><Down>WizardsWardrobe.LoadSetupCurrent(9, false)</Down></Action>
-			<Action name="WW_HOTKEY_SETUP_10"><Down>WizardsWardrobe.LoadSetupCurrent(10, false)</Down></Action>
-			<Action name="WW_HOTKEY_SETUP_11"><Down>WizardsWardrobe.LoadSetupCurrent(11, false)</Down></Action>
-			<Action name="WW_HOTKEY_SETUP_12"><Down>WizardsWardrobe.LoadSetupCurrent(12, false)</Down></Action>
-			<Action name="WW_HOTKEY_SETUP_13"><Down>WizardsWardrobe.LoadSetupCurrent(13, false)</Down></Action>
-			<Action name="WW_HOTKEY_SETUP_14"><Down>WizardsWardrobe.LoadSetupCurrent(14, false)</Down></Action>
-			<Action name="WW_HOTKEY_SETUP_15"><Down>WizardsWardrobe.LoadSetupCurrent(15, false)</Down></Action>
-			<Action name="WW_HOTKEY_PREBUFF_1"><Down>WizardsWardrobe.prebuff.Prebuff(1)</Down></Action>
-			<Action name="WW_HOTKEY_PREBUFF_2"><Down>WizardsWardrobe.prebuff.Prebuff(2)</Down></Action>
-			<Action name="WW_HOTKEY_PREBUFF_3"><Down>WizardsWardrobe.prebuff.Prebuff(3)</Down></Action>
-			<Action name="WW_HOTKEY_PREBUFF_4"><Down>WizardsWardrobe.prebuff.Prebuff(4)</Down></Action>
-			<Action name="WW_HOTKEY_PREBUFF_5"><Down>WizardsWardrobe.prebuff.Prebuff(5)</Down></Action>
+			<Action name="WW_HOTKEY_SHOW_UI">
+				<Down>SLASH_COMMANDS["/wizard"]()</Down>
+			</Action>
+			<Action name="WW_HOTKEY_FIXES_FLIP_SHOULDERS">
+				<Down>WizardsWardrobe.fixes.FlipShoulders()</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_1">
+				<Down>WizardsWardrobe.LoadSetupCurrent(1, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_2">
+				<Down>WizardsWardrobe.LoadSetupCurrent(2, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_3">
+				<Down>WizardsWardrobe.LoadSetupCurrent(3, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_4">
+				<Down>WizardsWardrobe.LoadSetupCurrent(4, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_5">
+				<Down>WizardsWardrobe.LoadSetupCurrent(5, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_6">
+				<Down>WizardsWardrobe.LoadSetupCurrent(6, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_7">
+				<Down>WizardsWardrobe.LoadSetupCurrent(7, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_8">
+				<Down>WizardsWardrobe.LoadSetupCurrent(8, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_9">
+				<Down>WizardsWardrobe.LoadSetupCurrent(9, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_10">
+				<Down>WizardsWardrobe.LoadSetupCurrent(10, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_11">
+				<Down>WizardsWardrobe.LoadSetupCurrent(11, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_12">
+				<Down>WizardsWardrobe.LoadSetupCurrent(12, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_13">
+				<Down>WizardsWardrobe.LoadSetupCurrent(13, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_14">
+				<Down>WizardsWardrobe.LoadSetupCurrent(14, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_15">
+				<Down>WizardsWardrobe.LoadSetupCurrent(15, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_PREBUFF_1">
+				<Down>WizardsWardrobe.prebuff.Prebuff(1)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_PREBUFF_2">
+				<Down>WizardsWardrobe.prebuff.Prebuff(2)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_PREBUFF_3">
+				<Down>WizardsWardrobe.prebuff.Prebuff(3)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_PREBUFF_4">
+				<Down>WizardsWardrobe.prebuff.Prebuff(4)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_PREBUFF_5">
+				<Down>WizardsWardrobe.prebuff.Prebuff(5)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_UNDRESS">
+				<Down>WizardsWardrobe.Undress()</Down>
+			</Action>
 		</Category>
 	</Layer>
 </Bindings>
