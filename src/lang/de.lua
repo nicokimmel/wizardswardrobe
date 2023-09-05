@@ -275,6 +275,9 @@ local language = {
 	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_3 = "Prebuff 3",
 	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_4 = "Prebuff 4",
 	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_5 = "Prebuff 5",
+	SI_BINDING_NAME_WW_HOTKEY_SETUP_PREVIOUS = "Vorheriges Setup"
+	SI_BINDING_NAME_WW_HOTKEY_SETUP_NEXT = "Nächstes Setup"
+	SI_BINDING_NAME_WW_HOTKEY_UNDRESS = "Ausziehen"
 }
 
 for key, value in pairs(language) do
