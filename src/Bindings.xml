@@ -69,6 +69,12 @@
 			</Action>
 			<Action name="WW_HOTKEY_UNDRESS">
 				<Down>WizardsWardrobe.Undress()</Down>
+      </Action>
+			<Action name="WW_HOTKEY_SETUP_PREVIOUS">
+				<Down>WizardsWardrobe.LoadSetupAdjacent(-1)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_NEXT">
+				<Down>WizardsWardrobe.LoadSetupAdjacent(1)</Down>
 			</Action>
 		</Category>
 	</Layer>
