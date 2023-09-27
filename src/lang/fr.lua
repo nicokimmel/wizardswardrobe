@@ -275,6 +275,11 @@ local language = {
 	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_3 = "Prebuff 3",
 	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_4 = "Prebuff 4",
 	SI_BINDING_NAME_WW_HOTKEY_PREBUFF_5 = "Prebuff 5",
+
+	SI_BINDING_NAME_WW_HOTKEY_UNDRESS = "Déshabiller",
+	SI_BINDING_NAME_WW_HOTKEY_SETUP_PREVIOUS = "Equiper le profil précédent",
+	SI_BINDING_NAME_WW_HOTKEY_SETUP_CURRENT = "Recharger le profil actuel",
+	SI_BINDING_NAME_WW_HOTKEY_SETUP_NEXT = "Equiper le prochain profil"
 }
 
 for key, value in pairs(language) do
