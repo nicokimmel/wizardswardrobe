@@ -296,6 +296,7 @@ local language = {
 
 	SI_BINDING_NAME_WW_HOTKEY_UNDRESS = "Undress",
 	SI_BINDING_NAME_WW_HOTKEY_SETUP_PREVIOUS = "Equip previous setup",
+	SI_BINDING_NAME_WW_HOTKEY_SETUP_CURRENT = "Reload current setup",
 	SI_BINDING_NAME_WW_HOTKEY_SETUP_NEXT = "Equip next setup"
 }
 
