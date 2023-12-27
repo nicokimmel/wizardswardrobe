@@ -9,18 +9,38 @@ function WWM.Init()
 	WWM.InitAM()
 end
 
+local addonMenuChoices = {
+	names = {
+		GetString( WW_MENU_COMPARISON_DEPTH_EASY ),
+		GetString( WW_MENU_COMPARISON_DEPTH_DETAILED ),
+		GetString( WW_MENU_COMPARISON_DEPTH_THOROUGH ),
+		GetString( WW_MENU_COMPARISON_DEPTH_STRICT )
+	},
+	values = {
+		1,
+		2,
+		3,
+		4
+	},
+	tooltips = {
+		GetString( WW_MENU_COMPARISON_DEPTH_EASY_TT ),
+		GetString( WW_MENU_COMPARISON_DEPTH_DETAILED_TT ),
+		GetString( WW_MENU_COMPARISON_DEPTH_THOROUGH_TT ),
+		GetString( WW_MENU_COMPARISON_DEPTH_STRICT_TT )
+	}
+}
 function WWM.InitSV()
-	WW.storage = ZO_SavedVars:NewCharacterIdSettings("WizardsWardrobeSV", 1, nil, {
+	WW.storage = ZO_SavedVars:NewCharacterIdSettings( "WizardsWardrobeSV", 1, nil, {
 		setups = {},
 		pages = {},
 		prebuffs = {},
 		autoEquipSetups = true,
-	})
+	} )
 	WW.setups = WW.storage.setups
 	WW.pages = WW.storage.pages
 	WW.prebuffs = WW.storage.prebuffs
-	
-	WW.settings = ZO_SavedVars:NewAccountWide("WizardsWardrobeSV", 1, nil, {
+
+	WW.settings = ZO_SavedVars:NewAccountWide( "WizardsWardrobeSV", 1, nil, {
 		window = {
 			wizard = {
 				width = 360,
@@ -47,6 +67,8 @@ function WWM.InitSV()
 		fixes = {
 			surfingWeapons = false,
 		},
+		failedSwapLog = {},
+		comparisonDepth = 1,
 		changelogs = {},
 		printMessages = "chat",
 		overwriteWarning = true,
@@ -58,7 +80,9 @@ function WWM.InitSV()
 		fillPoisons = false,
 		eatBuffFood = false,
 		initialized = false,
-	})
+		fixGearSwap = false,
+		validationDelay = 1500
+	} )
 
 	-- migrate printMessage settings
 	if WW.settings.printMessages == true then
@@ -66,13 +90,12 @@ function WWM.InitSV()
 	elseif WW.settings.printMessages == false then
 		WW.settings.printMessages = "off"
 	end
-	
+
 	-- dont look at this
 	WW.settings.autoEquipSetups = WW.storage.autoEquipSetups
 end
 
 function WWM.InitAM()
-	
 	local panelData = {
 		type = "panel",
 		name = WW.simpleName,
@@ -81,7 +104,7 @@ function WWM.InitAM()
 		version = WW.version,
 		registerForRefresh = true,
 	}
-	
+
 	local optionData = {
 		{
 			type = "description",
@@ -89,49 +112,94 @@ function WWM.InitAM()
 		},
 		{
 			type = "header",
-			name = GetString(WW_MENU_GENERAL),
+			name = GetString( WW_MENU_GENERAL ),
 		},
+
 		{
 			type = "dropdown",
-			name = GetString(WW_MENU_PRINTCHAT),
-			choices = { GetString(WW_MENU_PRINTCHAT_OFF), GetString(WW_MENU_PRINTCHAT_CHAT), GetString(WW_MENU_PRINTCHAT_ALERT) },
-			choicesValues = { "off", "chat", "alert" },
+			name = GetString( WW_MENU_PRINTCHAT ),
+			choices = {
+				GetString( WW_MENU_PRINTCHAT_OFF ),
+				GetString( WW_MENU_PRINTCHAT_CHAT ),
+				GetString( WW_MENU_PRINTCHAT_ALERT ),
+				GetString( WW_MENU_PRINTCHAT_ANNOUNCEMENT )
+			},
+			choicesValues = { "off", "chat", "alert", "announcement" },
 			getFunc = function() return WW.settings.printMessages end,
-			setFunc = function(value) WW.settings.printMessages = value end,
-			tooltip = GetString(WW_MENU_PRINTCHAT_TT),
+			setFunc = function( value ) WW.settings.printMessages = value end,
+			tooltip = GetString( WW_MENU_PRINTCHAT_TT ),
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_OVERWRITEWARNING),
+			name = GetString( WW_MENU_OVERWRITEWARNING ),
 			getFunc = function() return WW.settings.overwriteWarning end,
-			setFunc = function(value) WW.settings.overwriteWarning = value end,
-			tooltip = GetString(WW_MENU_OVERWRITEWARNING_TT),
+			setFunc = function( value ) WW.settings.overwriteWarning = value end,
+			tooltip = GetString( WW_MENU_OVERWRITEWARNING_TT ),
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_INVENTORYMARKER),
+			name = GetString( WW_MENU_INVENTORYMARKER ),
 			getFunc = function() return WW.settings.inventoryMarker end,
-			setFunc = function(value) WW.settings.inventoryMarker = value end,
-			tooltip = GetString(WW_MENU_INVENTORYMARKER_TT),
+			setFunc = function( value ) WW.settings.inventoryMarker = value end,
+			tooltip = GetString( WW_MENU_INVENTORYMARKER_TT ),
 			requiresReload = true,
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_UNEQUIPEMPTY),
+			name = GetString( WW_MENU_UNEQUIPEMPTY ),
 			getFunc = function() return WW.settings.unequipEmpty end,
-			setFunc = function(value) WW.settings.unequipEmpty = value end,
-			tooltip = GetString(WW_MENU_UNEQUIPEMPTY_TT),
+			setFunc = function( value ) WW.settings.unequipEmpty = value end,
+			tooltip = GetString( WW_MENU_UNEQUIPEMPTY_TT ),
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_IGNORE_TABARDS),
+			name = GetString( WW_MENU_IGNORE_TABARDS ),
 			getFunc = function() return WW.settings.ignoreTabards end,
-			setFunc = function(value) WW.settings.ignoreTabards = value end,
-			tooltip = GetString(WW_MENU_IGNORE_TABARDS_TT),
+			setFunc = function( value ) WW.settings.ignoreTabards = value end,
+			tooltip = GetString( WW_MENU_IGNORE_TABARDS_TT ),
 			disabled = function() return not WW.settings.unequipEmpty end, -- only enabled if unequip empty is true
 
 		},
+		{
+			type = "header",
+			name = "Setup Validation",
 
+		},
+		{
+			type            = "dropdown",
+			name            = GetString( WW_MENU_COMPARISON_DEPTH ),
+			choices         = addonMenuChoices.names,
+			choicesValues   = addonMenuChoices.values,
+			choicesTooltips = addonMenuChoices.tooltips,
+			disabled        = function() return false end,
+			scrollable      = true,
+			getFunc         = function() return WW.settings.comparisonDepth end,
+			setFunc         = function( var ) WW.settings.comparisonDepth = var end,
+			width           = "full",
+		},
+		{
+			type = "checkbox",
+			name = GetString( WW_MENU_WEAPON_GEAR_FIX ),
+			getFunc = function() return WW.settings.fixGearSwap end,
+			setFunc = function( value ) WW.settings.fixGearSwap = value end,
+			tooltip = GetString( WW_MENU_WEAPON_GEAR_FIX_TT )
+
+		},
+		{
+			type = "slider",
+			name = GetString( WW_MENU_VALIDATION_DELAY ),
+			tooltip = GetString( WW_MENU_VALIDATION_DELAY_TT ),
+			warning = GetString( WW_MENU_VALIDATION_DELAY_WARN ),
+			getFunc = function() return WW.settings.validationDelay end,
+			setFunc = function( value )
+				WW.settings.validationDelay = value
+			end,
+			step = 10,
+			min = 1500,
+			max = 4500,
+			clampInput = true,
+			width = "full",
+		},
 		{
 			type = "divider",
 			height = 15,
@@ -139,9 +207,9 @@ function WWM.InitAM()
 		},
 		{
 			type = "button",
-			name = GetString(WW_MENU_RESETUI),
+			name = GetString( WW_MENU_RESETUI ),
 			func = WW.gui.ResetUI,
-			warning = GetString(WW_MENU_RESETUI_TT),
+			warning = GetString( WW_MENU_RESETUI_TT ),
 		},
 		{
 			type = "divider",
@@ -150,38 +218,38 @@ function WWM.InitAM()
 		},
 		{
 			type = "header",
-			name = GetString(WW_MENU_AUTOEQUIP),
+			name = GetString( WW_MENU_AUTOEQUIP ),
 		},
 		{
 			type = "description",
-			text = GetString(WW_MENU_AUTOEQUIP_DESC),
+			text = GetString( WW_MENU_AUTOEQUIP_DESC ),
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_AUTOEQUIP_GEAR),
+			name = GetString( WW_MENU_AUTOEQUIP_GEAR ),
 			getFunc = function() return WW.settings.auto.gear end,
-			setFunc = function(value) WW.settings.auto.gear = value end,
+			setFunc = function( value ) WW.settings.auto.gear = value end,
 			width = "half",
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_AUTOEQUIP_SKILLS),
+			name = GetString( WW_MENU_AUTOEQUIP_SKILLS ),
 			getFunc = function() return WW.settings.auto.skills end,
-			setFunc = function(value) WW.settings.auto.skills = value end,
+			setFunc = function( value ) WW.settings.auto.skills = value end,
 			width = "half",
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_AUTOEQUIP_CP),
+			name = GetString( WW_MENU_AUTOEQUIP_CP ),
 			getFunc = function() return WW.settings.auto.cp end,
-			setFunc = function(value) WW.settings.auto.cp = value end,
+			setFunc = function( value ) WW.settings.auto.cp = value end,
 			width = "half",
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_AUTOEQUIP_BUFFFOOD),
+			name = GetString( WW_MENU_AUTOEQUIP_BUFFFOOD ),
 			getFunc = function() return WW.settings.auto.food end,
-			setFunc = function(value) WW.settings.auto.food = value end,
+			setFunc = function( value ) WW.settings.auto.food = value end,
 			width = "half",
 		},
 		{
@@ -191,24 +259,24 @@ function WWM.InitAM()
 		},
 		{
 			type = "header",
-			name = GetString(WW_MENU_SUBSTITUTE),
+			name = GetString( WW_MENU_SUBSTITUTE ),
 		},
 		{
 			type = "description",
-			text = GetString(WW_MENU_SUBSTITUTE_WARNING),
+			text = GetString( WW_MENU_SUBSTITUTE_WARNING ),
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_SUBSTITUTE_OVERLAND),
+			name = GetString( WW_MENU_SUBSTITUTE_OVERLAND ),
 			getFunc = function() return WW.settings.substitute.overland end,
-			setFunc = function(value) WW.settings.substitute.overland = value end,
-			tooltip = GetString(WW_MENU_SUBSTITUTE_OVERLAND_TT),
+			setFunc = function( value ) WW.settings.substitute.overland = value end,
+			tooltip = GetString( WW_MENU_SUBSTITUTE_OVERLAND_TT ),
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_SUBSTITUTE_DUNGEONS),
+			name = GetString( WW_MENU_SUBSTITUTE_DUNGEONS ),
 			getFunc = function() return WW.settings.substitute.dungeons end,
-			setFunc = function(value) WW.settings.substitute.dungeons = value end,
+			setFunc = function( value ) WW.settings.substitute.dungeons = value end,
 		},
 		{
 			type = "divider",
@@ -217,37 +285,37 @@ function WWM.InitAM()
 		},
 		{
 			type = "header",
-			name = GetString(WW_MENU_PANEL),
+			name = GetString( WW_MENU_PANEL ),
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_PANEL_ENABLE),
+			name = GetString( WW_MENU_PANEL_ENABLE ),
 			getFunc = function() return not WW.settings.panel.hidden end,
-			setFunc = function(value)
-						WW.settings.panel.hidden = not value
-						WizardsWardrobePanel.fragment:Refresh()
-					  end,
-			tooltip = GetString(WW_MENU_PANEL_ENABLE_TT),
+			setFunc = function( value )
+				WW.settings.panel.hidden = not value
+				WizardsWardrobePanel.fragment:Refresh()
+			end,
+			tooltip = GetString( WW_MENU_PANEL_ENABLE_TT ),
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_PANEL_MINI),
+			name = GetString( WW_MENU_PANEL_MINI ),
 			getFunc = function() return WW.settings.panel.mini end,
-			setFunc = function(value)
-						WW.settings.panel.mini = value
-					  end,
+			setFunc = function( value )
+				WW.settings.panel.mini = value
+			end,
 			disabled = function() return WW.settings.panel.hidden end,
-			tooltip = GetString(WW_MENU_PANEL_MINI_TT),
+			tooltip = GetString( WW_MENU_PANEL_MINI_TT ),
 			requiresReload = true,
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_PANEL_LOCK),
+			name = GetString( WW_MENU_PANEL_LOCK ),
 			getFunc = function() return WW.settings.panel.locked end,
-			setFunc = function(value)
-						WW.settings.panel.locked = value
-						WizardsWardrobePanel:SetMovable(not value)
-					  end,
+			setFunc = function( value )
+				WW.settings.panel.locked = value
+				WizardsWardrobePanel:SetMovable( not value )
+			end,
 			disabled = function() return WW.settings.panel.hidden end,
 		},
 		{
@@ -257,59 +325,70 @@ function WWM.InitAM()
 		},
 		{
 			type = "header",
-			name = GetString(WW_MENU_MODULES),
+			name = GetString( WW_MENU_MODULES ),
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_CHARGEWEAPONS),
+			name = GetString( WW_MENU_CHARGEWEAPONS ),
 			getFunc = function() return WW.settings.chargeWeapons end,
-			setFunc = function(value)
-						WW.settings.chargeWeapons = value
-						WW.repair.RegisterChargeEvents()
-					  end,
+			setFunc = function( value )
+				WW.settings.chargeWeapons = value
+				WW.repair.RegisterChargeEvents()
+			end,
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_REPAIRARMOR),
+			name = GetString( WW_MENU_REPAIRARMOR ),
 			getFunc = function() return WW.settings.repairArmor end,
-			setFunc = function(value)
-						WW.settings.repairArmor = value
-						WW.repair.RegisterRepairEvents()
-					  end,
-			tooltip = GetString(WW_MENU_REPAIRARMOR_TT),
+			setFunc = function( value )
+				WW.settings.repairArmor = value
+				WW.repair.RegisterRepairEvents()
+			end,
+			tooltip = GetString( WW_MENU_REPAIRARMOR_TT ),
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_FILLPOISONS),
+			name = GetString( WW_MENU_FILLPOISONS ),
 			getFunc = function() return WW.settings.fillPoisons end,
-			setFunc = function(value)
-						WW.settings.fillPoisons = value
-						WW.poison.RegisterEvents()
-					  end,
-			tooltip = GetString(WW_MENU_FILLPOISONS_TT),
+			setFunc = function( value )
+				WW.settings.fillPoisons = value
+				WW.poison.RegisterEvents()
+			end,
+			tooltip = GetString( WW_MENU_FILLPOISONS_TT ),
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_BUFFFOOD),
+			name = GetString( WW_MENU_BUFFFOOD ),
 			getFunc = function() return WW.settings.eatBuffFood end,
-			setFunc = function(value)
-						WW.settings.eatBuffFood = value
-						WW.food.RegisterEvents()
-					  end,
-			tooltip = GetString(WW_MENU_BUFFFOOD_TT),
+			setFunc = function( value )
+				WW.settings.eatBuffFood = value
+				WW.food.RegisterEvents()
+			end,
+			tooltip = GetString( WW_MENU_BUFFFOOD_TT ),
 		},
 		{
 			type = "checkbox",
-			name = GetString(WW_MENU_FIXES_FIXSURFINGWEAPONS),
+			name = GetString( WW_MENU_FIXES_FIXSURFINGWEAPONS ),
 			getFunc = function() return WW.settings.fixes.surfingWeapons end,
-			setFunc = function(value)
-						WW.settings.fixes.surfingWeapons = value
-					  end,
-			tooltip = GetString(WW_MENU_FIXES_FIXSURFINGWEAPONS_TT),
+			setFunc = function( value )
+				WW.settings.fixes.surfingWeapons = value
+			end,
+			tooltip = GetString( WW_MENU_FIXES_FIXSURFINGWEAPONS_TT ),
 		},
-	}
-	
-	WWM.panel = LibAddonMenu2:RegisterAddonPanel("WizardsWardrobeMenu", panelData)
-	LibAddonMenu2:RegisterOptionControls("WizardsWardrobeMenu", optionData)
-end
+		{
+			type = "header",
+			name = "Delete log",
+		},
+		{
+			type = "button",
+			name = "Delete",
+			danger = true,
+			func = function() WW.settings.failedSwapLog = {} end,
+			width = "full",
+		},
 
+	}
+
+	WWM.panel = LibAddonMenu2:RegisterAddonPanel( "WizardsWardrobeMenu", panelData )
+	LibAddonMenu2:RegisterOptionControls( "WizardsWardrobeMenu", optionData )
+end

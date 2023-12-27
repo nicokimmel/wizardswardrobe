@@ -10,8 +10,7 @@ SE.tag = "SE"
 SE.icon = "/esoui/art/icons/achievement_u38_vtrial_meta.dds"
 SE.priority = 12
 SE.id = 1427
-SE.node = 434 -- Not sure whats the use of this. I used a random positive number
-
+SE.node = 534
 SE.bosses = {
     [ 1 ] = {
         name = GetString( WW_TRASH ),

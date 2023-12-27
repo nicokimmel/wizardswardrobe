@@ -1,9 +1,9 @@
 ## Title: Wizard's Wardrobe
 ## Author: ownedbynico, |c268074JN_Slevin|r, |c00a313Ghostbane|r
-## Version: 1.14.0
+## Version: 1.16.0
 ## Description: Throw all your setups into the wardrobe and let the wizard equip them exactly when you need it.
-## APIVersion: 101039
-## DependsOn: LibAddonMenu-2.0 LibChatMessage>=105
+## APIVersion: 101040
+## DependsOn: LibAddonMenu-2.0 LibChatMessage>=105 LibDebugLogger LibAsync
 ## SavedVariables: WizardsWardrobeSV
 
 ## This Add-on is not created by, affiliated with or sponsored by ZeniMax Media Inc. or its affiliates.
@@ -25,6 +25,7 @@ WizardsWardrobeSetup.lua
 WizardsWardrobeConst.lua
 WizardsWardrobeUtils.lua
 WizardsWardrobeQueue.lua
+WizardsWardrobeSetupValidation.lua
 
 modules/WizardsWardrobeConditions.lua
 modules/WizardsWardrobeTransfer.lua
@@ -42,6 +43,7 @@ WizardsWardrobeGui.lua
 WizardsWardrobeMenu.lua
 WizardsWardrobe.lua
 
+
 zones/GEN.lua
 zones/SUB.lua
 zones/PVP.lua
@@ -58,4 +60,3 @@ zones/RG.lua
 zones/DSR.lua
 zones/SE.lua
 zones/BRP.lua
-zones/EA.lua
