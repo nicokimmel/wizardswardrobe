@@ -66,10 +66,12 @@ local language = {
 	-- ADDON MENU
 	WW_MENU_GENERAL = "Allgemein",
 	WW_MENU_PRINTCHAT = "Meldungen",
-	WW_MENU_PRINTCHAT_TT = "Gibt Meldungen über geladene Setups im Chat oder Benachrichtigungsfenster aus.",
+	WW_MENU_PRINTCHAT_TT =
+	"Gibt Meldungen über geladene Setups im Chat, Benachrichtigungsfenster oder als 'Center Screen Announcement' aus.",
 	WW_MENU_PRINTCHAT_OFF = "Deaktiviert",
 	WW_MENU_PRINTCHAT_CHAT = "Chat",
 	WW_MENU_PRINTCHAT_ALERT = "Benachrichtigung",
+	WW_MENU_PRINTCHAT_ANNOUNCEMENT = "Announcement",
 	WW_MENU_OVERWRITEWARNING = "Warnung beim Überschreiben",
 	WW_MENU_OVERWRITEWARNING_TT = "Zeigt eine Warnung wenn ein bereits gespeichertes Setup überschrieben wird.",
 	WW_MENU_INVENTORYMARKER = "Inventarmarker",
