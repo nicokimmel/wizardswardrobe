@@ -57,8 +57,8 @@ local language = {
 	WW_MSG_FOOD_COMBAT =
 	"Dein Bufffood ist im Kampf ausgelaufen. Wenn nötig wird dich der Zauberer nach dem Kampf mit %s versorgen.",
 	WW_MSG_NOFOOD = "Kein passendes Bufffood im Inventar gefunden!",
-	WW_MSG_SWAPFAIL = "Setup hat nicht gewechselt, versuche Problemsumgehung, bitte warte einige Sekunden",
-	WW_MSG_SWAPFAIL_DISABLED = "Setup hat nicht gewechselt",
+	WW_MSG_SWAPFAIL = "%s im Setup hat nicht gewechselt, versuche Problemsumgehung, bitte warte einige Sekunden",
+	WW_MSG_SWAPFAIL_DISABLED = "%s im Setup hat nicht gewechselt",
 	WW_MSG_SWAPSUCCESS = "Setup hat erfolgreich geladen",
 	WW_MSG_SWAP_FIX_FAIL = "Alle versuche haben fehlgeschlagen, bitte versuche die Rüstungen / Waffen manuell zu entfernen",
 
@@ -121,6 +121,16 @@ local language = {
 	WW_MENU_VALIDATION_DELAY_TT = "Wähle die Anzahl der ms nachder die Überprüfung passsiert.",
 	WW_MENU_VALIDATION_DELAY_WARN =
 	"Je länger die Verzögerung, desto höher is die Chance falsche positive Warnungen zu haben. Wenn die Verzögerung zu gering ist, könnten unabsichtliche Dinge passieren.",
+	WW_MENU_COMPARISON_DEPTH = "Vergleichstiefe",
+	WW_MENU_COMPARISON_DEPTH_EASY = "Einfach",
+	WW_MENU_COMPARISON_DEPTH_DETAILED = "Detailliert",
+	WW_MENU_COMPARISON_DEPTH_THOROUGH = "Gründlich",
+	WW_MENU_COMPARISON_DEPTH_STRICT = "Streng",
+	WW_MENU_COMPARISON_DEPTH_EASY_TT = "Überprüft nur den Trait, den Waffentyp und das Set.",
+	WW_MENU_COMPARISON_DEPTH_DETAILED_TT = "Überprüft den Trait, den Waffentyp das Set und Qualität.",
+	WW_MENU_COMPARISON_DEPTH_THOROUGH_TT = "Überprüft den Trait, den Waffentyp das Set, Qualität und Verzauberung.",
+	WW_MENU_COMPARISON_DEPTH_STRICT_TT =
+	"Überprüft, ob es genau das gleiche Ausrüstungsteil ist, das gespeichert wurde. Scheiterd, wenn irgendetwas verändert wurde",
 
 
 	-- USER INTERFACE
