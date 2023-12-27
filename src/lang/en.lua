@@ -56,15 +56,21 @@ local language = {
 	WW_MSG_FOOD_COMBAT =
 	"Your buff food just ran out mid combat. The wizard will provide you with %s after the combat if still needed.",
 	WW_MSG_NOFOOD = "Could not find any matching buff food in your inventory!",
+	WW_MSG_SWAPFAIL = "%s in your Setup failed to swap, attempting workaround, please wait a few seconds",
+	WW_MSG_SWAPFAIL_DISABLED = "%s in your Setup failed to swap",
+	WW_MSG_SWAPSUCCESS = "Setup successfully loaded",
+	WW_MSG_SWAP_FIX_FAIL = "All workarounds have failed, please try to manually unequip the stuck piece",
 
 
 	-- ADDON MENU
 	WW_MENU_GENERAL = "General",
 	WW_MENU_PRINTCHAT = "Print messages",
-	WW_MENU_PRINTCHAT_TT = "Prints messages about loaded setups into the chat or the alert notifications",
+	WW_MENU_PRINTCHAT_TT =
+	"Prints messages about loaded setups into the chat, the alert notifications or the center screen announcements",
 	WW_MENU_PRINTCHAT_OFF = "Disabled",
 	WW_MENU_PRINTCHAT_CHAT = "Chat",
 	WW_MENU_PRINTCHAT_ALERT = "Alert",
+	WW_MENU_PRINTCHAT_ANNOUNCEMENT = "Announcement",
 	WW_MENU_OVERWRITEWARNING = "Show warning on overwrite",
 	WW_MENU_OVERWRITEWARNING_TT = "Shows a warning if an already saved setup is overwritten.",
 	WW_MENU_INVENTORYMARKER = "Inventory marker",
@@ -109,6 +115,22 @@ local language = {
 	WW_MENU_FIXES_FIXSURFINGWEAPONS = "Fix surfing on weapons",
 	WW_MENU_FIXES_FIXSURFINGWEAPONS_TT =
 	"This will toggle \"Hide Your Helm\" twice every zone swap in order to fix the weapon surf bug.",
+	WW_MENU_WEAPON_GEAR_FIX = "Fix failed gear swaps.",
+	WW_MENU_WEAPON_GEAR_FIX_TT = "Automates the steps we take to fix failed gear swaps",
+	WW_MENU_VALIDATION_DELAY = "Validation delay",
+	WW_MENU_VALIDATION_DELAY_TT = "Chose here the amount of MS after which the setup validation takes place",
+	WW_MENU_VALIDATION_DELAY_WARN =
+	"The longer the delay the lower the chance to have false positives. If its too low, it might cause unintended behavior.",
+	WW_MENU_COMPARISON_DEPTH = "Comparison depth",
+	WW_MENU_COMPARISON_DEPTH_EASY = "Easy",
+	WW_MENU_COMPARISON_DEPTH_DETAILED = "Detailed",
+	WW_MENU_COMPARISON_DEPTH_THOROUGH = "Thorough",
+	WW_MENU_COMPARISON_DEPTH_STRICT = "Strict",
+	WW_MENU_COMPARISON_DEPTH_EASY_TT = "Will only check the trait, the weapon type and the set.",
+	WW_MENU_COMPARISON_DEPTH_DETAILED_TT = "Will check the trait, the weapon type the set and quality.",
+	WW_MENU_COMPARISON_DEPTH_THOROUGH_TT = "Will check the trait, the weapon type the set, quality and enchantment.",
+	WW_MENU_COMPARISON_DEPTH_STRICT_TT =
+	"Will check if its the exact same piece of gear that was saved. Will fail if you change anything.",
 
 
 	-- USER INTERFACE
@@ -297,10 +319,11 @@ local language = {
 	SI_BINDING_NAME_WW_HOTKEY_UNDRESS = "Undress",
 	SI_BINDING_NAME_WW_HOTKEY_SETUP_PREVIOUS = "Equip previous setup",
 	SI_BINDING_NAME_WW_HOTKEY_SETUP_CURRENT = "Reload current setup",
-	SI_BINDING_NAME_WW_HOTKEY_SETUP_NEXT = "Equip next setup"
+	SI_BINDING_NAME_WW_HOTKEY_SETUP_NEXT = "Equip next setup",
+	SI_BINDING_NAME_WW_HOTKEY_SETUP_FIX = "Try to fix failed setup swap"
 }
 
-for key, value in pairs(language) do
-	SafeAddVersion(key, 1)
-	ZO_CreateStringId(key, value)
+for key, value in pairs( language ) do
+	SafeAddVersion( key, 1 )
+	ZO_CreateStringId( key, value )
 end

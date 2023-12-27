@@ -79,6 +79,9 @@
 			<Action name="WW_HOTKEY_SETUP_NEXT">
 				<Down>WizardsWardrobe.LoadSetupAdjacent(1)</Down>
 			</Action>
+			<Action name="WW_HOTKEY_SETUP_FIX">
+				<Down>WizardsWardrobe.validation.WorkAroundOne()</Down>
+			</Action>
 		</Category>
 	</Layer>
 </Bindings>
