@@ -58,3 +58,4 @@ zones/RG.lua
 zones/DSR.lua
 zones/SE.lua
 zones/BRP.lua
+zones/EA.lua
