@@ -21,12 +21,12 @@ local WORKAROUND_FOUR         = 4
 
 
 function WWV.CompareItemLinks( linkEquipped, linkSaved, uniqueIdEquipped, uniqueIdSaved )
-    local traitEquipped             = GetItemLinkTraitInfo( linkEquipped )
-    local weaponTypeEquipped        = GetItemLinkWeaponType( linkEquipped )
-    local weaponTypeSaved           = GetItemLinkWeaponType( linkSaved )
-    local traitSaved                = GetItemLinkTraitInfo( linkSaved )
-    local _, _, _, _, setIdEquipped = GetItemLinkSetInfo( linkEquipped )
-    local _, _, _, _, setIdSaved    = GetItemLinkSetInfo( linkSaved )
+    local traitEquipped               = GetItemLinkTraitInfo( linkEquipped )
+    local traitSaved                  = GetItemLinkTraitInfo( linkSaved )
+    local weaponTypeEquipped          = GetItemLinkWeaponType( linkEquipped )
+    local weaponTypeSaved             = GetItemLinkWeaponType( linkSaved )
+    local _, _, _, _, _, setIdEquipped = GetItemLinkSetInfo( linkEquipped )
+    local _, _, _, _, _, setIdSaved   = GetItemLinkSetInfo( linkSaved )
 
     if WW.settings.comparisonDepth == 1 then -- easy
         if traitEquipped ~= traitSaved or weaponTypeEquipped ~= weaponTypeSaved or setIdEquipped ~= setIdSaved then
@@ -94,6 +94,7 @@ function WWV.DidSetupSwapCorrectly( workAround )
                 local equippedUId  = Id64ToString( GetItemUniqueId( BAG_WORN, equipSlot ) )
                 local savedUId     = setupTable.gear[ equipSlot ].id
                 local success      = nil
+                logger:Debug( " equipSlot: %s, %s // %s", GetString( "SI_EQUIPSLOT", equipSlot ), equippedLink, savedLink )
                 if WWV.CompareItemLinks( equippedLink, savedLink, equippedUId, savedUId ) then
                     success = true
                 else
