@@ -21,12 +21,22 @@ local WORKAROUND_FOUR         = 4
 
 
 function WWV.CompareItemLinks( linkEquipped, linkSaved, uniqueIdEquipped, uniqueIdSaved )
-    local traitEquipped               = GetItemLinkTraitInfo( linkEquipped )
-    local traitSaved                  = GetItemLinkTraitInfo( linkSaved )
-    local weaponTypeEquipped          = GetItemLinkWeaponType( linkEquipped )
-    local weaponTypeSaved             = GetItemLinkWeaponType( linkSaved )
+    -- if unequipEmpty is enabled then empty slots should be checked.
+    -- If not then we cant check empty slots since it will always be the previously equipped item
+    if not WW.settings.unequipEmpty then
+        --If nothing is saved return true and dont check anything for setups which have empty slots (like prebuffs etc)
+        if (linkSaved == "" or linkSaved == nil) or (uniqueIdSaved == 0 or uniqueIdSaved == nil)
+        then
+            logger:Debug( "CompareItemLinks return check: linkSaved: %s, uniqueIdSaved: %s", linkSaved, uniqueIdSaved )
+            return true
+        end
+    end
+    local traitEquipped                = GetItemLinkTraitInfo( linkEquipped )
+    local traitSaved                   = GetItemLinkTraitInfo( linkSaved )
+    local weaponTypeEquipped           = GetItemLinkWeaponType( linkEquipped )
+    local weaponTypeSaved              = GetItemLinkWeaponType( linkSaved )
     local _, _, _, _, _, setIdEquipped = GetItemLinkSetInfo( linkEquipped )
-    local _, _, _, _, _, setIdSaved   = GetItemLinkSetInfo( linkSaved )
+    local _, _, _, _, _, setIdSaved    = GetItemLinkSetInfo( linkSaved )
 
     if WW.settings.comparisonDepth == 1 then -- easy
         if traitEquipped ~= traitSaved or weaponTypeEquipped ~= weaponTypeSaved or setIdEquipped ~= setIdSaved then
