@@ -144,7 +144,7 @@ end
 
 function Setup:ExecuteCode( setup, zone, pageId, index, auto )
 	if not self.code then return end
-	local func = string.format( "return function(setup, zone, pageId, index, auto) %s end", self.code )
+	local func = string.format( "return function(setup, zone, pageId, setupId, autoLoaded) %s end", self.code )
 	local exec = zo_loadstring( func )
 	if exec then
 		exec()( setup, zone, pageId, index, auto )
