@@ -7,6 +7,7 @@ SG.tag = "SG"
 SG.icon = "/esoui/art/icons/achievement_u27_dun1_vetbosses.dds"
 SG.priority = 116
 SG.id = 1197
+SG.node = 433
 
 SG.bosses = {
 	[1] = {

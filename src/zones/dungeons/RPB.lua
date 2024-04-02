@@ -7,6 +7,7 @@ RPB.tag = "RPB"
 RPB.icon = "/esoui/art/icons/achievement_u31_dun1_vet_bosses.dds"
 RPB.priority = 120
 RPB.id = 1267
+RPB.node = 470
 
 RPB.bosses = {
 	[1] = {

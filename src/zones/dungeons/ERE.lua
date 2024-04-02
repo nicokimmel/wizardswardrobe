@@ -7,6 +7,7 @@ ERE.tag = "ERE"
 ERE.icon = "/esoui/art/icons/achievement_u35_dun1_vet_bosses.dds"
 ERE.priority =  124
 ERE.id = 1360
+ERE.node = 520
 
 ERE.bosses = { [1] = {
 		name = GetString(WW_TRASH),

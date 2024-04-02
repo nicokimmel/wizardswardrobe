@@ -7,6 +7,7 @@ DSA.tag = "DSA"
 DSA.icon = "/esoui/art/icons/achievement_026.dds"
 DSA.priority = 50
 DSA.id = 635
+DSA.node = 270
 
 DSA.bosses = {
 	[1] = {

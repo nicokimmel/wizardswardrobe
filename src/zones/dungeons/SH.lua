@@ -7,6 +7,7 @@ SH.tag = "SH"
 SH.icon = "/esoui/art/icons/u37_dun2_vet_bosses.dds"
 SH.priority =  127
 SH.id = 1390
+SH.node = 532
 
 SH.bosses = {
 	[1] = {

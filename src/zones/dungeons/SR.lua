@@ -7,6 +7,7 @@ SR.tag = "SR"
 SR.icon = "/esoui/art/icons/u33_dun2_vet_bosses.dds"
 SR.priority = 123
 SR.id = 1302
+SR.node = 498
 
 SR.bosses = { [1] = {
 		name = GetString(WW_TRASH),

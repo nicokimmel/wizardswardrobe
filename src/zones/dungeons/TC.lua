@@ -7,6 +7,7 @@ TC.tag = "TC"
 TC.icon = "/esoui/art/icons/achievement_u29_dun2_vet_bosses.dds"
 TC.priority = 119
 TC.id = 1229
+TC.node = 454
 
 TC.bosses = {
 	[1] = {

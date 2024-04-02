@@ -7,6 +7,7 @@ MA.tag = "MA"
 MA.icon = "/esoui/art/icons/store_orsiniumdlc_maelstromarena.dds"
 MA.priority = 52
 MA.id = 677
+MA.node = 249
 
 MA.bosses = {
 	[1] = {

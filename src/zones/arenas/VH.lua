@@ -7,6 +7,7 @@ VH.tag = "VH"
 VH.icon = "/esoui/art/icons/achievement_u28_varena_veteran.dds"
 VH.priority = 53
 VH.id = 1227
+VH.node = 457
 
 VH.bosses = {
 	[1] = {

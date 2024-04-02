@@ -7,6 +7,7 @@ ROM.tag = "ROM"
 ROM.icon = "/esoui/art/icons/achievement_u30_groupboss6.dss"
 ROM.priority = 102
 ROM.id = 843
+ROM.node = 260
 
 ROM.bosses = {
 	[1] = {

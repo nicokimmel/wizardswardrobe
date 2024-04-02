@@ -7,6 +7,7 @@ SCP.tag = "SCP"
 SCP.icon = "/esoui/art/icons/achievement_scalecaller_veteran.dds"
 SCP.priority = 107
 SCP.id = 1010
+SCP.node = 363
 
 SCP.bosses = {
 	[1] = {

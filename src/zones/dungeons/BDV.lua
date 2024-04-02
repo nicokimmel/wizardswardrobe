@@ -7,6 +7,7 @@ BDV.tag = "BDV"
 BDV.icon = "/esoui/art/icons/achievement_u29_dun1_vet_bosses.dds"
 BDV.priority = 118
 BDV.id = 1228
+BDV.node = 437
 
 BDV.bosses = { [1] = {
 		name = GetString(WW_TRASH),

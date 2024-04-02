@@ -7,6 +7,7 @@ WGT.tag = "WGT"
 WGT.icon = "/esoui/art/icons/achievement_ic_027_heroic.dds"
 WGT.priority = 100
 WGT.id = 688
+WGT.node = 247
 
 WGT.bosses = {
 	[1] = {

@@ -7,6 +7,7 @@ FV.tag = "FV"
 FV.icon = "/esoui/art/icons/achievement_frostvault_vet_bosses.dds"
 FV.priority = 110
 FV.id = 1080
+FV.node = 389
 
 FV.bosses = {
 	[1] = {

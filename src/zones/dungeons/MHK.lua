@@ -7,6 +7,7 @@ MHK.tag = "MHK"
 MHK.icon = "/esoui/art/icons/vmh_vet_bosses.dds"
 MHK.priority = 108
 MHK.id = 1052
+MHK.node = 371
 
 MHK.bosses = {
 	[1] = {

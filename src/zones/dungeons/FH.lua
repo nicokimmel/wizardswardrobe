@@ -7,6 +7,7 @@ FH.tag = "FH"
 FH.icon = "/esoui/art/icons/achievement_update15_008.dds"
 FH.priority = 104
 FH.id = 974
+FH.node = 332
 
 FH.bosses = {
 	[1] = {

@@ -7,6 +7,7 @@ FL.tag = "FL"
 FL.icon = "/esoui/art/icons/achievement_fanglairpeak_veteran.dds"
 FL.priority = 106
 FL.id = 1009
+FL.node = 341
 
 FL.bosses = {
 	[1] = {

@@ -7,6 +7,7 @@ BS.tag = "BS"
 BS.icon = "/esoui/art/icons/achievement_u37_dun1_vet_bosses.dds"
 BS.priority =  126
 BS.id = 1389
+BS.node = 531
 
 BS.bosses = {
 	[1] = {

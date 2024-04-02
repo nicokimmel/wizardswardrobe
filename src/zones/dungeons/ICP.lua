@@ -7,6 +7,7 @@ ICP.tag = "ICP"
 ICP.icon = "/esoui/art/icons/achievement_ic_025_heroic.dds"
 ICP.priority = 101
 ICP.id = 678
+ICP.node = 236
 
 ICP.bosses = {
 	[1] = {

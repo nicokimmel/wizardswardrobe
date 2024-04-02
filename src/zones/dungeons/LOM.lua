@@ -7,6 +7,7 @@ LOM.tag = "LOM"
 LOM.icon = "/esoui/art/icons/achievement_u23_dun2_flavorboss5b.dds"
 LOM.priority = 112
 LOM.id = 1123
+LOM.node = 398
 
 LOM.bosses = {
 	[1] = {

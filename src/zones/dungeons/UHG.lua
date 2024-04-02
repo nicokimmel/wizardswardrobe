@@ -7,6 +7,7 @@ UHG.tag = "UHG"
 UHG.icon = "/esoui/art/icons/achievement_u25_dun2_bosses.dds"
 UHG.priority = 115
 UHG.id = 1153
+UHG.node = 425
 
 UHG.bosses = {
 	[1] = {

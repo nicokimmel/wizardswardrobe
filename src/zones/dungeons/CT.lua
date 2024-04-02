@@ -7,6 +7,7 @@ CT.tag = "CT"
 CT.icon = "/esoui/art/icons/achievement_u27_dun2_vetbosses.dds"
 CT.priority = 117
 CT.id = 1201
+CT.node = 436
 
 CT.bosses = {
 	[1] = {

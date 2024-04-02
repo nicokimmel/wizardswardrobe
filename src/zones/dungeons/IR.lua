@@ -7,6 +7,7 @@ IR.tag = "IR"
 IR.icon = "/esoui/art/icons/achievement_u25_dun1_vet_bosses.dds"
 IR.priority = 114
 IR.id = 1152
+IR.node = 424
 
 IR.bosses = {
 	[1] = {

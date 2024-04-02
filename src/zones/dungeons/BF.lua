@@ -7,6 +7,7 @@ BF.tag = "BF"
 BF.icon = "/esoui/art/icons/achievement_update15_002.dds"
 BF.priority = 105
 BF.id = 973
+BF.node = 326
 
 BF.bosses = {
 	[1] = {

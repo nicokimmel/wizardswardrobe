@@ -7,6 +7,7 @@ DOM.tag = "DOM"
 DOM.icon = "/esoui/art/icons/achievement_depthsofmalatar_vet_bosses.dds"
 DOM.priority = 111
 DOM.id = 1081
+DOM.node = 390
 
 DOM.bosses = {
 	[1] = {

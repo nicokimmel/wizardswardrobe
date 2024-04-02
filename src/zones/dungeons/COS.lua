@@ -7,6 +7,7 @@ COS.tag = "COS"
 COS.icon = "/esoui/art/icons/achievement_update11_dungeons_034.dds"
 COS.priority = 103
 COS.id = 848
+COS.node = 261
 
 COS.bosses = {
 	[1] = {

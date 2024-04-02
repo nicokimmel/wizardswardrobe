@@ -7,6 +7,7 @@ MGF.tag = "MGF"
 MGF.icon = "/esoui/art/icons/achievement_u23_dun1_meta.dds"
 MGF.priority = 113
 MGF.id = 1122
+MGF.node = 391
 
 MGF.bosses = {
 	[1] = {

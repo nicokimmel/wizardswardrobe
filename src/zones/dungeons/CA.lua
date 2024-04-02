@@ -7,6 +7,7 @@ CA.tag = "CA"
 CA.icon = "/esoui/art/icons/u33_dun1_vet_bosses.dds"
 CA.priority =  122
 CA.id = 1301
+CA.node = 497
 
 CA.bosses = { [1] = {
 		name = GetString(WW_TRASH),

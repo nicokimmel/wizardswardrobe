@@ -7,6 +7,7 @@ MOS.tag = "MOS"
 MOS.icon = "/esoui/art/icons/vmos_vet_bosses.dds"
 MOS.priority = 109
 MOS.id = 1055
+MOS.node = 370
 
 MOS.bosses = {
 	[1] = {

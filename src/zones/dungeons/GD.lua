@@ -7,6 +7,7 @@ GD.tag = "GD"
 GD.icon = "/esoui/art/icons/achievement_u35_dun2_vet_bosses.dds"
 GD.priority =  125
 GD.id = 1361
+GD.node = 521
 
 GD.bosses = { [1] = {
 		name = GetString(WW_TRASH),

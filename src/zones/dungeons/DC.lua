@@ -7,6 +7,7 @@ DC.tag = "DC"
 DC.icon = "/esoui/art/icons/achievement_u31_dun2_vet_bosses.dds"
 DC.priority = 121
 DC.id = 1268
+DC.node = 469
 
 DC.bosses = {
 	[1] = {
