@@ -7,7 +7,7 @@ OP.tag = "OP"
 OP.icon = "/esoui/art/icons/achievement_u41_dun1_vet_bosses.dds"
 OP.priority =  129
 OP.id = 1470
---OP.node = TODO
+OP.node = 556
 
 OP.bosses = {
 	[1] = {

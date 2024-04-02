@@ -7,7 +7,7 @@ BV.tag = "BV"
 BV.icon = "/esoui/art/icons/achievement_u41_dun2_vet_bosses.dds"
 BV.priority =  128
 BV.id = 1471
---BV.node = TODO
+BV.node = 565
 
 BV.bosses = {
 	[1] = {
