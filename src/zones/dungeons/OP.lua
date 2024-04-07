@@ -24,9 +24,11 @@ OP.bosses = {
 	},
 	[5] = {
 		name = GetString(WW_OP_MB1),
-	},[6] = {
+	},
+	[6] = {
 		name = GetString(WW_OP_MB2),
-	},[7] = {
+	},
+	[7] = {
 		name = GetString(WW_OP_MB3),
 	},
 }

@@ -486,7 +486,7 @@ local language = {
 	WW_BS_SCB="Urvel Drath",
 
 	WW_SH_NAME="Scrivener's Hall",
-	WW_SH_B1="Ritemaster Maqri",
+	WW_SH_B1="Riftmaster Maqri",
 	WW_SH_B2="Ozezan the Inferno",
 	WW_SH_B3="Valinna",
 
