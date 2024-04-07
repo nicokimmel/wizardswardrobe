@@ -2,3 +2,5 @@
 .vscode/
 build.sh
 todo.txt
+.idea
+src/zones/dungeons/template_dg.lua

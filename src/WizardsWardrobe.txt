@@ -1,8 +1,8 @@
 ## Title: Wizard's Wardrobe
-## Author: ownedbynico, |c268074JN_Slevin|r, |c00a313Ghostbane|r
-## Version: 1.16.2
+## Author: ownedbynico, |c268074JN_Slevin|r, |c00a313Ghostbane|r, |cFFCC66@Doc_Landerf|r
+## Version: 2.0.0
 ## Description: Throw all your setups into the wardrobe and let the wizard equip them exactly when you need it.
-## APIVersion: 101040
+## APIVersion: 101041 101042
 ## DependsOn: LibAddonMenu-2.0 LibChatMessage>=105 LibDebugLogger LibAsync
 ## SavedVariables: WizardsWardrobeSV
 
@@ -21,11 +21,11 @@ libs/gridcombobox.lua
 lang/en.lua
 lang/$(language).lua
 
-WizardsWardrobeSetup.lua
-WizardsWardrobeConst.lua
-WizardsWardrobeUtils.lua
-WizardsWardrobeQueue.lua
-WizardsWardrobeSetupValidation.lua
+utils/WizardsWardrobeSetup.lua
+utils/WizardsWardrobeConst.lua
+utils/WizardsWardrobeUtils.lua
+utils/WizardsWardrobeQueue.lua
+utils/WizardsWardrobeSetupValidation.lua
 
 modules/WizardsWardrobeConditions.lua
 modules/WizardsWardrobeTransfer.lua
@@ -47,20 +47,57 @@ WizardsWardrobe.lua
 zones/GEN.lua
 zones/SUB.lua
 zones/PVP.lua
-zones/AA.lua
-zones/SO.lua
-zones/HRC.lua
-zones/MOL.lua
-zones/HOF.lua
-zones/AS.lua
-zones/CR.lua
-zones/SS.lua
-zones/KA.lua
-zones/RG.lua
-zones/DSR.lua
-zones/SE.lua
-zones/BRP.lua
-zones/EA.lua 
+zones/trials/AA.lua
+zones/trials/SO.lua
+zones/trials/HRC.lua
+zones/trials/MOL.lua
+zones/trials/HOF.lua
+zones/trials/AS.lua
+zones/trials/CR.lua
+zones/trials/SS.lua
+zones/trials/KA.lua
+zones/trials/RG.lua
+zones/trials/DSR.lua
+zones/trials/SE.lua
+
+zones/arenas/MA.lua
+zones/arenas/VH.lua
+zones/arenas/DSA.lua
+zones/arenas/BRP.lua
+zones/arenas/EA.lua
+
+zones/dungeons/WGT.lua
+zones/dungeons/ICP.lua
+zones/dungeons/ROM.lua
+zones/dungeons/COS.lua
+zones/dungeons/FH.lua
+zones/dungeons/BF.lua
+zones/dungeons/FL.lua
+zones/dungeons/SCP.lua
+zones/dungeons/MHK.lua
+zones/dungeons/MOS.lua
+zones/dungeons/FV.lua
+zones/dungeons/DOM.lua
+zones/dungeons/LOM.lua
+zones/dungeons/MGF.lua
+zones/dungeons/IR.lua
+zones/dungeons/UHG.lua
+zones/dungeons/SG.lua
+zones/dungeons/CT.lua
+zones/dungeons/BDV.lua
+zones/dungeons/TC.lua
+zones/dungeons/RPB.lua
+zones/dungeons/DC.lua
+zones/dungeons/CA.lua
+zones/dungeons/SR.lua
+zones/dungeons/ERE.lua
+zones/dungeons/GD.lua
+zones/dungeons/BS.lua
+zones/dungeons/SH.lua
+zones/dungeons/BV.lua
+zones/dungeons/OP.lua
+
+# DG from Mephisto, merge by @Doc_Landerf© MIT
 
 # EA should technically be IA
 # It was released as Endless Archive then changed to Infinite Archive afterward
