@@ -885,9 +885,9 @@ function WWG.AquireSetupControl( setup )
 					return
 				end
 
-				if type(progression.IsChainingAbility) == "function" then
+				if not progression:GetSkillData():IsCraftedAbility() then
 					if progression:IsChainingAbility() then
-						abilityId = GetEffectiveAbilityIdForAbilityOnHotbar( abilityId, hotbarCategory )
+						abilityId = GetEffectiveAbilityIdForAbilityOnHotbar(abilityId, hotbarCategory)
 					end
 				end
 

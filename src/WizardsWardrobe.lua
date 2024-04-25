@@ -245,15 +245,14 @@ end
 function WW.GetBaseAbilityId( abilityId )
 	if abilityId == 0 then return 0 end
 	local playerSkillProgressionData = SKILLS_DATA_MANAGER:GetProgressionDataByAbilityId( abilityId )
-	if not playerSkillProgressionData then
-		return nil
+    if not playerSkillProgressionData then
+        return nil
+    end
+	if playerSkillProgressionData:GetSkillData():IsCraftedAbility() then
+		return abilityId
 	end
-	local playerSkillProgressionSkillData = playerSkillProgressionData:GetSkillData()
-	if playerSkillProgressionSkillData and type(playerSkillProgressionSkillData.GetMorphData) == "function" then
-		local baseMorphData = playerSkillProgressionSkillData:GetMorphData(MORPH_SLOT_BASE)
-		abilityId = baseMorphData:GetAbilityId()
-	end
-	return abilityId
+	local baseMorphData = playerSkillProgressionData:GetSkillData():GetMorphData( MORPH_SLOT_BASE )
+	return baseMorphData:GetAbilityId()
 end
 
 function WW.LoadGear( setup )
