@@ -885,8 +885,10 @@ function WWG.AquireSetupControl( setup )
 					return
 				end
 
-				if progression:IsChainingAbility() then
-					abilityId = GetEffectiveAbilityIdForAbilityOnHotbar( abilityId, hotbarCategory )
+				if type(progression.IsChainingAbility) == "function" then
+					if progression:IsChainingAbility() then
+						abilityId = GetEffectiveAbilityIdForAbilityOnHotbar( abilityId, hotbarCategory )
+					end
 				end
 
 				ClearCursor()

@@ -66,7 +66,7 @@ function WWP.OnPrebuffed(_, slotIndex)
 	if WWP.cache.spell.slot ~= slotIndex then return end
 	
 	-- skill already gone
-	if not WW.AreSkillsEqual(WWP.cache.spell.id, GetSlotBoundId(slotIndex, GetActiveHotbarCategory())) then
+	if not WW.AreSkillsEqual(WWP.cache.spell.id, WW.GetSlotBoundAbilityId(slotIndex, GetActiveHotbarCategory())) then
 		WWP.cache = {}
 		return
 	end
@@ -96,7 +96,7 @@ function WWP.GetCurrentHotbar()
 	local skillTable = {}
 	for slot = 3, 8 do
 		local hotbarCategory = GetActiveHotbarCategory()
-		local abilityId = GetSlotBoundId(slot, hotbarCategory)
+		local abilityId = WW.GetSlotBoundAbilityId(slot, hotbarCategory)
 		local baseId = WW.GetBaseAbilityId(abilityId)
 		skillTable[slot] = baseId
 	end

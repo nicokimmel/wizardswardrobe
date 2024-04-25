@@ -248,8 +248,12 @@ function WW.GetBaseAbilityId( abilityId )
 	if not playerSkillProgressionData then
 		return nil
 	end
-	local baseMorphData = playerSkillProgressionData:GetSkillData():GetMorphData( MORPH_SLOT_BASE )
-	return baseMorphData:GetAbilityId()
+	local playerSkillProgressionSkillData = playerSkillProgressionData:GetSkillData()
+	if playerSkillProgressionSkillData and type(playerSkillProgressionSkillData.GetMorphData) == "function" then
+		local baseMorphData = playerSkillProgressionSkillData:GetMorphData(MORPH_SLOT_BASE)
+		abilityId = baseMorphData:GetAbilityId()
+	end
+	return abilityId
 end
 
 function WW.LoadGear( setup )
@@ -479,7 +483,7 @@ end
 function WW.SaveCP( setup )
 	local cpTable = {}
 	for slotIndex = 1, 12 do
-		cpTable[ slotIndex ] = GetSlotBoundId( slotIndex, HOTBAR_CATEGORY_CHAMPION )
+		cpTable[ slotIndex ] = WW.GetSlotBoundAbilityId( slotIndex, HOTBAR_CATEGORY_CHAMPION )
 	end
 	setup:SetCP( cpTable )
 end
