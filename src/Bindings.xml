@@ -7,6 +7,21 @@
 			<Action name="WW_HOTKEY_FIXES_FLIP_SHOULDERS">
 				<Down>WizardsWardrobe.fixes.FlipShoulders()</Down>
 			</Action>
+			<Action name="WW_HOTKEY_SETUP_PREVIOUS">
+				<Down>WizardsWardrobe.LoadSetupAdjacent(-1)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_CURRENT">
+				<Down>WizardsWardrobe.LoadSetupAdjacent(0)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_NEXT">
+				<Down>WizardsWardrobe.LoadSetupAdjacent(1)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_UNDRESS">
+				<Down>WizardsWardrobe.Undress()</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_FIX">
+				<Down>WizardsWardrobe.validation.WorkAroundThree()</Down>
+			</Action>
 			<Action name="WW_HOTKEY_SETUP_1">
 				<Down>WizardsWardrobe.LoadSetupCurrent(1, false)</Down>
 			</Action>
@@ -52,6 +67,36 @@
 			<Action name="WW_HOTKEY_SETUP_15">
 				<Down>WizardsWardrobe.LoadSetupCurrent(15, false)</Down>
 			</Action>
+			<Action name="WW_HOTKEY_SETUP_16">
+				<Down>WizardsWardrobe.LoadSetupCurrent(16, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_17">
+				<Down>WizardsWardrobe.LoadSetupCurrent(17, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_18">
+				<Down>WizardsWardrobe.LoadSetupCurrent(18, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_19">
+				<Down>WizardsWardrobe.LoadSetupCurrent(19, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_20">
+				<Down>WizardsWardrobe.LoadSetupCurrent(20, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_21">
+				<Down>WizardsWardrobe.LoadSetupCurrent(21, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_22">
+				<Down>WizardsWardrobe.LoadSetupCurrent(22, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_23">
+				<Down>WizardsWardrobe.LoadSetupCurrent(23, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_24">
+				<Down>WizardsWardrobe.LoadSetupCurrent(24, false)</Down>
+			</Action>
+			<Action name="WW_HOTKEY_SETUP_25">
+				<Down>WizardsWardrobe.LoadSetupCurrent(25, false)</Down>
+			</Action>
 			<Action name="WW_HOTKEY_PREBUFF_1">
 				<Down>WizardsWardrobe.prebuff.Prebuff(1)</Down>
 			</Action>
@@ -66,21 +111,6 @@
 			</Action>
 			<Action name="WW_HOTKEY_PREBUFF_5">
 				<Down>WizardsWardrobe.prebuff.Prebuff(5)</Down>
-			</Action>
-			<Action name="WW_HOTKEY_UNDRESS">
-				<Down>WizardsWardrobe.Undress()</Down>
-			</Action>
-			<Action name="WW_HOTKEY_SETUP_PREVIOUS">
-				<Down>WizardsWardrobe.LoadSetupAdjacent(-1)</Down>
-			</Action>
-			<Action name="WW_HOTKEY_SETUP_CURRENT">
-				<Down>WizardsWardrobe.LoadSetupAdjacent(0)</Down>
-			</Action>
-			<Action name="WW_HOTKEY_SETUP_NEXT">
-				<Down>WizardsWardrobe.LoadSetupAdjacent(1)</Down>
-			</Action>
-			<Action name="WW_HOTKEY_SETUP_FIX">
-				<Down>WizardsWardrobe.validation.WorkAroundOne()</Down>
 			</Action>
 		</Category>
 	</Layer>

@@ -72,30 +72,45 @@ function WWG.HandleFirstStart()
 		LINK_HANDLER:RegisterCallback( LINK_HANDLER.LINK_MOUSE_UP_EVENT, HandleClickEvent )
 		LINK_HANDLER:RegisterCallback( LINK_HANDLER.LINK_CLICKED_EVENT, HandleClickEvent )
 		zo_callLater( function()
-						  local urlLink = ZO_LinkHandler_CreateLink( "esoui.com", nil, WW.LINK_TYPES.URL, "esoui" )
-						  local pattern = string.format( "|c18bed8[|c65d3b0W|cb2e789W|cfffc61]|r |cFFFFFF%s|r",
-							  GetString( WW_MSG_FIRSTSTART ) )
-						  local output = string.format( pattern, "|r" .. urlLink .. "|cFFFFFF" )
-						  CHAT_ROUTER:AddSystemMessage( output )
-						  WW.settings.initialized = true
-					  end, 500 )
+			local urlLink = ZO_LinkHandler_CreateLink( "esoui.com", nil, WW.LINK_TYPES.URL, "esoui" )
+			local pattern = string.format( "|c18bed8[|c65d3b0W|cb2e789W|cfffc61]|r |cFFFFFF%s|r",
+				GetString( WW_MSG_FIRSTSTART ) )
+			local output = string.format( pattern, "|r" .. urlLink .. "|cFFFFFF" )
+			CHAT_ROUTER:AddSystemMessage( output )
+			WW.settings.initialized = true
+		end, 500 )
 
 		-- dont show changelogs if first time
 		WW.settings.changelogs[ "v1.8.0" ] = true
 		return
 	end
+	local function getMajorMinorVersion( version )
+		version = version:match( "[^%s]+" ):match( "%d+%.%d+" )
+		local major, minor = version:match( "^(%d+)%.(%d+)" )
+		return tonumber( major ), tonumber( minor )
+	end
+	-- only show warning if major or minor patches are updated, do not show it with fixes
+	local currentMajor, currentMinor = getMajorMinorVersion( WW.version )
 
-	if not WW.settings.changelogs[ "v1.8.0" ] then
-		EVENT_MANAGER:RegisterForUpdate( WWG.name .. "UpdateWarning", 1000, function()
-			if not WW.settings.changelogs[ "v1.8.0" ]
-				and not ZO_Dialogs_IsShowingDialog() then
-				WWG.ShowConfirmationDialog( WWG.name .. "UpdateWarning", GetString( WW_CHANGELOG ), function()
-					EVENT_MANAGER:UnregisterForUpdate( WWG.name .. "UpdateWarning" )
-					WW.settings.changelogs[ "v1.8.0" ] = true
-					RequestOpenUnsafeURL( "https://www.esoui.com/downloads/info3170-WizardsWardrobe.html" )
-				end )
-			end
-		end )
+	local highestMajor, highestMinor = 0, 0
+	for version, shown in pairs( WW.settings.changelogs ) do
+		local oldMajor, oldMinor = getMajorMinorVersion( version )
+		if oldMajor > highestMajor or (oldMajor == highestMajor and oldMinor > highestMinor) then
+			highestMajor, highestMinor = oldMajor, oldMinor
+		end
+	end
+	if not PlainStringFind( string.lower( WW.version ), "beta" ) then
+		if highestMajor < currentMajor or (highestMajor == currentMajor and highestMinor < currentMinor) then
+			EVENT_MANAGER:RegisterForUpdate( WWG.name .. "UpdateWarning", 1000, function()
+				if not ZO_Dialogs_IsShowingDialog() then
+					WWG.ShowConfirmationDialog( WWG.name .. "UpdateWarning", GetString( WW_CHANGELOG ), function()
+						EVENT_MANAGER:UnregisterForUpdate( WWG.name .. "UpdateWarning" )
+						WW.settings.changelogs[ WW.version ] = true
+						RequestOpenUnsafeURL( "https://www.esoui.com/downloads/info3170-WizardsWardrobe.html" )
+					end )
+				end
+			end )
+		end
 	end
 end
 
@@ -353,7 +368,7 @@ function WWG.OnWindowResize( action )
 	local function OnResize()
 		local count = #WWG.setupTable
 		local height = WizardsWardrobeWindow:GetHeight() - TITLE_HEIGHT - TOP_MENU_HEIGHT - DIVIDER_HEIGHT - PAGE_MENU_HEIGHT -
-		DIVIDER_HEIGHT - BOTTOM_MENU_HEIGHT
+			DIVIDER_HEIGHT - BOTTOM_MENU_HEIGHT
 		local width = WizardsWardrobeWindow:GetWidth() - 6
 
 		local rows = zo_floor( width / SETUP_BOX_WIDTH )
@@ -381,7 +396,7 @@ function WWG.OnWindowResize( action )
 		WizardsWardrobeWindowTitle:SetWidth( width )
 		WizardsWardrobeWindowPageMenu:SetWidth( width )
 		WizardsWardrobeWindowSetupList:SetDimensions( width, height )
-		scrollBox:SetDimensionConstraints( width, height, AUTO_SIZE, AUTO_SIZE )
+		scrollBox:SetDimensionConstraints( width, height, FLEX_ALIGNMENT_AUTO, FLEX_ALIGNMENT_AUTO )
 		WizardsWardrobeWindowBottomMenu:SetWidth( width )
 
 		WizardsWardrobeWindowTopDivider:SetWidth( width )
@@ -483,7 +498,8 @@ function WWG.SetupTopMenu()
 		WW.settings.autoEquipSetups = not WW.settings.autoEquipSetups
 		WW.storage.autoEquipSetups = WW.settings.autoEquipSetups
 		self:SetNormalTexture( autoEquipTextures[ WW.settings.autoEquipSetups ] )
-		WW.Log( GetString( WW_MSG_TOGGLEAUTOEQUIP ), WW.LOGTYPES.NORMAL, nil, autoEquipMessages[ WW.settings.autoEquipSetups ] )
+		WW.Log( GetString( WW_MSG_TOGGLEAUTOEQUIP ), WW.LOGTYPES.NORMAL, nil, autoEquipMessages
+			[ WW.settings.autoEquipSetups ] )
 	end )
 	WizardsWardrobeWindowTopMenuAutoEquip:SetNormalTexture( autoEquipTextures[ WW.settings.autoEquipSetups ] )
 	WWG.SetTooltip( WizardsWardrobeWindowTopMenuAutoEquip, TOP, GetString( WW_BUTTON_TOGGLEAUTOEQUIP ) )
@@ -527,7 +543,8 @@ function WWG.SetupPageMenu()
 		if mouseButton == MOUSE_BUTTON_INDEX_LEFT then
 			local missingGear = WW.CheckGear( WW.selection.zone, WW.selection.pageId )
 			if #missingGear > 0 then
-				local missingGearText = string.format( GetString( WW_MISSING_GEAR_TT ), WWG.GearLinkTableToString( missingGear ) )
+				local missingGearText = string.format( GetString( WW_MISSING_GEAR_TT ),
+					WWG.GearLinkTableToString( missingGear ) )
 				WWG.SetTooltip( self, TOP, missingGearText )
 			else
 				self:SetHidden( true )
@@ -646,8 +663,8 @@ function WWG.CreateLabel( data )
 	label:SetFont( data.font )
 	label:SetText( data.text or "" )
 	label:SetAnchor( unpack( data.anchor ) )
-	label:SetDimensionConstraints( AUTO_SIZE, AUTO_SIZE, data.constraint or AUTO_SIZE,
-		data.oneline and label:GetFontHeight() or AUTO_SIZE )
+	label:SetDimensionConstraints( FLEX_ALIGNMENT_AUTO, FLEX_ALIGNMENT_AUTO, data.constraint or FLEX_ALIGNMENT_AUTO,
+		data.oneline and label:GetFontHeight() or FLEX_ALIGNMENT_AUTO )
 	label:SetHidden( data.hidden or false )
 	label:SetMouseEnabled( data.mouse or false )
 	if data.tooltip then WWG.SetTooltip( label, TOP, data.tooltip ) end
@@ -1248,18 +1265,18 @@ function WWG.RenamePage()
 
 	local initialText = WW.pages[ zone.tag ][ pageId ].name
 	WWG.ShowEditDialog( "PageNameEdit", GetString( WW_RENAME_PAGE ), initialText,
-						function( input )
-							if not input then
-								return
-							end
-							if input == "" then
-								WW.pages[ zone.tag ][ pageId ].name = GetString( WW_UNNAMED )
-							else
-								WW.pages[ zone.tag ][ pageId ].name = input
-							end
-							local pageName = WW.pages[ zone.tag ][ pageId ].name
-							WizardsWardrobeWindowPageMenuLabel:SetText( pageName:upper() )
-						end )
+		function( input )
+			if not input then
+				return
+			end
+			if input == "" then
+				WW.pages[ zone.tag ][ pageId ].name = GetString( WW_UNNAMED )
+			else
+				WW.pages[ zone.tag ][ pageId ].name = input
+			end
+			local pageName = WW.pages[ zone.tag ][ pageId ].name
+			WizardsWardrobeWindowPageMenuLabel:SetText( pageName:upper() )
+		end )
 end
 
 function WWG.PageLeft()
@@ -1295,10 +1312,17 @@ function WWG.RefreshPage()
 	local pageName = WW.pages[ zone.tag ][ pageId ].name
 	WizardsWardrobeWindowPageMenuLabel:SetText( pageName:upper() )
 
-	if pageId == 1 then WizardsWardrobeWindowPageMenuLeft:SetEnabled( false ) else WizardsWardrobeWindowPageMenuLeft
-			:SetEnabled( true ) end
-	if pageId == #WW.pages[ zone.tag ] then WizardsWardrobeWindowPageMenuRight:SetEnabled( false ) else
-		WizardsWardrobeWindowPageMenuRight:SetEnabled( true ) end
+	if pageId == 1 then
+		WizardsWardrobeWindowPageMenuLeft:SetEnabled( false )
+	else
+		WizardsWardrobeWindowPageMenuLeft
+			:SetEnabled( true )
+	end
+	if pageId == #WW.pages[ zone.tag ] then
+		WizardsWardrobeWindowPageMenuRight:SetEnabled( false )
+	else
+		WizardsWardrobeWindowPageMenuRight:SetEnabled( true )
+	end
 
 	local missingGear = WW.CheckGear( zone, pageId )
 	if #missingGear > 0 then
@@ -1392,15 +1416,15 @@ function WWG.ShowPageContextMenu( control )
 
 	local deleteColor = #WW.pages[ zone.tag ] > 1 and ZO_ColorDef:New( 1, 0, 0, 1 ) or ZO_ColorDef:New( 0.35, 0.35, 0.35, 1 )
 	AddMenuItem( GetString( WW_DELETE ):upper(), function()
-					 if #WW.pages[ zone.tag ] > 1 then
-						 local pageName = WW.pages[ zone.tag ][ pageId ].name
-						 WWG.ShowConfirmationDialog( "DeletePageConfirmation",
-													 string.format( GetString( WW_DELETEPAGE_WARNING ), pageName ),
-													 function()
-														 WWG.DeletePage()
-													 end )
-					 end
-				 end, MENU_ADD_OPTION_LABEL, "ZoFontGameBold", deleteColor, deleteColor )
+		if #WW.pages[ zone.tag ] > 1 then
+			local pageName = WW.pages[ zone.tag ][ pageId ].name
+			WWG.ShowConfirmationDialog( "DeletePageConfirmation",
+				string.format( GetString( WW_DELETEPAGE_WARNING ), pageName ),
+				function()
+					WWG.DeletePage()
+				end )
+		end
+	end, MENU_ADD_OPTION_LABEL, "ZoFontGameBold", deleteColor, deleteColor )
 
 	-- lets fix some ZOS bugs(?)
 	if control:GetWidth() >= ZO_Menu.width then
@@ -1420,8 +1444,8 @@ function WWG.ShowSetupContextMenu( control, index )
 
 	-- LINK TO CHAT
 	AddMenuItem( GetString( SI_ITEM_ACTION_LINK_TO_CHAT ), function()
-					 WW.preview.PrintPreviewString( zone, pageId, index )
-				 end, MENU_ADD_OPTION_LABEL )
+		WW.preview.PrintPreviewString( zone, pageId, index )
+	end, MENU_ADD_OPTION_LABEL )
 
 	-- CUSTOM CODE
 	AddMenuItem( GetString( WW_CUSTOMCODE ), function() WW.code.ShowCodeDialog( zone, pageId, index ) end,
@@ -1442,13 +1466,13 @@ function WWG.ShowSetupContextMenu( control, index )
 
 	-- DELETE
 	AddMenuItem( GetString( WW_DELETE ):upper(), function()
-					 PlaySound( SOUNDS.DEFER_NOTIFICATION )
-					 if WW.selection.zone.tag == "SUB" then
-						 WW.ClearSetup( zone, pageId, index )
-					 else
-						 WW.DeleteSetup( zone, pageId, index )
-					 end
-				 end, MENU_ADD_OPTION_LABEL, "ZoFontGameBold", ZO_ColorDef:New( 1, 0, 0, 1 ), ZO_ColorDef:New( 1, 0, 0, 1 ) )
+		PlaySound( SOUNDS.DEFER_NOTIFICATION )
+		if WW.selection.zone.tag == "SUB" then
+			WW.ClearSetup( zone, pageId, index )
+		else
+			WW.DeleteSetup( zone, pageId, index )
+		end
+	end, MENU_ADD_OPTION_LABEL, "ZoFontGameBold", ZO_ColorDef:New( 1, 0, 0, 1 ), ZO_ColorDef:New( 1, 0, 0, 1 ) )
 
 	-- lets fix some ZOS bugs(?)
 	if control:GetWidth() >= ZO_Menu.width then
@@ -1523,7 +1547,7 @@ function WWG.ShowModifyDialog( setupControl, index )
 			function() OnBossCombo( WW.CONDITIONS.NONE ) end ) )
 		local bossId = zone.lookupBosses[ condition.boss ]
 		local selectedBoss = bossId and (zone.bosses[ bossId ].displayName or zone.bosses[ bossId ].name) or
-		GetString( WW_CONDITION_NONE )
+			GetString( WW_CONDITION_NONE )
 		bossCombo:SetSelectedItemText( selectedBoss )
 		OnBossCombo( condition.boss or WW.CONDITIONS.NONE )
 
@@ -1534,7 +1558,7 @@ function WWG.ShowModifyDialog( setupControl, index )
 			function() OnTrashCombo( WW.CONDITIONS.EVERYWHERE ) end ) )
 		local trashId = zone.lookupBosses[ condition.trash ]
 		local selectedTrash = trashId and (zone.bosses[ trashId ].displayName or zone.bosses[ trashId ].name) or
-		GetString( WW_CONDITION_EVERYWHERE )
+			GetString( WW_CONDITION_EVERYWHERE )
 		trashCombo:SetSelectedItemText( selectedTrash )
 		OnTrashCombo( condition.trash or WW.CONDITIONS.EVERYWHERE )
 

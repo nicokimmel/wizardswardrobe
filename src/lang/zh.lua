@@ -55,6 +55,11 @@ local language = {
     WW_MSG_FOOD_FADED = "你的增益食物已用尽. 再次享用 %s!",
     WW_MSG_FOOD_COMBAT = "你的增益食物刚在战斗中用尽. 在战斗结束后若还需要, Wizard将帮你使用 %s .",
     WW_MSG_NOFOOD = "无法在背包中找到对应的增益食物!",
+    WW_MSG_SWAPFAIL = "%s in your Setup failed to swap, attempting workaround, please wait a few seconds",
+    WW_MSG_SWAPFAIL_DISABLED = "%s in your Setup failed to swap",
+    WW_MSG_SWAPSUCCESS = "Setup successfully loaded",
+    WW_MSG_SWAP_FIX_FAIL = "All workarounds have failed, please try to manually unequip the stuck piece",
+    WW_MSG_BLOCK_WARN = "DO NOT BLOCK!",
 
     -- ADDON MENU
     WW_MENU_GENERAL = "常规",
@@ -95,11 +100,32 @@ local language = {
     WW_MENU_REPAIRARMOR = "自动修复护甲",
     WW_MENU_REPAIRARMOR_TT = "在商店或使用修理包来修复.",
     WW_MENU_FILLPOISONS = "自动补充毒药",
-    WW_MENU_FILLPOISONS_TT = "毒药耗尽时自动尝试从背包中补充.\n|H1:item:76827:308:50:0:0:0:0:0:0:0:0:0:0:0:0:36:1:0:0:0:138240|h|h 在不可用时将以 |H1:item:79690:6:1:0:0:0:0:0:0:0:0:0:0:0:1:36:0:1:0:0:0|h|h 替代 (反之亦然).",
+    WW_MENU_FILLPOISONS_TT =
+    "毒药耗尽时自动尝试从背包中补充.\n|H1:item:76827:308:50:0:0:0:0:0:0:0:0:0:0:0:0:36:1:0:0:0:138240|h|h 在不可用时将以 |H1:item:79690:6:1:0:0:0:0:0:0:0:0:0:0:0:1:36:0:1:0:0:0|h|h 替代 (反之亦然).",
     WW_MENU_BUFFFOOD = "自动补充增益食物",
     WW_MENU_BUFFFOOD_TT = "自动在食物过期时补充对应的食物. 只在试炼和地下城中生效.\n可查看 \"WizardsWardrobeConst.lua\" 以了解受支持的食物列表. 持续补充中.",
     WW_MENU_FIXES_FIXSURFINGWEAPONS = "修复御剑飞行bug",
     WW_MENU_FIXES_FIXSURFINGWEAPONS_TT = "将在每次过图时调用两次 \"隐藏头盔\" 来避免御剑飞行bug.",
+    WW_MENU_WEAPON_GEAR_FIX = "Fix failed gear swaps.",
+    WW_MENU_WEAPON_GEAR_FIX_TT = "Automates the steps we take to fix failed gear swaps",
+    WW_MENU_VALIDATION_DELAY = "Validation delay",
+    WW_MENU_VALIDATION_DELAY_TT = "Chose here the amount of MS after which the setup validation takes place",
+    WW_MENU_VALIDATION_DELAY_WARN =
+    "The longer the delay the lower the chance to have false positives. If its too low, it might cause unintended behavior.",
+    WW_MENU_COMPARISON_DEPTH = "Comparison depth",
+    WW_MENU_COMPARISON_DEPTH_EASY = "Easy",
+    WW_MENU_COMPARISON_DEPTH_DETAILED = "Detailed",
+    WW_MENU_COMPARISON_DEPTH_THOROUGH = "Thorough",
+    WW_MENU_COMPARISON_DEPTH_STRICT = "Strict",
+    WW_MENU_COMPARISON_DEPTH_EASY_TT = "Will only check the trait, the weapon type and the set.",
+    WW_MENU_COMPARISON_DEPTH_DETAILED_TT = "Will check the trait, the weapon type the set and quality.",
+    WW_MENU_COMPARISON_DEPTH_THOROUGH_TT = "Will check the trait, the weapon type the set, quality and enchantment.",
+    WW_MENU_COMPARISON_DEPTH_STRICT_TT =
+    "Will check if its the exact same piece of gear that was saved. Will fail if you change anything.",
+    WW_MENU_COMPARISON_IGNORE_COSTUME_SLOTS = "Ignore costumes",
+    WW_MENU_COMPARISON_IGNORE_COSTUME_SLOTS_TT = "If set to on costumes will be ignored.",
+    WW_MENU_COMPARISON_IGNORE_POISON_SLOTS = "Ignore poisons",
+    WW_MENU_COMPARISON_IGNORE_POISON_SLOTS_TT = "If set to on poisons will be ignored.",
 
     -- USER INTERFACE
     WW_CHANGELOG = "注意! 本次更新包含了一些重大改动. 请阅读改动日志以了解哪些功能可能与先前产生差异.",
@@ -137,7 +163,8 @@ local language = {
     WW_CONDITION_NONE = "无",
     WW_CONDITION_EVERYWHERE = "所有Boss",
     WW_IMPORT = "导入",
-    WW_IMPORT_HELP = "在此处按 |cFFFFFF[CTRL + V]|r 粘贴导出的文本. 确保不要手动改动文本, 否则导入将会失败.\n你需要在背包里留有所有所需物品. 特质相符的装备将被优先采用, 但如果背包中有特质不同的相同装备, 这些\"错误\"的装备也将被使用.",
+    WW_IMPORT_HELP =
+    "在此处按 |cFFFFFF[CTRL + V]|r 粘贴导出的文本. 确保不要手动改动文本, 否则导入将会失败.\n你需要在背包里留有所有所需物品. 特质相符的装备将被优先采用, 但如果背包中有特质不同的相同装备, 这些\"错误\"的装备也将被使用.",
     WW_IMPORT_TT = "|cFF0000注意! 这将覆写被选中的配装.|r",
     WW_EXPORT = "导出",
     WW_EXPORT_HELP = "按下 |cFFFFFF[CTRL + C]|r 复制选中的文本并与他人分享.\n这以压缩文本形式导出了可在他人处导入的装备, 技能与CP点信息 .",
@@ -146,7 +173,8 @@ local language = {
     WW_DUPLICATE = "复制",
     WW_DUPLICATE_NAME = "复制自 %s",
     WW_LINK_IMPORT = "添加到 Wardrobe",
-    WW_PREBUFF_HELP = "将技能拖拽到prebuff栏中.\n如果勾选Toggle, prebuff技能会被保留到该技能栏原本的技能被使用.否则, prebuff技能在施放后将被移出. \n\"普通\"技能被移出的默认延迟为500毫秒, 引导技能需要的时间更长.",
+    WW_PREBUFF_HELP =
+    "将技能拖拽到prebuff栏中.\n如果勾选Toggle, prebuff技能会被保留到该技能栏原本的技能被使用.否则, prebuff技能在施放后将被移出. \n\"普通\"技能被移出的默认延迟为500毫秒, 引导技能需要的时间更长.",
 
     -- BOSS & TRIAL NAMES
     WW_PAGE = "第 %s 页",
@@ -268,6 +296,16 @@ local language = {
     SI_BINDING_NAME_WW_HOTKEY_SETUP_13 = "配装 13",
     SI_BINDING_NAME_WW_HOTKEY_SETUP_14 = "配装 14",
     SI_BINDING_NAME_WW_HOTKEY_SETUP_15 = "配装 15",
+    SI_BINDING_NAME_WW_HOTKEY_SETUP_16 = "配装 16",
+    SI_BINDING_NAME_WW_HOTKEY_SETUP_17 = "配装 17",
+    SI_BINDING_NAME_WW_HOTKEY_SETUP_18 = "配装 18",
+    SI_BINDING_NAME_WW_HOTKEY_SETUP_19 = "配装 19",
+    SI_BINDING_NAME_WW_HOTKEY_SETUP_20 = "配装 20",
+    SI_BINDING_NAME_WW_HOTKEY_SETUP_21 = "配装 21",
+    SI_BINDING_NAME_WW_HOTKEY_SETUP_22 = "配装 22",
+    SI_BINDING_NAME_WW_HOTKEY_SETUP_23 = "配装 23",
+    SI_BINDING_NAME_WW_HOTKEY_SETUP_24 = "配装 24",
+    SI_BINDING_NAME_WW_HOTKEY_SETUP_25 = "配装 25",
     SI_BINDING_NAME_WW_HOTKEY_PREBUFF_1 = "Prebuff 1",
     SI_BINDING_NAME_WW_HOTKEY_PREBUFF_2 = "Prebuff 2",
     SI_BINDING_NAME_WW_HOTKEY_PREBUFF_3 = "Prebuff 3",
@@ -278,7 +316,7 @@ local language = {
     SI_BINDING_NAME_WW_HOTKEY_UNDRESS = "卸下装备"
 }
 
-for key, value in pairs(language) do
-    SafeAddVersion(key, 1)
-    ZO_CreateStringId(key, value)
+for key, value in pairs( language ) do
+    SafeAddVersion( key, 1 )
+    ZO_CreateStringId( key, value )
 end
