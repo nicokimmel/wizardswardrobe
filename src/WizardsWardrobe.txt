@@ -1,9 +1,10 @@
 ## Title: Wizard's Wardrobe
-## Author: ownedbynico, |c268074JN_Slevin|r, |c00a313Ghostbane|r
-## Version: 1.16.2
+## Author: ownedbynico, |c268074JN_Slevin|r
+## Version: 1.17.11
+## AddOnVersion: 11711
 ## Description: Throw all your setups into the wardrobe and let the wizard equip them exactly when you need it.
-## APIVersion: 101040
-## DependsOn: LibAddonMenu-2.0 LibChatMessage>=105 LibDebugLogger LibAsync
+## APIVersion: 101041
+## DependsOn: LibAddonMenu-2.0>=35 LibChatMessage>=105 LibDebugLogger>=105 LibAsync>=20304
 ## SavedVariables: WizardsWardrobeSV
 
 ## This Add-on is not created by, affiliated with or sponsored by ZeniMax Media Inc. or its affiliates.
@@ -60,9 +61,4 @@ zones/RG.lua
 zones/DSR.lua
 zones/SE.lua
 zones/BRP.lua
-zones/EA.lua 
-
-# EA should technically be IA
-# It was released as Endless Archive then changed to Infinite Archive afterward
-# It can remain EA as file name so users don't have to delete their old files,
-# or have an useless extra file on their harddrives
+zones/EA.lua

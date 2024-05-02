@@ -1,6 +1,6 @@
 WizardsWardrobe = WizardsWardrobe or {}
 local WW = WizardsWardrobe
-
+local async = LibAsync
 Setup = {
 	name = GetString( WW_EMPTY ),
 	disabled = false,
@@ -142,12 +142,35 @@ function Setup:SetCode( code )
 	self.code = code
 end
 
+local codeTask = async:Create( "WizardsWardrobeCustomCodeTask" )
+local logger = LibDebugLogger( "WizardsWardrobe" )
 function Setup:ExecuteCode( setup, zone, pageId, index, auto )
+	local chat = LibChatMessage( "WW/" .. setup:GetName(), "WW" )
+	logger = logger:Create( zone.name .. " -- " .. setup:GetName() )
 	if not self.code then return end
-	local func = string.format( "return function(setup, zone, pageId, index, auto) %s end", self.code )
-	local exec = zo_loadstring( func )
-	if exec then
-		exec()( setup, zone, pageId, index, auto )
+
+	local stringTable = {}
+	for match in self.code:gmatch( "<<(.-)>>" ) do
+		table.insert( stringTable, match )
+	end
+
+	local immediateCode = self.code:gsub( "<<.->>", "" )
+
+	local immediateFunc = zo_loadstring( "return function(setup, zone, pageId, index, auto, codeTask, chat, logger) " ..
+		immediateCode .. " end" )
+	if immediateFunc then
+		immediateFunc()( setup, zone, pageId, index, auto, codeTask, chat, logger )
+	end
+
+	for i = 1, #stringTable do
+		local afterCombatFunc = zo_loadstring( "return function(setup, zone, pageId, index, auto, codeTask, chat, logger) " ..
+			stringTable[ i ] .. " end" )
+		if afterCombatFunc then
+			codeTask:WaitUntil( function() return not IsUnitInCombat( "player" ) end )
+			codeTask:Then( function( task )
+				afterCombatFunc()( setup, zone, pageId, index, auto, codeTask, chat, logger )
+			end )
+		end
 	end
 end
 

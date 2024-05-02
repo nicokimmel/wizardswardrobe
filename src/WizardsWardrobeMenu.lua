@@ -81,9 +81,19 @@ function WWM.InitSV()
 		eatBuffFood = false,
 		initialized = false,
 		fixGearSwap = false,
-		validationDelay = 1500
+		canUseCrownRepairKits = false,
+		setupValidation = {
+			delay = 1500,
+			ignorePoisons = true,
+			ignoreCostumes = true
+		}
 	} )
 
+	-- migrate validation settings
+	if WW.settings.validationDelay then
+		WW.settings.setupValidation.delay = WW.settings.validationDelay
+		WW.settings.validationDelay = nil
+	end
 	-- migrate printMessage settings
 	if WW.settings.printMessages == true then
 		WW.settings.printMessages = "chat"
@@ -166,40 +176,50 @@ function WWM.InitAM()
 
 		},
 		{
-			type            = "dropdown",
-			name            = GetString( WW_MENU_COMPARISON_DEPTH ),
-			choices         = addonMenuChoices.names,
-			choicesValues   = addonMenuChoices.values,
+			type = "dropdown",
+			name = GetString( WW_MENU_COMPARISON_DEPTH ),
+			choices = addonMenuChoices.names,
+			choicesValues = addonMenuChoices.values,
 			choicesTooltips = addonMenuChoices.tooltips,
-			disabled        = function() return false end,
-			scrollable      = true,
-			getFunc         = function() return WW.settings.comparisonDepth end,
-			setFunc         = function( var ) WW.settings.comparisonDepth = var end,
-			width           = "full",
+			disabled = function() return false end,
+			scrollable = true,
+			getFunc = function() return WW.settings.comparisonDepth end,
+			setFunc = function( var ) WW.settings.comparisonDepth = var end,
+			width = "full",
 		},
-		{
-			type = "checkbox",
-			name = GetString( WW_MENU_WEAPON_GEAR_FIX ),
-			getFunc = function() return WW.settings.fixGearSwap end,
-			setFunc = function( value ) WW.settings.fixGearSwap = value end,
-			tooltip = GetString( WW_MENU_WEAPON_GEAR_FIX_TT )
 
-		},
 		{
 			type = "slider",
 			name = GetString( WW_MENU_VALIDATION_DELAY ),
 			tooltip = GetString( WW_MENU_VALIDATION_DELAY_TT ),
 			warning = GetString( WW_MENU_VALIDATION_DELAY_WARN ),
-			getFunc = function() return WW.settings.validationDelay end,
+			getFunc = function() return WW.settings.setupValidation.delay end,
 			setFunc = function( value )
-				WW.settings.validationDelay = value
+				WW.settings.setupValidation.delay = value
 			end,
 			step = 10,
 			min = 1500,
 			max = 4500,
-			clampInput = true,
+			clampInput = false,
 			width = "full",
 		},
+		{
+			type = "checkbox",
+			name = GetString( WW_MENU_COMPARISON_IGNORE_COSTUME_SLOTS ),
+			getFunc = function() return WW.settings.setupValidation.ignoreCostumes end,
+			setFunc = function( value ) WW.settings.setupValidation.ignoreCostumes = value end,
+			tooltip = GetString( WW_MENU_COMPARISON_IGNORE_COSTUME_SLOTS_TT ),
+
+		},
+		{
+			type = "checkbox",
+			name = GetString( WW_MENU_COMPARISON_IGNORE_POISON_SLOTS ),
+			getFunc = function() return WW.settings.setupValidation.ignorePoisons end,
+			setFunc = function( value ) WW.settings.setupValidation.ignorePoisons = value end,
+			tooltip = GetString( WW_MENU_COMPARISON_IGNORE_POISON_SLOTS_TT ),
+
+		},
+
 		{
 			type = "divider",
 			height = 15,
@@ -345,6 +365,16 @@ function WWM.InitAM()
 				WW.repair.RegisterRepairEvents()
 			end,
 			tooltip = GetString( WW_MENU_REPAIRARMOR_TT ),
+		},
+		{
+			type = "checkbox",
+			name = GetString( WW_MENU_KITCHOICE ),
+			getFunc = function() return WW.settings.canUseCrownRepairKits end,
+			setFunc = function( value )
+				WW.settings.canUseCrownRepairKits = value
+			end,
+			tooltip = GetString( WW_MENU_KITCHOICE_TT ),
+			disabled = function() return not WW.settings.repairArmor end,
 		},
 		{
 			type = "checkbox",
