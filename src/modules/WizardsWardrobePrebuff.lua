@@ -96,7 +96,7 @@ function WWP.GetCurrentHotbar()
 	local skillTable = {}
 	for slot = 3, 8 do
 		local hotbarCategory = GetActiveHotbarCategory()
-		local abilityId = GetSlotBoundId( slot, hotbarCategory )
+		local abilityId = WW.GetSlotBoundAbilityId( slot, hotbarCategory )
 		local baseId = WW.GetBaseAbilityId( abilityId )
 		skillTable[ slot ] = baseId
 	end
@@ -131,7 +131,7 @@ function WWP.CreatePrebuffWindow()
 	local dialog = WINDOW_MANAGER:CreateTopLevelWindow( WWP.name )
 	WWP.dialog = dialog
 	dialog:SetDimensions( 600, 395 )
-	dialog:SetAnchor( CENTER, GUI_ROOT, CENTER, 0, 0 )
+	dialog:SetAnchor( CENTER, GuiRoot, CENTER, 0, 0 )
 	dialog:SetDrawTier( DT_HIGH )
 	dialog:SetClampedToScreen( false )
 	dialog:SetMouseEnabled( true )

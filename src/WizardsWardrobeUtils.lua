@@ -25,10 +25,21 @@ function WW.ChangeItemLinkStyle( itemLink, linkStyle )
 	return string.format( "%s%d%s", itemLink:sub( 1, 2 ), linkStyle, itemLink:sub( 4 ) )
 end
 
+function WW.GetSlotBoundAbilityId( slotIndex, hotbarIndex )
+	local slottedId = GetSlotBoundId( slotIndex, hotbarIndex )
+	local actionType = GetSlotType( slotIndex, hotbarIndex )
+
+	if actionType == ACTION_TYPE_CRAFTED_ABILITY then
+		slottedId = GetAbilityIdForCraftedAbilityId( id )
+	end
+
+	return slottedId
+end
+
 function WW.CompareCP( setup )
 	for slotIndex = 1, 12 do
 		local savedSkillId = setup:GetCP()[ slotIndex ]
-		local selectedSkilId = GetSlotBoundId( slotIndex, HOTBAR_CATEGORY_CHAMPION )
+		local selectedSkilId = WW.GetSlotBoundAbilityId( slotIndex, HOTBAR_CATEGORY_CHAMPION )
 		if not savedSkillId or savedSkillId ~= selectedSkilId then
 			return false
 		end

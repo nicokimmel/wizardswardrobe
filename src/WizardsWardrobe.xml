@@ -1,4 +1,4 @@
-<GuiXml>
+<GuiXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sir.insidi.at/or/schema/esoui.xsd">
 	<Controls>
 		<TopLevelControl name="WizardsWardrobePanel" tier="LOW" layer="CONTROLS" mouseEnabled="true" movable="false" clampedToScreen="true" hidden="true">
 			<Dimensions x="245" y="70" />
@@ -30,6 +30,8 @@
 			<OnMoveStop>WizardsWardrobe.gui.OnWindowMove()</OnMoveStop>
 			<OnResizeStart>WizardsWardrobe.gui.OnWindowResize("start")</OnResizeStart>
 			<OnResizeStop>WizardsWardrobe.gui.OnWindowResize("stop")</OnResizeStop>
+			<!-- <OnMouseExit>WizardsWardrobeWindowZone:SetHidden( true )</OnMouseExit> -->
+
 			<Controls>
 				<Backdrop name="$(parent)BG" inherits="ZO_DefaultBackdrop" alpha="0.95">
 					<AnchorFill />
@@ -40,6 +42,7 @@
 				<Control name="$(parent)Title">
 					<Dimensions x="FLEX_ALIGNMENT_AUTO" y="50" />
 					<Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP" />
+
 					<Controls>
 						<Label name="$(parent)Label" font="$(BOLD_FONT)|$(KB_26)|soft-shadow-thick">
 							<Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP" offsetY="15" />
@@ -52,45 +55,61 @@
 								mouseOver="/esoui/art/buttons/decline_over.dds"
 								disabled="/esoui/art/buttons/decline_disabled.dds" />
 						</Button>
-
 					</Controls>
 				</Control>
 				<Control name="$(parent)TopMenu">
-					<Dimensions x="340" y="50" />
+					<Dimensions x="340" y="75" />
+
 					<Anchor point="TOP" relativeTo="$(parent)Title" relativePoint="BOTTOM" />
 					<Controls>
-						<!-- ZONE SELECTION -->
-						<Button name="$(parent)AddPage" inherits="ZO_ButtonBehaviorClickSound">
-							<Dimensions x="36" y="36" />
-							<Anchor point="RIGHT" relativeTo="$(parent)" relativePoint="RIGHT" />
-							<Textures normal="/esoui/art/buttons/plus_up.dds"
-								pressed="/esoui/art/buttons/plus_down.dds"
-								mouseOver="/esoui/art/buttons/plus_over.dds"
-								disabled="/esoui/art/buttons/plus_disabled.dds" />
-						</Button>
-						<Button name="$(parent)AutoEquip" inherits="ZO_ButtonBehaviorClickSound">
-							<Dimensions x="36" y="36" />
-							<Anchor point="RIGHT" relativeTo="$(parent)AddPage" relativePoint="LEFT" />
-							<Textures normal="/esoui/art/crafting/smithing_tabicon_armorset_up.dds"
-								pressed="/esoui/art/crafting/smithing_tabicon_armorset_down.dds"
-								mouseOver="/esoui/art/crafting/smithing_tabicon_armorset_over.dds"
-								disabled="/esoui/art/buttons/closebutton_disabled.dds" />
-						</Button>
-						<Button name="$(parent)TeleportHouse" inherits="ZO_ButtonBehaviorClickSound">
-							<Dimensions x="36" y="36" />
-							<Anchor point="RIGHT" relativeTo="$(parent)AutoEquip" relativePoint="LEFT" />
-							<Textures normal="/esoui/art/guild/tabicon_home_up.dds"
-								pressed="/esoui/art/guild/tabicon_home_down.dds"
-								mouseOver="/esoui/art/guild/tabicon_home_over.dds"
-								disabled="/esoui/art/guild/tabicon_home_disabled.dds" />
-						</Button>
-						<Button name="$(parent)TeleportTrial" inherits="ZO_ButtonBehaviorClickSound">
-							<Dimensions x="36" y="36" />
-							<Anchor point="RIGHT" relativeTo="$(parent)AutoEquip" relativePoint="LEFT" />
-							<Textures normal="/esoui/art/help/help_tabicon_questassistance_up.dds"
-								pressed="/esoui/art/help/help_tabicon_questassistance_down.dds"
-								mouseOver="/esoui/art/help/help_tabicon_questassistance_over.dds" />
-						</Button>
+						<Control name="$(parent)Buttons">
+							<Dimensions x="FLEX_ALIGNMENT_AUTO" y="36" />
+							<Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP" offsetY="0" />
+							<Controls>
+								<Button name="$(parent)ZoneSelect" inherits="ZO_DefaultButton" text="ZONE NAME" hidden="false">
+									<OnClicked>WizardsWardrobeWindowZone:ToggleHidden()
+										<!-- self:SetState(BSTATE_CLICKED, true) -->
+
+									</OnClicked>
+									<Dimensions x="200" y="30" />
+									<Anchor point="TOP" relativeTo="$(parent)" relativePoint="BOTTOM" offsetX="0" offsetY="0" />
+								</Button>
+								<!-- ZONE SELECTION -->
+								<Button name="$(parent)AutoEquip" inherits="ZO_ButtonBehaviorClickSound">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP" />
+									<Textures normal="/esoui/art/crafting/smithing_tabicon_armorset_up.dds"
+										pressed="/esoui/art/crafting/smithing_tabicon_armorset_down.dds"
+										mouseOver="/esoui/art/crafting/smithing_tabicon_armorset_over.dds"
+										disabled="/esoui/art/buttons/closebutton_disabled.dds" />
+								</Button>
+								<Button name="$(parent)AddPage" inherits="ZO_ButtonBehaviorClickSound">
+									<Dimensions x="36" y="36" />
+									<Anchor point="LEFT" relativeTo="$(parent)AutoEquip" relativePoint="RIGHT" />
+									<Textures normal="/esoui/art/buttons/plus_up.dds"
+										pressed="/esoui/art/buttons/plus_down.dds"
+										mouseOver="/esoui/art/buttons/plus_over.dds"
+										disabled="/esoui/art/buttons/plus_disabled.dds" />
+								</Button>
+
+								<Button name="$(parent)TeleportHouse" inherits="ZO_ButtonBehaviorClickSound">
+									<Dimensions x="36" y="36" />
+									<Anchor point="RIGHT" relativeTo="$(parent)AutoEquip" relativePoint="LEFT" />
+									<Textures normal="/esoui/art/guild/tabicon_home_up.dds"
+										pressed="/esoui/art/guild/tabicon_home_down.dds"
+										mouseOver="/esoui/art/guild/tabicon_home_over.dds"
+										disabled="/esoui/art/guild/tabicon_home_disabled.dds" />
+								</Button>
+								<Button name="$(parent)TeleportTrial" inherits="ZO_ButtonBehaviorClickSound">
+									<Dimensions x="36" y="36" />
+									<Anchor point="RIGHT" relativeTo="$(parent)AutoEquip" relativePoint="LEFT" />
+									<Textures normal="/esoui/art/help/help_tabicon_questassistance_up.dds"
+										pressed="/esoui/art/help/help_tabicon_questassistance_down.dds"
+										mouseOver="/esoui/art/help/help_tabicon_questassistance_over.dds" />
+								</Button>
+							</Controls>
+						</Control>
+
 					</Controls>
 				</Control>
 				<Texture name="$(parent)TopDivider" textureFile="/esoui/art/miscellaneous/centerscreen_topdivider.dds">
@@ -109,7 +128,7 @@
 							<Anchor point="RIGHT" relativeTo="$(parent)Label" relativePoint="LEFT" />
 						</Texture>
 						<Button name="$(parent)Dropdown" inherits="ZO_ButtonBehaviorClickSound">
-							<Dimensions x="16" y="16" offsetY="-1" />
+							<Dimensions x="16" y="16" />
 							<Anchor point="LEFT" relativeTo="$(parent)Label" relativePoint="RIGHT" />
 							<Textures normal="/esoui/art/buttons/scrollbox_downarrow_up.dds"
 								pressed="/esoui/art/buttons/scrollbox_downarrow_down.dds"
@@ -144,6 +163,7 @@
 				</Control>
 				<Control name="$(parent)SetupList" inherits="ZO_ScrollContainer">
 					<Dimensions x="FLEX_ALIGNMENT_AUTO" y="FLEX_ALIGNMENT_AUTO" />
+
 					<Anchor point="TOP" relativeTo="$(parent)PageMenu" relativePoint="BOTTOM" />
 					<Controls>
 						<!-- SETUP BOXES -->
@@ -196,6 +216,40 @@
 								pressed="/esoui/art/menubar/menubar_help_down.dds"
 								mouseOver="/esoui/art/menubar/menubar_help_over.dds"
 								disabled="/esoui/art/menubar/menubar_help_disabled.dds" />
+						</Button>
+					</Controls>
+				</Control>
+				<!-- <Button name="$(parent)ZoneButton">
+					<OnClicked>WizardsWardrobeWindowZone:SetHidden(false) d("clicked")</OnClicked>
+					<Dimensions x="50" y="50" />
+					<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="5" offsetY="5" />
+					<Textures normal="/esoui/art/treeicons/collection_indexicon_equipment_up.dds"
+						pressed="/esoui/art/treeicons/collection_indexicon_equipment_down.dds"
+						mouseOver="/esoui/art/treeicons/collection_indexicon_equipment_over.dds"
+						disabled="/esoui/art/treeicons/collection_indexicon_equipment_disabled.dds" />
+				</Button> -->
+				<Control name="$(parent)Zone" mouseEnabled="true" tier="HIGH" layer="DT_OVERLAY" hidden="true">
+					<Dimensions x="500" y="500" />
+					<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" />
+					<!-- <OnMouseEnter> d("hello") </OnMouseEnter>
+					<OnMouseExit>d("bye")</OnMouseExit> -->
+					<OnHide>WizardsWardrobeWindowTopMenuButtonsZoneSelect:SetState(BSTATE_NORMAL)</OnHide>
+					<OnShow>WizardsWardrobeWindowTopMenuButtonsZoneSelect:SetState(BSTATE_PRESSED)</OnShow>
+
+					<Controls>
+						<Texture name="$(parent)BG" textureFile="/esoui/art/options/keyboard/pregame_settings_mungebg.dds" alpha="0.8" layer="DT_BACKGROUND" level="3">
+
+							<AnchorFill />
+
+						</Texture>
+						<Button name="$(parent)Hide" inherits="ZO_ButtonBehaviorClickSound">
+							<Dimensions x="24" y="24" />
+							<OnClicked>WizardsWardrobeWindowZone:SetHidden( true )</OnClicked>
+							<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="5" offsetY="5" />
+							<Textures normal="/esoui/art/buttons/decline_up.dds"
+								pressed="/esoui/art/buttons/decline_down.dds"
+								mouseOver="/esoui/art/buttons/decline_over.dds"
+								disabled="/esoui/art/buttons/decline_disabled.dds" />
 						</Button>
 					</Controls>
 				</Control>
@@ -349,5 +403,16 @@
 				</Control>
 			</Controls>
 		</TopLevelControl>
+		<!-- ZO_Tree templates -->
+		<!-- <Control name="WW_ZoneEntry" virtual="true" mouseEnabled="true" inherits="ZO_TreeLabelSubCategory">
+			<Dimensions y="25" />
+		</Control>
+		<Control name="WW_ZoneCategory" virtual="true" mouseEnabled="true" inherits="ZO_StatusIconHeader">
+			<OnInitialized>WW_IconHeader_OnInitialized( self )</OnInitialized>
+		</Control>
+		<Control name="WW_ZoneGeneral" virtual="true" mouseEnabled="true" inherits="ZO_StatusIconHeader">
+			<OnInitialized>WW_IconHeader_OnInitialized( self )</OnInitialized>
+		</Control> -->
+
 	</Controls>
 </GuiXml>

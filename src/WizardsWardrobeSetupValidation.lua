@@ -11,6 +11,7 @@ local logger = LibDebugLogger( WW.name )
 logger = logger:Create( "SetupValidation" )
 local async = LibAsync
 local validationTask = async:Create( WW.name .. "Validation" )
+WW.validation.validationTask = validationTask
 local setupName = ""
 local validationDelay = 1500
 local WORKAROUND_INITIAL_CALL = 0
@@ -30,13 +31,14 @@ function WWV.CompareItemLinks( linkEquipped, linkSaved, uniqueIdEquipped, unique
     local nameSaved = GetItemLinkName( linkSaved )
     local _, _, _, _, _, setIdEquipped = GetItemLinkSetInfo( linkEquipped )
     local _, _, _, _, _, setIdSaved = GetItemLinkSetInfo( linkSaved )
-    logger:Debug( "CompareItemLinks: comparisonDepth: " .. WW.settings.comparisonDepth )
+    logger:Verbose( "CompareItemLinks: comparisonDepth: " .. WW.settings.comparisonDepth )
 
-    logger:Debug( "nameEquipped: %s, nameSaved: %s, linkEquipped: %s, linkSaved: %s, uniqueIdEquipped: %s, uniqueIdSaved: %s",
+    logger:Verbose(
+        "nameEquipped: %s, nameSaved: %s, linkEquipped: %s, linkSaved: %s, uniqueIdEquipped: %s, uniqueIdSaved: %s",
         nameSaved, nameEquipped, linkEquipped, linkSaved,
         uniqueIdEquipped, uniqueIdSaved
     )
-    logger:Debug(
+    logger:Verbose(
         "traitEquipped: %d, traitSaved: %d, weaponTypeEquipped: %d, weaponTypeSaved: %d, setIdEquipped: %d, setIdSaved: %d",
         traitEquipped, traitSaved, weaponTypeEquipped, weaponTypeSaved, setIdEquipped, setIdSaved )
 
@@ -45,21 +47,22 @@ function WWV.CompareItemLinks( linkEquipped, linkSaved, uniqueIdEquipped, unique
             logger:Warn( "Trait / Weapon Type and set Id did not match" )
             return false
         end
-        logger:Info( "Trait / Weapon Type and set Id matched" )
+        logger:Debug( "Trait / Weapon Type and set Id matched" )
         return true
     end
     local qualityEquipped = GetItemLinkDisplayQuality( linkEquipped )
     local _, enchantEquipped = GetItemLinkEnchantInfo( linkEquipped )
     local qualitySaved = GetItemLinkDisplayQuality( linkSaved )
     local _, enchantSaved = GetItemLinkEnchantInfo( linkSaved )
-    logger:Debug( "qualityEquipped: %s, qualitySaved: %s, enchantEquipped: %s, enchantSaved: %s", tostring( qualityEquipped ),
+    logger:Verbose( "qualityEquipped: %s, qualitySaved: %s, enchantEquipped: %s, enchantSaved: %s",
+        tostring( qualityEquipped ),
         tostring( qualitySaved ), tostring( enchantEquipped ), tostring( enchantSaved ) )
     if WW.settings.comparisonDepth == 2 then -- detailed
         if (traitEquipped ~= traitSaved) or (weaponTypeEquipped ~= weaponTypeSaved) or (setIdEquipped ~= setIdSaved) or (qualityEquipped ~= qualitySaved) then
             logger:Warn( "Trait / Weapon Type / Set Id / Quality did not match" )
             return false
         end
-        logger:Info( "Trait / Weapon Type / Set Id / Quality matched" )
+        logger:Debug( "Trait / Weapon Type / Set Id / Quality matched" )
         return true
     end
 
@@ -69,7 +72,7 @@ function WWV.CompareItemLinks( linkEquipped, linkSaved, uniqueIdEquipped, unique
             logger:Warn( "Trait / Weapon Type / Set Id / Quality / Enchant did not match" )
             return false
         end
-        logger:Info( "Trait / Weapon Type / Set Id / Quality / Enchant matched" )
+        logger:Debug( "Trait / Weapon Type / Set Id / Quality / Enchant matched" )
         return true
     end
 
@@ -78,7 +81,7 @@ function WWV.CompareItemLinks( linkEquipped, linkSaved, uniqueIdEquipped, unique
             logger:Warn( "UniqueId did not match" )
             return false
         end
-        logger:Info( "UniqueId matched" )
+        logger:Debug( "UniqueId matched" )
         return true
     end
 end
@@ -145,7 +148,7 @@ function WWV.DidSetupSwapCorrectly( workAround )
                         end
                     else
                         failedT[ # failedT + 1 ] = GetString( "SI_EQUIPSLOT", equipSlot )
-                        logger:Debug( "Equipped %s // saved %s", equippedLink, savedLink )
+                        logger:Verbose( "Equipped %s // saved %s", equippedLink, savedLink )
                         success = false
                         if workAround > 2 then
                             if not db[ equipSlot ] then db[ equipSlot ] = {} end
@@ -228,55 +231,21 @@ function WWV.DidSetupSwapCorrectly( workAround )
                     end
                 end
                 if equippedSkill ~= 0 and equippedSkill ~= 195031 then
-                    local skillData = slotData:GetPlayerSkillData()
-                    local progressionId = skillData:GetProgressionId()
-                    local chainedAbilityIds = GetProgressionSkillMorphSlotChainedAbilityIds( progressionId, MORPH_SLOT_BASE )
-                    equippedBaseId = GetProgressionSkillMorphSlotAbilityId( progressionId, MORPH_SLOT_BASE )
-                    if chainedAbilityIds then
-                        local skillType, skillLineIndex, skillIndex, morphChoice, rank =
-                            GetSpecificSkillAbilityKeysByAbilityId(
-                                equippedBaseId )
-                        equippedBaseId = GetSpecificSkillAbilityInfo( skillType, skillLineIndex, skillIndex, MORPH_SLOT_BASE,
-                            rank )
-                    end
+                    equippedBaseId = WW.GetBaseAbilityId( equippedSkill )
                 end
                 if savedSkill ~= 195031 then
-                    local chainedAbilityIds = GetProgressionSkillMorphSlotChainedAbilityIds( savedSkill, MORPH_SLOT_BASE )
-                    local skillType, skillLineIndex, skillIndex, morphChoice, rank = GetSpecificSkillAbilityKeysByAbilityId(
-                        savedSkill )
-                    local progressionId
-                    local progressionData = SKILLS_DATA_MANAGER:GetProgressionDataByAbilityId( savedSkill )
-                    local skillData
-                    if progressionData then
-                        skillData = progressionData.skillData
-                    end
-                    if skillData then
-                        progressionId = skillData:GetProgressionId()
-                    end
-                    savedBaseId = GetProgressionSkillMorphSlotAbilityId( progressionId, MORPH_SLOT_BASE )
-                    if chainedAbilityIds then
-                        skillType, skillLineIndex, skillIndex, morphChoice, rank =
-                            GetSpecificSkillAbilityKeysByAbilityId(
-                                savedBaseId )
-                        savedBaseId = GetSpecificSkillAbilityInfo( skillType, skillLineIndex, skillIndex, MORPH_SLOT_BASE,
-                            rank )
-                    end
+                    equippedBaseId = WW.GetBaseAbilityId( equippedSkill )
                 end
 
-                logger:Debug( "SavedBaseId = %d, name= %s, equippedBaseId = %d, name = %s", savedBaseId,
+                logger:Verbose( "SavedBaseId = %d, name= %s, equippedBaseId = %d, name = %s", savedBaseId,
                     GetAbilityName( savedBaseId ), equippedBaseId,
                     GetAbilityName( equippedBaseId ) )
                 --[[ logger:Debug( "SavedSkill = %s, equippedSkill = %s", GetAbilityName( savedSkill ),
                     GetAbilityName( equippedSkill ) ) ]]
-                if savedBaseId ~= equippedBaseId then
-                    if equippedSkill ~= 195031 then
-                        failedT[ # failedT + 1 ] = GetAbilityName( equippedSkill )
-                        skillSuccess = false
-                        logger:Warn( "Skills did not swap correctly: %s // %s, (initial)", GetAbilityName( equippedSkill ),
-                            GetAbilityName( savedSkill ) )
-                    elseif equippedBaseId == 0 then
+                if savedBaseId ~= equippedBaseId and skillSuccess == true then
+                    if savedBaseId == 0 then
                         if WW.settings.unequipEmpty then
-                            if savedBaseId == 0 then
+                            if equippedBaseId == 0 then
                                 skillSuccess = true
                             else
                                 failedT[ # failedT + 1 ] = GetAbilityName( savedSkill )
@@ -288,6 +257,25 @@ function WWV.DidSetupSwapCorrectly( workAround )
                         else
                             skillSuccess = true
                         end
+                    elseif equippedBaseId == 0 then
+                        if WW.settings.unequipEmpty then
+                            skillSuccess = true
+                        else
+                            if equippedSkill == 195031 then
+                                skillSuccess = true
+                            else
+                                failedT[ # failedT + 1 ] = GetAbilityName( savedSkill )
+                                skillSuccess = false
+                                logger:Warn( "Skills did not swap correctly: %s // %s (empty skill)",
+                                    GetAbilityName( equippedSkill ),
+                                    GetAbilityName( savedSkill ) )
+                            end
+                        end
+                    elseif equippedSkill ~= 195031 then
+                        failedT[ # failedT + 1 ] = GetAbilityName( savedSkill )
+                        skillSuccess = false
+                        logger:Warn( "Skills did not swap correctly: %s // %s, (initial)", GetAbilityName( equippedSkill ),
+                            GetAbilityName( savedSkill ) )
                     else
                         failedT[ # failedT + 1 ] = GetAbilityName( savedSkill )
                         skillSuccess = false
@@ -299,7 +287,7 @@ function WWV.DidSetupSwapCorrectly( workAround )
             end
         end
         if skillSuccess then
-            logger:Info( "Skills swapped correctly" )
+            logger:Debug( "Skills swapped correctly" )
         else
             logger:Warn( "Skills did not swap correctly" )
         end
@@ -309,7 +297,7 @@ function WWV.DidSetupSwapCorrectly( workAround )
     return check, failedT
 end
 
-local function failureFunction()
+local function failureFunction( workaround )
     validationTask:Cancel()
     EVENT_MANAGER:UnregisterForUpdate( WW.name .. "Throttle" )
     EVENT_MANAGER:UnregisterForUpdate( WW.name .. "Throttle2" )
@@ -323,8 +311,9 @@ local function failureFunction()
     EVENT_MANAGER:UnregisterForEvent( WW.name .. "workaroundFour", EVENT_INVENTORY_SINGLE_SLOT_UPDATE )
     EVENT_MANAGER:UnregisterForUpdate( WW.name .. "ThrottleWorkaroundTFour" )
     EVENT_MANAGER:UnregisterForUpdate( WW.name .. "Failure" )
-    lastSetup = nil
-    WW.Log( GetString( WW_MSG_SWAP_FIX_FAIL ), WW.LOGTYPES.ERROR )
+    if workaround > 2 then
+        WW.Log( GetString( WW_MSG_SWAP_FIX_FAIL ), WW.LOGTYPES.ERROR )
+    end
 end
 local function successFunction()
     -- Cancel everything in case swap worked out sooner than expected to avoid having situations where some function gets called endlessly
@@ -354,6 +343,7 @@ local function successFunction()
         end
     end
     WizardsWardrobePanelBottomLabel:SetText( middleText )
+    WW.callbackManager:FireCallbacks( "WW_OnSetupSwapSuccess" )
 end
 
 
@@ -368,7 +358,7 @@ local function workaroundFour()
     -- Redundancy in case everything is stuck and no event triggers. This will hopefully always be unregistered before it actually gets called
     EVENT_MANAGER:RegisterForUpdate( WW.name .. "Throttle2", 5000,
         function()
-            failureFunction() -- If all swaps have failed.
+            failureFunction( 4 ) -- If all swaps have failed.
         end )
 
     if not WWV.DidSetupSwapCorrectly( WORKAROUND_FOUR ) then
@@ -385,14 +375,15 @@ local function workaroundFour()
             end
             return not isNotEmpty
         end ):Then( function()
-            WW.LoadSetupAdjacent( 0 ) -- reload current setup
+            local DO_SKIP_VALIDATION = true               -- prevent endless looping
+            WW.LoadSetupAdjacent( 0, DO_SKIP_VALIDATION ) -- reload current setup
         end ):Call( function()
             EVENT_MANAGER:RegisterForEvent( WW.name .. "workaroundThree", EVENT_INVENTORY_SINGLE_SLOT_UPDATE, function()
                 EVENT_MANAGER:RegisterForUpdate( WW.name .. "Throttle", validationDelay / 2, function()
                     if WWV.DidSetupSwapCorrectly( WORKAROUND_FOUR ) then
                         successFunction()
                     else
-                        failureFunction()
+                        failureFunction( 4 )
                     end
                     EVENT_MANAGER:UnregisterForEvent( WW.name .. "workaroundThree", EVENT_INVENTORY_SINGLE_SLOT_UPDATE )
                     EVENT_MANAGER:UnregisterForUpdate( WW.name .. "Throttle" )
@@ -450,7 +441,10 @@ local function workaroundThree()
                     CallSecureProtected( "RequestMoveItem", BAG_WORN, equipSlot, BAG_BACKPACK, emptySlot, 1 )
                     moveTask:Suspend() -- Suspend loop until item has actually moved
                 end
-            end ):Then( function() WW.LoadSetupAdjacent( 0 ) end )
+            end ):Then( function()
+                local DO_SKIP_VALIDATION = true
+                WW.LoadSetupAdjacent( 0, DO_SKIP_VALIDATION )
+            end )
         else
             successFunction()
         end
@@ -475,12 +469,18 @@ local function handleSettings()
             WizardsWardrobePanelBottomLabel:SetText( middleText )
 
             WW.Log( GetString( WW_MSG_SWAPFAIL_DISABLED ), WW.LOGTYPES.ERROR, "FFFFFF", failedSlotNames )
-            --end
+
+            failureFunction( 1 )
         end
     end )
 end
 -- Reload setup
-local function workaroundTwo()
+local function workaroundTwo( skipValidation )
+    if skipValidation then
+        logger:Warn( "Skipping validation" )
+        return failureFunction( 4 )
+    end
+
     logger:Info( "workaroundTwo got called" )
     EVENT_MANAGER:UnregisterForUpdate( WW.name .. "ThrottleWorkaroundOne" )
     EVENT_MANAGER:UnregisterForEvent( WW.name .. "workaroundOne", EVENT_INVENTORY_SINGLE_SLOT_UPDATE )
@@ -500,7 +500,8 @@ local function workaroundTwo()
             REGISTER_FILTER_INVENTORY_UPDATE_REASON,
             INVENTORY_UPDATE_REASON_DEFAULT )
         if not WWV.DidSetupSwapCorrectly( WORKAROUND_TWO ) then
-            WW.LoadSetupAdjacent( 0 )
+            local DO_SKIP_VALIDATION = true
+            WW.LoadSetupAdjacent( 0, DO_SKIP_VALIDATION )
         else
             successFunction()
         end
@@ -509,7 +510,7 @@ local function workaroundTwo()
 end
 
 -- Sheathe weapons and see if it fixes itself
-local function workaroundOne()
+local function workaroundOne( skipValidation, isChangingWeapons )
     EVENT_MANAGER:UnregisterForUpdate( WW.name .. "Throttle" )
 
     logger:Info( "workaround one got called" )
@@ -518,7 +519,9 @@ local function workaroundOne()
         if WWV.DidSetupSwapCorrectly( WORKAROUND_ONE ) then
             successFunction()
         else
-            EVENT_MANAGER:RegisterForUpdate( WW.name .. "ThrottleWorkaroundOne", validationDelay / 2, workaroundTwo ) -- throttle to call workaround after the last event
+            EVENT_MANAGER:RegisterForUpdate( WW.name .. "ThrottleWorkaroundOne", validationDelay / 2, function()
+                workaroundTwo( skipValidation )
+            end ) -- throttle to call workaround after the last event
         end
     end )
     EVENT_MANAGER:AddFilterForEvent( WW.name .. "workaroundOne", EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
@@ -532,10 +535,13 @@ local function workaroundOne()
             return not IsUnitInCombat( "player" )
         end )
         if not WWV.DidSetupSwapCorrectly( WORKAROUND_ONE ) then
-            if not ArePlayerWeaponsSheathed() then
+            if not ArePlayerWeaponsSheathed() and isChangingWeapons then
                 TogglePlayerWield()
             end
-            EVENT_MANAGER:RegisterForUpdate( WW.name .. "ThrottleWorkaroundOne", validationDelay, workaroundTwo ) -- we wait for the gear swap event, if it does not happen we try workaround two
+            EVENT_MANAGER:RegisterForUpdate( WW.name .. "ThrottleWorkaroundOne", validationDelay,
+                function()
+                    workaroundTwo( skipValidation )
+                end ) -- we wait for the gear swap event, if it does not happen we try workaround two
         else
             successFunction()
         end
@@ -547,23 +553,21 @@ end
 
 -- Function gets called once on setup swap
 
-function WWV.SetupFailWorkaround( setupNameComparison )
-    if lastSetup == setupNameComparison then
-        if not WWV.DidSetupSwapCorrectly( WORKAROUND_INITIAL_CALL ) then
-            failureFunction()
-            return logger:Warn( "Setup failed and already validated" )
-        else
-            successFunction()
-            return logger:Warn( "Setup succesfull and already validated" )
-        end
+function WWV.SetupFailWorkaround( setupName, skipValidation, isChangingWeapons )
+    if skipValidation then
+        logger:Info( "Skipping validation" )
+    else
+        logger:Info( "Not skipping validation" )
     end
-    lastSetup = setupNameComparison
+    logger:Verbose( "SetupFailWorkaround has been called" )
     validationDelay = WW.settings.setupValidation.delay
     local function throttle()
         if WWV.DidSetupSwapCorrectly( WORKAROUND_INITIAL_CALL ) then
             return successFunction()
         else
-            EVENT_MANAGER:RegisterForUpdate( WW.name .. "Throttle", validationDelay, workaroundOne )
+            EVENT_MANAGER:RegisterForUpdate( WW.name .. "Throttle", validationDelay, function()
+                workaroundOne( skipValidation, isChangingWeapons )
+            end )
         end
     end
     if WWV.DidSetupSwapCorrectly( WORKAROUND_INITIAL_CALL ) then
@@ -577,6 +581,7 @@ function WWV.SetupFailWorkaround( setupNameComparison )
     EVENT_MANAGER:AddFilterForEvent( WW.name, EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
         REGISTER_FILTER_INVENTORY_UPDATE_REASON,
         INVENTORY_UPDATE_REASON_DEFAULT )
+    EVENT_MANAGER:RegisterForUpdate( WW.name .. "Failure", validationDelay + 500, throttle )
 end
 
 -- Suspend all tasks when in combat and resume once we are out

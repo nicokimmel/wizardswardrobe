@@ -22,7 +22,7 @@ function WWP.CreatePreviewWindow()
 	local window = WINDOW_MANAGER:CreateTopLevelWindow( WWP.name )
 	WWP.window = window
 	window:SetDimensions( GuiRoot:GetWidth() + 8, GuiRoot:GetHeight() + 8 )
-	window:SetAnchor( CENTER, GUI_ROOT, CENTER, 0, 0 )
+	window:SetAnchor( CENTER, GuiRoot, CENTER, 0, 0 )
 	window:SetDrawTier( DT_HIGH )
 	window:SetClampedToScreen( false )
 	window:SetMouseEnabled( true )

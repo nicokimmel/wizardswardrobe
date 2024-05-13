@@ -59,7 +59,8 @@ local language = {
 	WW_MSG_SWAPFAIL = "%s in your Setup failed to swap, attempting workaround, please wait a few seconds",
 	WW_MSG_SWAPFAIL_DISABLED = "%s in your Setup failed to swap",
 	WW_MSG_SWAPSUCCESS = "Setup successfully loaded",
-	WW_MSG_SWAP_FIX_FAIL = "All workarounds have failed, please try to manually unequip the stuck piece",
+	WW_MSG_SWAP_FIX_FAIL =
+	"All workarounds have failed, please try to manually unequip the stuck piece or try to resave the setup if everything swapped correctly",
 	WW_MSG_BLOCK_WARN = "DO NOT BLOCK!",
 
 	-- ADDON MENU
@@ -138,6 +139,9 @@ local language = {
 	WW_MENU_COMPARISON_IGNORE_COSTUME_SLOTS_TT = "If set to on costumes will be ignored.",
 	WW_MENU_COMPARISON_IGNORE_POISON_SLOTS = "Ignore poisons",
 	WW_MENU_COMPARISON_IGNORE_POISON_SLOTS_TT = "If set to on poisons will be ignored.",
+	WW_MENU_ZONE_SELECTION = "Use legacy zone selection",
+	WW_MENU_ZONE_SELECTION_TT =
+	"If set to on it will use the grid dropdown box from previous versions, if off it will use the new selection method.",
 
 	-- USER INTERFACE
 	WW_CHANGELOG =
@@ -289,7 +293,7 @@ local language = {
 	WW_LC_RYELAZ = "Count Ryelaz and Zilyesset",
 	WW_LC_CAVOT_AGNAN = "Cavot Agnan",
 	WW_LC_ORPHIC = "Orphic Shattered Shard",
-	WW_LC_XORYN = "Xoryn",
+	WW_LC_KNOT = "Arcane Knot",
 
 	WW_MSA_NAME = "Maelstrom Arena",
 

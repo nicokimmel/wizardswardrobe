@@ -8,6 +8,7 @@ IA.icon = "/esoui/art/icons/achievement_u40_ed2_defeat_final_boss_50.dds"
 IA.priority = 14
 IA.id = 1436
 IA.node = 550
+IA.category = WW.ACTIVITIES.ENDLESS
 
 IA.bosses = {
 	[ 1 ] = {

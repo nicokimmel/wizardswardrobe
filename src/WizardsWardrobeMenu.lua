@@ -86,7 +86,8 @@ function WWM.InitSV()
 			delay = 1500,
 			ignorePoisons = true,
 			ignoreCostumes = true
-		}
+		},
+		legacyZoneSelection = false
 	} )
 
 	-- migrate validation settings
@@ -170,6 +171,19 @@ function WWM.InitAM()
 			disabled = function() return not WW.settings.unequipEmpty end, -- only enabled if unequip empty is true
 
 		},
+		{
+			type = "checkbox",
+			name = GetString( WW_MENU_ZONE_SELECTION ),
+			getFunc = function() return WW.settings.legacyZoneSelection end,
+			setFunc = function( value )
+				WW.settings.legacyZoneSelection = value
+				WizardsWardrobeWindowTopMenuButtonsZoneSelect:SetHidden( value )
+				WizardsWardrobeWindowSelection:SetHidden( not value )
+			end,
+			tooltip = GetString( WW_MENU_ZONE_SELECTION_TT ),
+
+		},
+
 		{
 			type = "header",
 			name = "Setup Validation",
