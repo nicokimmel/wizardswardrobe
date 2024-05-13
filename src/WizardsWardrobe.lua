@@ -7,7 +7,7 @@ WW.name = "WizardsWardrobe"
 WW.simpleName = "Wizard's Wardrobe"
 WW.displayName =
 "|c18bed8W|c26c2d1i|c35c6c9z|c43cac2a|c52cebar|c60d1b3d|c6fd5ab'|c7dd9a4s|c8cdd9d |c9ae195W|ca8e58ea|cb7e986r|cc5ed7fd|cd4f077r|ce2f470o|cf1f868b|cfffc61e|r"
-WW.version = "1.17.11"
+WW.version = "1.18.0"
 WW.zones = {}
 WW.currentIndex = 0
 WW.IsHeavyAttacking = false
@@ -18,6 +18,8 @@ local wipeChangeCooldown = false
 local bossLastName = "WW"
 local blockTrash = nil
 local logger = LibDebugLogger( WW.name )
+WW.callbackManager = ZO_CallbackObject:New()
+
 
 
 function WW.GetSetupsAmount()
@@ -28,13 +30,13 @@ function WW.GetSetupsAmount()
 	return count
 end
 
-function WW.LoadSetupAdjacent( direct )
+function WW.LoadSetupAdjacent( direct, skipValidation )
 	local zone = WW.selection.zone
 	local pageId = WW.selection.pageId
 	local newSetupId = WW.currentIndex + direct
 	if newSetupId > WW.GetSetupsAmount() then newSetupId = 1 end
 	if newSetupId < 1 then newSetupId = WW.GetSetupsAmount() end
-	WW.LoadSetup( zone, pageId, newSetupId, false )
+	WW.LoadSetup( zone, pageId, newSetupId, false, skipValidation )
 end
 
 function WW.IsReadyToSwap()
@@ -43,12 +45,13 @@ end
 
 local setupTask = async:Create( WW.name .. "SetupTask" )
 local validationTask = async:Create( WW.name .. "ValidationTask" )
-function WW.LoadSetup( zone, pageId, index, auto )
+function WW.LoadSetup( zone, pageId, index, auto, skipValidation )
 	if not zone or not pageId or not index then
 		return false
 	end
-
+	if skipValidation == nil then skipValidation = false end
 	local setup = Setup:FromStorage( zone.tag, pageId, index )
+
 	logger:Info( "LoadSetup " .. setup:GetName() )
 
 	if setup:IsEmpty() then
@@ -57,21 +60,32 @@ function WW.LoadSetup( zone, pageId, index, auto )
 		end
 		return false
 	end
-	validationTask:WaitUntil( function() return WW.IsReadyToSwap() end ):Then( function()
-		EVENT_MANAGER:RegisterForEvent( WW.name .. "SetupFailWorkaround", EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
-			function()
-				WWV.SetupFailWorkaround( setup:GetName() ) -- Wait until something actually swapped before doing the workaround
-				EVENT_MANAGER:UnregisterForEvent( WW.name .. "SetupFailWorkaround", EVENT_INVENTORY_SINGLE_SLOT_UPDATE )
-			end )
-		EVENT_MANAGER:AddFilterForEvent( WW.name .. "SetupFailWorkaround", EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
-			REGISTER_FILTER_BAG_ID, BAG_WORN )
-		EVENT_MANAGER:RegisterForUpdate( WW.name .. "SetupFailWorkaround", 3000, function()
-			EVENT_MANAGER:UnregisterForEvent( WW.name .. "SetupFailWorkaround", EVENT_INVENTORY_SINGLE_SLOT_UPDATE )
-		end )
-	end )
+	for i = 1, #WW.gui.setupTable do
+		local control = WW.gui.GetSetupControl( i )
+		control.highlight:SetHidden( i ~= index )
+	end
+
+	local areAllItemsInInventory = false
+	local isChangingWeapons = false
 	setupTask:Call( function()
+		local pageName = WW.pages[ zone.tag ][ pageId ].name
+		WW.gui.SetPanelText( zone.tag, pageName, setup:GetName() )
+		local logMessage = WW.IsReadyToSwap() and GetString( WW_MSG_LOADSETUP ) or GetString( WW_MSG_LOADINFIGHT )
+		local logColor = WW.IsReadyToSwap() and WW.LOGTYPES.NORMAL or WW.LOGTYPES.INFO
+
+		WW.Log( logMessage, logColor, "FFFFFF", setup:GetName(), zone.name )
+
+		setupTask:WaitUntil( function()
+			return WW.IsReadyToSwap()
+		end )
+
 		if WW.settings.auto.gear then
-			WW.LoadGear( setup )
+			_, areAllItemsInInventory, isChangingWeapons = WW.LoadGear( setup )
+		end
+		if areAllItemsInInventory then
+			logger:Warn( "73 - All items in inventory" )
+		else
+			logger:Warn( "75 - Not all items in inventory" )
 		end
 	end ):Then( function()
 		if WW.settings.auto.skills then
@@ -83,16 +97,15 @@ function WW.LoadSetup( zone, pageId, index, auto )
 		end
 	end ):Then( function()
 		if WW.settings.auto.food then WW.EatFood( setup ) end
+	end ):Then( function()
+		setup:ExecuteCode( setup, zone, pageId, index, auto )
+		WW.currentIndex = index
+		--WWV.SetupFailWorkaround( setup:GetName() ) -- Wait until something actually swapped before doing the workaround
+	end ):Then( function()
+		if areAllItemsInInventory then
+			WWV.SetupFailWorkaround( setup:GetName(), skipValidation, isChangingWeapons )
+		end
 	end )
-
-	local pageName = WW.pages[ zone.tag ][ pageId ].name
-	WW.gui.SetPanelText( zone.tag, pageName, setup:GetName() )
-
-	local logMessage = IsUnitInCombat( "player" ) and GetString( WW_MSG_LOADINFIGHT ) or GetString( WW_MSG_LOADSETUP )
-	local logColor = IsUnitInCombat( "player" ) and WW.LOGTYPES.INFO or WW.LOGTYPES.NORMAL
-	WW.Log( logMessage, logColor, "FFFFFF", setup:GetName(), zone.name )
-	setup:ExecuteCode( setup, zone, pageId, index, auto )
-	WW.currentIndex = index
 
 	return true
 end
@@ -100,12 +113,14 @@ end
 function WW.LoadSetupCurrent( index, auto )
 	local zone = WW.selection.zone
 	local pageId = WW.selection.pageId
-	WW.LoadSetup( zone, pageId, index, auto )
+	local DO_NOT_SKIP_VALIDATION = false
+	WW.LoadSetup( zone, pageId, index, auto, DO_NOT_SKIP_VALIDATION )
 end
 
 function WW.LoadSetupSubstitute( index )
 	if not WW.zones[ "SUB" ] or not WW.pages[ "SUB" ] then return end
-	WW.LoadSetup( WW.zones[ "SUB" ], WW.pages[ "SUB" ][ 0 ].selected, index, true )
+	local DO_NOT_SKIP_VALIDATION = false
+	WW.LoadSetup( WW.zones[ "SUB" ], WW.pages[ "SUB" ][ 0 ].selected, index, true, DO_NOT_SKIP_VALIDATION )
 end
 
 function WW.SaveSetup( zone, pageId, index, skip )
@@ -190,17 +205,17 @@ function WW.LoadSkills( setup )
 	skillTask:For( 0, 1 ):Do( function( hotbarCategory )
 		skillTask:For( 3, 8 ):Do( function( slotIndex )
 			local abilityId = skillTable[ hotbarCategory ][ slotIndex ]
-			--[[ if not WW.settings.unequipEmpty and (abilityId == 0 or abilityId == nil) then
+			if not WW.settings.unequipEmpty and (abilityId == 0 or abilityId == nil) then
 				return false
-			end ]]
-			--[[ if not WW.settings.unequipEmpty then
+			end
+			if not WW.settings.unequipEmpty then
 				if (abilityId == 0 or abilityId == nil) then
 					logger:Info( "SlotSkill %d %d %d - no skill", hotbarCategory, slotIndex, abilityId )
 					return false
 				else
 					logger:Warn( "SlotSkill %d %d %d", hotbarCategory, slotIndex, abilityId )
 				end
-			end ]]
+			end
 			logger:Debug( "SlotSkill %d %d %d", hotbarCategory, slotIndex, abilityId )
 
 
@@ -227,14 +242,12 @@ function WW.LoadSkills( setup )
 						return not WW.HasCryptCanon()
 					end )
 				end
+
 				if abilityId == 38989 or abilityId == 38985 or abilityId == 38993 then
 					abilityId = 38984
 				end
-				if WW.settings.unequipEmpty and (abilityId == 0 or abilityId == nil) then
-					WW.SlotSkill( hotbarCategory, slotIndex, abilityId )
-				elseif not (abilityId == 0 or abilityId == nil) then
-					WW.SlotSkill( hotbarCategory, slotIndex, abilityId )
-				end
+
+				WW.SlotSkill( hotbarCategory, slotIndex, abilityId )
 			end )
 		end )
 	end ):Then( function()
@@ -259,11 +272,17 @@ end
 
 function WW.SlotSkill( hotbarCategory, slotIndex, abilityId )
 	local hotbarData = ACTION_BAR_ASSIGNMENT_MANAGER:GetHotbar( hotbarCategory )
+	logger:Verbose( "SlotSkill %d %d %d", hotbarCategory, slotIndex, abilityId )
 	-- if using cryptcanon dont slot skill, since cryptcanon does it on its own
+	if not abilityId then return end
 	if abilityId == 195031 then
 		return
 	end
 	if WW.HasCryptCanon() and slotIndex == 8 then
+		return
+	end
+	if WW.settings.unequipEmpty and abilityId == 0 then
+		hotbarData:ClearSlot( slotIndex )
 		return
 	end
 	if abilityId and abilityId > 0 then
@@ -315,10 +334,10 @@ end
 function WW.AreSkillsEqual( abilityId1, abilityId2 ) -- gets base abilityIds first, then compares
 	if abilityId1 == abilityId2 then return true end
 
-	local baseMorphAbilityId1 = WW.GetBaseAbilityId( previousAbilityId )
+	local baseMorphAbilityId1 = WW.GetBaseAbilityId( abilityId1 )
 	if not baseMorphAbilityId1 then return end
 
-	local baseMorphAbilityId2 = WW.GetBaseAbilityId( previousAbilityId )
+	local baseMorphAbilityId2 = WW.GetBaseAbilityId( abilityId2 )
 	if not baseMorphAbilityId2 then return end
 
 	if baseMorphAbilityId1 == baseMorphAbilityId2 then
@@ -332,6 +351,12 @@ function WW.GetBaseAbilityId( abilityId )
 	local playerSkillProgressionData = SKILLS_DATA_MANAGER:GetProgressionDataByAbilityId( abilityId )
 	if not playerSkillProgressionData then
 		return nil
+	end
+	local apiVersion = GetAPIVersion()
+	if apiVersion >= 101042 then
+		if playerSkillProgressionData:GetSkillData():IsCraftedAbility() then
+			return abilityId
+		end
 	end
 	local baseMorphData = playerSkillProgressionData:GetSkillData():GetMorphData( MORPH_SLOT_BASE )
 	return baseMorphData:GetAbilityId()
@@ -384,11 +409,7 @@ function WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons )
 		logger:Info( "MoveItems: Starting to move %d items (no queue), isChangingWeapons = %s", #itemTaskList,
 			tostring( isChangingWeapons ) )
 	end
-	local zone = WW.selection.zone
-	local pageId = WW.selection.pageId
-	local index = WW.currentIndex
 
-	local setup = Setup:FromStorage( zone.tag, pageId, index )
 	local timeStamp = GetTimeStamp()
 	isMovingItems = true
 	local hasBeenWarnedAboutBlocking = false
@@ -416,7 +437,11 @@ function WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons )
 			TogglePlayerWield()
 		end
 	end ):WaitUntil( function()
-		if timeStamp + 5000 > GetTimeStamp() and not ArePlayerWeaponsSheathed() then
+		logger:Info( "TimeStamp = %d, GetTimeStamp = %d, bool: %s", timeStamp, GetTimeStamp(),
+			tostring( GetTimeStamp() > (timeStamp + 5000) ) )
+
+
+		if GetTimeStamp() > timeStamp + 5000 and not ArePlayerWeaponsSheathed() then
 			TogglePlayerWield()
 		end
 		--? If the user is heavy attacking, the setup will not load, and the user will have to do it manually which is horrible but there is no way to fix it
@@ -454,7 +479,13 @@ function WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons )
 		end )
 	end ):Then( function()
 		if not areAllItemsInInventory then
+			local zone = WW.selection.zone
+			local pageId = WW.selection.pageId
+			local index = WW.currentIndex
+
+			local setup = Setup:FromStorage( zone.tag, pageId, index )
 			WW.SetPanelText( setup:GetName(), "F96417", WW.WARNING.INVENTORY )
+
 			--[[ local warning = "|t100%:t100%:/esoui/art/crafting/crafting_provisioner_inventorycolumn_icon.dds:inheritColor|t"
 			local middleText = string.format( "|c%s%s%s|r", "F96417",
 				setup:GetName(), warning )
@@ -517,20 +548,6 @@ function WW.LoadGear( setup )
 					WW.poison.EquipPoisons( gear.link, gearSlot )
 				end
 			else
-				if gearSlot == EQUIP_SLOT_MAIN_HAND or gearSlot == EQUIP_SLOT_OFF_HAND or gearSlot == EQUIP_SLOT_BACKUP_MAIN or gearSlot == EQUIP_SLOT_BACKUP_OFF then
-					--Check if weapons are being changed, if not dont sheath weapons
-
-
-					local newWeapon = Id64ToString( GetItemUniqueId( inventoryList[ gear.id ].bag,
-						inventoryList[ gear.id ].slot ) )
-
-					if lookupId ~= newWeapon and not isChangingWeapons then
-						logger:Error( "Changing weapons: equippedWeapon = %s, newWeapon = %s",
-							GetItemLink( BAG_WORN, gearSlot ),
-							GetItemLink( inventoryList[ gear.id ].bag, inventoryList[ gear.id ].slot ) )
-						isChangingWeapons = true
-					end
-				end
 				-- equip item (if not already equipped)
 
 
@@ -546,7 +563,20 @@ function WW.LoadGear( setup )
 							delay = delay + 500
 						end
 
+						if gearSlot == EQUIP_SLOT_MAIN_HAND or gearSlot == EQUIP_SLOT_OFF_HAND or gearSlot == EQUIP_SLOT_BACKUP_MAIN or gearSlot == EQUIP_SLOT_BACKUP_OFF then
+							--Check if weapons are being changed, if not dont sheath weapons
 
+
+							local newWeapon = Id64ToString( GetItemUniqueId( inventoryList[ gear.id ].bag,
+								inventoryList[ gear.id ].slot ) )
+
+							if lookupId ~= newWeapon and not isChangingWeapons then
+								logger:Info( "Changing weapons: equippedWeapon = %s, newWeapon = %s",
+									GetItemLink( BAG_WORN, gearSlot ),
+									GetItemLink( inventoryList[ gear.id ].bag, inventoryList[ gear.id ].slot ) )
+								isChangingWeapons = true
+							end
+						end
 						table.insert( itemTaskList, {
 							sourceBag = bag,
 							sourceSlot = slot,
@@ -576,9 +606,13 @@ function WW.LoadGear( setup )
 		end
 	end
 
-
+	if areAllItemsInInventory then
+		logger:Warn( "All items in inventory" )
+	else
+		logger:Warn( "Not all items in inventory" )
+	end
 	WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons )
-	return true
+	return true, areAllItemsInInventory, isChangingWeapons
 	--end
 end
 
@@ -705,7 +739,7 @@ end
 function WW.SaveCP( setup )
 	local cpTable = {}
 	for slotIndex = 1, 12 do
-		cpTable[ slotIndex ] = GetSlotBoundId( slotIndex, HOTBAR_CATEGORY_CHAMPION )
+		cpTable[ slotIndex ] = WW.GetSlotBoundAbilityId( slotIndex, HOTBAR_CATEGORY_CHAMPION )
 	end
 	setup:SetCP( cpTable )
 end
@@ -737,7 +771,7 @@ function WW.EatFood( setup )
 		foodTask:WaitUntil( function() return WW.IsReadyToSwap() end ):Then( function()
 			local foodIndex = WW.FindFood( foodChoice )
 
-			logger:Error( CanInteractWithItem( BAG_BACKPACK, foodIndex ) )
+			logger:Info( CanInteractWithItem( BAG_BACKPACK, foodIndex ) )
 			if not foodIndex then
 				WW.Log( GetString( WW_MSG_FOODENOENT ), WW.LOGTYPES.ERROR )
 				return
@@ -814,6 +848,13 @@ function WW.PageIterator( zone, pageId )
 		i = i + 1
 		return setupList[ i ]
 	end
+end
+
+function WW.CancelAllTasks()
+	foodTask:Cancel()
+	cpTask:Cancel()
+	gearMoveTask:Cancel()
+	WW.validation.validationTask:Cancel()
 end
 
 function WW.OnBossChange( _, isBoss, manualBossName )
@@ -1035,6 +1076,7 @@ function WW.OnAddOnLoaded( _, addonName )
 
 	WW.RegisterEvents()
 	WizardsWardrobeWindowVersion:SetText( "v" .. WW.version )
+	WizardsWardrobeWindowTopMenuButtonsZoneSelect:SetHidden( WW.settings.legacyZoneSelection )
 end
 
 EVENT_MANAGER:RegisterForEvent( WW.name, EVENT_ADD_ON_LOADED, WW.OnAddOnLoaded )

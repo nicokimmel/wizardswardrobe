@@ -60,7 +60,8 @@ local language = {
 	WW_MSG_SWAPFAIL = "%s im Setup hat nicht gewechselt, versuche Problemsumgehung, bitte warte einige Sekunden",
 	WW_MSG_SWAPFAIL_DISABLED = "%s im Setup hat nicht gewechselt",
 	WW_MSG_SWAPSUCCESS = "Setup hat erfolgreich geladen",
-	WW_MSG_SWAP_FIX_FAIL = "Alle versuche haben fehlgeschlagen, bitte versuche die Rüstungen / Waffen manuell zu entfernen",
+	WW_MSG_SWAP_FIX_FAIL =
+	"Alle versuche haben fehlgeschlagen, bitte versuche die Rüstungen / Waffen manuell zu entfernen oder versuche das setup erneut zu speichern falls alles korrekt gewechslt wurde",
 	WW_MSG_BLOCK_WARN = "NICHT BLOCKEN!",
 
 	-- ADDON MENU

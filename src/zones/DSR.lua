@@ -1,33 +1,34 @@
 local WW = WizardsWardrobe
-WW.zones["DSR"] = {}
-local DSR = WW.zones["DSR"]
+WW.zones[ "DSR" ] = {}
+local DSR = WW.zones[ "DSR" ]
 
-DSR.name = GetString(WW_DSR_NAME)
+DSR.name = GetString( WW_DSR_NAME )
 DSR.tag = "DSR"
 DSR.icon = "/esoui/art/icons/u34_vtrial_meta.dds"
 DSR.priority = 11
 DSR.id = 1344
 DSR.node = 488
+DSR.category = WW.ACTIVITIES.TRIALS
 
 DSR.bosses = {
-	[1] = {
-		name = GetString(WW_TRASH),
+	[ 1 ] = {
+		name = GetString( WW_TRASH ),
 	},
-	[2] = {
-		displayName = GetString(WW_DSR_LYLANARTURLASSIL_DN),
-		name = GetString(WW_DSR_LYLANARTURLASSIL),
+	[ 2 ] = {
+		displayName = GetString( WW_DSR_LYLANARTURLASSIL_DN ),
+		name = GetString( WW_DSR_LYLANARTURLASSIL ),
 	},
-	[3] = {
-		name = GetString(WW_DSR_GUARDIAN),
+	[ 3 ] = {
+		name = GetString( WW_DSR_GUARDIAN ),
 	},
-	[4] = {
-		name = GetString(WW_DSR_TALERIA),
+	[ 4 ] = {
+		name = GetString( WW_DSR_TALERIA ),
 	},
-	[5] = {
-		name = GetString(WW_DSR_SAILRIPPER),
+	[ 5 ] = {
+		name = GetString( WW_DSR_SAILRIPPER ),
 	},
-	[6] = {
-		name = GetString(WW_DSR_BOWBREAKER),
+	[ 6 ] = {
+		name = GetString( WW_DSR_BOWBREAKER ),
 	},
 }
 
@@ -75,71 +76,61 @@ DSR.LOCATIONS = {
 }
 
 function DSR.Init()
-	EVENT_MANAGER:UnregisterForEvent(WW.name, EVENT_BOSSES_CHANGED)
-	EVENT_MANAGER:RegisterForUpdate(WW.name .. DSR.tag .. "MovementLoop", 2000, DSR.OnMovement)
-	EVENT_MANAGER:RegisterForEvent(WW.name .. DSR.tag, EVENT_PLAYER_COMBAT_STATE, DSR.OnCombatChange)
+	EVENT_MANAGER:UnregisterForEvent( WW.name, EVENT_BOSSES_CHANGED )
+	EVENT_MANAGER:RegisterForUpdate( WW.name .. DSR.tag .. "MovementLoop", 2000, DSR.OnMovement )
+	EVENT_MANAGER:RegisterForEvent( WW.name .. DSR.tag, EVENT_PLAYER_COMBAT_STATE, DSR.OnCombatChange )
 end
 
 function DSR.Reset()
-	EVENT_MANAGER:UnregisterForEvent(WW.name .. DSR.tag, EVENT_PLAYER_COMBAT_STATE)
-	EVENT_MANAGER:UnregisterForUpdate(WW.name .. DSR.tag .. "MovementLoop")
-	EVENT_MANAGER:RegisterForEvent(WW.name, EVENT_BOSSES_CHANGED, WW.OnBossChange)
+	EVENT_MANAGER:UnregisterForEvent( WW.name .. DSR.tag, EVENT_PLAYER_COMBAT_STATE )
+	EVENT_MANAGER:UnregisterForUpdate( WW.name .. DSR.tag .. "MovementLoop" )
+	EVENT_MANAGER:RegisterForEvent( WW.name, EVENT_BOSSES_CHANGED, WW.OnBossChange )
 end
 
-function DSR.OnCombatChange(_, inCombat)
+function DSR.OnCombatChange( _, inCombat )
 	if inCombat then
-		EVENT_MANAGER:UnregisterForUpdate(WW.name .. DSR.tag .. "MovementLoop")
+		EVENT_MANAGER:UnregisterForUpdate( WW.name .. DSR.tag .. "MovementLoop" )
 	else
-		EVENT_MANAGER:RegisterForUpdate(WW.name .. DSR.tag .. "MovementLoop", 2000, DSR.OnMovement)
+		EVENT_MANAGER:RegisterForUpdate( WW.name .. DSR.tag .. "MovementLoop", 2000, DSR.OnMovement )
 	end
 end
 
 function DSR.OnMovement()
 	local bossName = DSR.GetBossByLocation()
 	if not bossName then return end
-	WW.OnBossChange(_, true, bossName)
+	WW.OnBossChange( _, true, bossName )
 end
 
 function DSR.GetBossByLocation()
-	local zone, x, y, z = GetUnitWorldPosition("player")
-	
+	local zone, x, y, z = GetUnitWorldPosition( "player" )
+
 	if zone ~= DSR.id then return nil end
-	
+
 	if x > DSR.LOCATIONS.LYLANARTURLASSIL.x1 and x < DSR.LOCATIONS.LYLANARTURLASSIL.x2
 		and y > DSR.LOCATIONS.LYLANARTURLASSIL.y1 and y < DSR.LOCATIONS.LYLANARTURLASSIL.y2
 		and z > DSR.LOCATIONS.LYLANARTURLASSIL.z1 and z < DSR.LOCATIONS.LYLANARTURLASSIL.z2 then
-		
-		return GetString(WW_DSR_LYLANARTURLASSIL)
-		
+		return GetString( WW_DSR_LYLANARTURLASSIL )
 	elseif x > DSR.LOCATIONS.GUARDIAN.x1 and x < DSR.LOCATIONS.GUARDIAN.x2
 		and y > DSR.LOCATIONS.GUARDIAN.y1 and y < DSR.LOCATIONS.GUARDIAN.y2
 		and z > DSR.LOCATIONS.GUARDIAN.z1 and z < DSR.LOCATIONS.GUARDIAN.z2 then
-		
-		return GetString(WW_DSR_GUARDIAN)
-		
+		return GetString( WW_DSR_GUARDIAN )
 	elseif x > DSR.LOCATIONS.TALERIA.x1 and x < DSR.LOCATIONS.TALERIA.x2
 		and y > DSR.LOCATIONS.TALERIA.y1 and y < DSR.LOCATIONS.TALERIA.y2
 		and z > DSR.LOCATIONS.TALERIA.z1 and z < DSR.LOCATIONS.TALERIA.z2 then
-		
-		return GetString(WW_DSR_TALERIA)
-		
+		return GetString( WW_DSR_TALERIA )
 	elseif x > DSR.LOCATIONS.SAILRIPPER.x1 and x < DSR.LOCATIONS.SAILRIPPER.x2
 		and y > DSR.LOCATIONS.SAILRIPPER.y1 and y < DSR.LOCATIONS.SAILRIPPER.y2
 		and z > DSR.LOCATIONS.SAILRIPPER.z1 and z < DSR.LOCATIONS.SAILRIPPER.z2 then
-		
-		return GetString(WW_DSR_SAILRIPPER)
-		
+		return GetString( WW_DSR_SAILRIPPER )
 	elseif x > DSR.LOCATIONS.BOWBREAKER.x1 and x < DSR.LOCATIONS.BOWBREAKER.x2
 		and y > DSR.LOCATIONS.BOWBREAKER.y1 and y < DSR.LOCATIONS.BOWBREAKER.y2
 		and z > DSR.LOCATIONS.BOWBREAKER.z1 and z < DSR.LOCATIONS.BOWBREAKER.z2 then
-		
-		return GetString(WW_DSR_BOWBREAKER)
-		
+		return GetString( WW_DSR_BOWBREAKER )
 	else
-		return GetString(WW_TRASH)
+		return GetString( WW_TRASH )
 	end
 end
 
-function DSR.OnBossChange(bossName)
-	WW.conditions.OnBossChange(bossName)
+function DSR.OnBossChange( bossName )
+	WW.conditions.OnBossChange( bossName )
 end
