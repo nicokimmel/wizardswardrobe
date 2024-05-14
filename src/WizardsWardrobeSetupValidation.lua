@@ -146,6 +146,10 @@ function WWV.DidSetupSwapCorrectly( workAround )
                         else
                             success = false
                         end
+                    elseif WW.settings.unequipEmpty and equippedLink == "" then
+                        success = true
+                    elseif not WW.settings.unequipEmpty then
+                        success = true
                     else
                         failedT[ # failedT + 1 ] = GetString( "SI_EQUIPSLOT", equipSlot )
                         logger:Verbose( "Equipped %s // saved %s", equippedLink, savedLink )
@@ -214,31 +218,37 @@ function WWV.DidSetupSwapCorrectly( workAround )
                         equippedSkill = slotData.abilityId
                     else
                         if slotData == ZO_EMPTY_SLOTTABLE_ACTION then
-                            --[[ logger:Debug( "slotData.abilityId =" .. tostring( slotData.abilityId ) )
-                            if WW.settings.unequipEmpty then
-                                skillSuccess = true
-                            else
-                                if savedBaseId == 0 then
-                                    skillSuccess = true
-                                else
-                                    failedT[ # failedT + 1 ] = GetAbilityName( savedSkill )
-                                    skillSuccess = false
-                                end
-                            end ]]
+
                         else
                             equippedSkill = slotData:GetEffectiveAbilityId()
                         end
                     end
                 end
-                if equippedSkill ~= 0 and equippedSkill ~= 195031 then
+                local areSkillsEqual = WW.AreSkillsEqual( equippedSkill, savedSkill )
+                if areSkillsEqual then
+                    skillSuccess = true
+                else
+                    if WW.settings.unequipEmpty then
+                        if equippedSkill == 0 then
+                            skillSuccess = true
+                        else
+                            failedT[ # failedT + 1 ] = GetAbilityName( savedSkill )
+                            skillSuccess = false
+                            logger:Warn( "Skills did not swap correctly: %s // %s (empty skill)",
+                                GetAbilityName( equippedSkill ),
+                                GetAbilityName( savedSkill ) )
+                        end
+                    end
+                end
+                --[[   if equippedSkill ~= 0 and equippedSkill ~= 195031 then
                     equippedBaseId = WW.GetBaseAbilityId( equippedSkill )
                 end
                 if savedSkill ~= 195031 then
-                    equippedBaseId = WW.GetBaseAbilityId( equippedSkill )
-                end
+                    savedBaseId = WW.GetBaseAbilityId( savedSkill )
+                end ]]
 
-                logger:Verbose( "SavedBaseId = %d, name= %s, equippedBaseId = %d, name = %s", savedBaseId,
-                    GetAbilityName( savedBaseId ), equippedBaseId,
+                logger:Verbose( "SavedBaseId = %s, name= %s, equippedBaseId = %s, name = %s", tostring( savedBaseId ),
+                    GetAbilityName( savedBaseId ), tostring( equippedBaseId ),
                     GetAbilityName( equippedBaseId ) )
                 --[[ logger:Debug( "SavedSkill = %s, equippedSkill = %s", GetAbilityName( savedSkill ),
                     GetAbilityName( equippedSkill ) ) ]]
@@ -291,6 +301,11 @@ function WWV.DidSetupSwapCorrectly( workAround )
         else
             logger:Warn( "Skills did not swap correctly" )
         end
+    end
+    if check then
+        logger:Debug( "Gear swapped correctly" )
+    else
+        logger:Warn( "Gear did not swap correctly" )
     end
     if not isGearPresent then check = true end
     if not skillSuccess then check = false end
