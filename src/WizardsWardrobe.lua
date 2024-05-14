@@ -7,7 +7,7 @@ WW.name = "WizardsWardrobe"
 WW.simpleName = "Wizard's Wardrobe"
 WW.displayName =
 "|c18bed8W|c26c2d1i|c35c6c9z|c43cac2a|c52cebar|c60d1b3d|c6fd5ab'|c7dd9a4s|c8cdd9d |c9ae195W|ca8e58ea|cb7e986r|cc5ed7fd|cd4f077r|ce2f470o|cf1f868b|cfffc61e|r"
-WW.version = "1.18.0"
+WW.version = "1.18.1"
 WW.zones = {}
 WW.currentIndex = 0
 WW.IsHeavyAttacking = false
@@ -210,13 +210,12 @@ function WW.LoadSkills( setup )
 			end
 			if not WW.settings.unequipEmpty then
 				if (abilityId == 0 or abilityId == nil) then
-					logger:Info( "SlotSkill %d %d %d - no skill", hotbarCategory, slotIndex, abilityId )
+					logger:Debug( "SlotSkill %d %d %d - no skill", hotbarCategory, slotIndex, abilityId )
 					return false
-				else
-					logger:Warn( "SlotSkill %d %d %d", hotbarCategory, slotIndex, abilityId )
 				end
 			end
-			logger:Debug( "SlotSkill %d %d %d", hotbarCategory, slotIndex, abilityId )
+			logger:Debug( "SlotSkill %s %s %s (%s)", tostring( hotbarCategory ), tostring( slotIndex ), tostring( abilityId ),
+				GetAbilityName( abilityId ) )
 
 
 			skillTask:WaitUntil( function()
@@ -272,16 +271,17 @@ end
 
 function WW.SlotSkill( hotbarCategory, slotIndex, abilityId )
 	local hotbarData = ACTION_BAR_ASSIGNMENT_MANAGER:GetHotbar( hotbarCategory )
-	logger:Verbose( "SlotSkill %d %d %d", hotbarCategory, slotIndex, abilityId )
+	logger:Verbose( "SlotSkill %s %s %s (%s) ", tostring( hotbarCategory ), tostring( slotIndex ), tostring( abilityId ),
+		GetAbilityName( abilityId ) )
 	-- if using cryptcanon dont slot skill, since cryptcanon does it on its own
-	if not abilityId then return end
+	--if not abilityId then return end
 	if abilityId == 195031 then
 		return
 	end
 	if WW.HasCryptCanon() and slotIndex == 8 then
 		return
 	end
-	if WW.settings.unequipEmpty and abilityId == 0 then
+	if WW.settings.unequipEmpty and (abilityId == 0 or abilityId == nil) then
 		hotbarData:ClearSlot( slotIndex )
 		return
 	end
@@ -365,9 +365,10 @@ end
 local runningGearTasks = {}
 local gearMoveTask = async:Create( WW.name .. "GearMoveTask" )
 
-local function updateItemLocation( item )
+local function updateItemLocation( index, item )
+	local freeSlotMap = WW.GetFreeSlots( BAG_BACKPACK )
 	if not item.destSlot then
-		item.destSlot = FindFirstEmptySlotInBag( item.destBag )
+		item.destSlot = freeSlotMap[ index ]
 	end
 
 	if not item.sourceSlot or item.workaround then
@@ -383,6 +384,9 @@ local function moveItemToDestination( item )
 	if item.destBag == BAG_WORN then
 		EquipItem( item.sourceBag, item.sourceSlot, item.destSlot )
 	else
+		local isSlotEmpty = GetItemId( item.destBag, item.destSlot ) == 0
+		item.destSlot = isSlotEmpty and item.destSlot or FindFirstEmptySlotInBag( item.destBag )
+
 		CallSecureProtected( "RequestMoveItem", item.sourceBag, item.sourceSlot, item.destBag, item.destSlot, 1 )
 		if WW.IsMythic( item.sourceBag, item.sourceSlot ) then
 			gearMoveTask:Suspend()
@@ -437,11 +441,7 @@ function WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons )
 			TogglePlayerWield()
 		end
 	end ):WaitUntil( function()
-		logger:Info( "TimeStamp = %d, GetTimeStamp = %d, bool: %s", timeStamp, GetTimeStamp(),
-			tostring( GetTimeStamp() > (timeStamp + 5000) ) )
-
-
-		if GetTimeStamp() > timeStamp + 5000 and not ArePlayerWeaponsSheathed() then
+		if GetTimeStamp() > timeStamp + 5000 and not ArePlayerWeaponsSheathed() and isChangingWeapons then
 			TogglePlayerWield()
 		end
 		--? If the user is heavy attacking, the setup will not load, and the user will have to do it manually which is horrible but there is no way to fix it
@@ -449,8 +449,8 @@ function WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons )
 		--? The event is only a bandaid fix which isnt ideal but for now it works...........
 		--! the above check is only performed if it bugs out and nothing happened after 5 seconds
 		return ArePlayerWeaponsSheathed() or not isChangingWeapons
-	end ):For( ipairs( itemTaskList ) ):Do( function( _, item )
-		updateItemLocation( item )
+	end ):For( ipairs( itemTaskList ) ):Do( function( index, item )
+		updateItemLocation( index, item )
 
 		if not item.sourceSlot or not item.destSlot then return end
 
@@ -470,12 +470,15 @@ function WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons )
 		end ):WaitUntil( function()
 			return ArePlayerWeaponsSheathed() or not isChangingWeapons
 		end ):Then( function()
-			logger:Debug( "Trying to move %s from %d:%d to %d:%d (%s)",
+			logger:Debug( "Trying to move %s from %d:%d to %d:%d (%s) [%d]",
 				GetItemLink( item.sourceBag, item.sourceSlot, LINK_STYLE_DEFAULT ),
 				item.sourceBag, item.sourceSlot,
 				item.destBag,
-				item.destSlot, GetString( "SI_EQUIPSLOT", item.destSlot ) )
+				item.destSlot, GetString( "SI_EQUIPSLOT", item.sourceSlot ), #itemTaskList )
 			moveItemToDestination( item )
+			--[[ gearMoveTask:Delay( 500, function()
+				gearMoveTask:Resume()
+			end ) ]]
 		end )
 	end ):Then( function()
 		if not areAllItemsInInventory then
@@ -514,6 +517,7 @@ function WW.LoadGear( setup )
 		WW.Log( GetString( WW_MSG_FULLINV ), WW.LOGTYPES.INFO )
 	end
 	logger:Warn( "LoadGear " .. setup:GetName() )
+	local freeSlotMap = WW.GetFreeSlots( BAG_BACKPACK )
 	local itemTaskList = {}
 	local inventoryList = WW.GetItemLocation()
 	local areAllItemsInInventory = true
@@ -536,7 +540,7 @@ function WW.LoadGear( setup )
 		end
 	end
 
-	for _, gearSlot in ipairs( WW.GEARSLOTS ) do
+	for index, gearSlot in ipairs( WW.GEARSLOTS ) do
 		local gear = setup:GetGearInSlot( gearSlot )
 
 		if gear then
@@ -611,6 +615,7 @@ function WW.LoadGear( setup )
 	else
 		logger:Warn( "Not all items in inventory" )
 	end
+
 	WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons )
 	return true, areAllItemsInInventory, isChangingWeapons
 	--end

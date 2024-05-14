@@ -30,7 +30,7 @@ function WW.GetSlotBoundAbilityId( slotIndex, hotbarIndex )
 	local actionType = GetSlotType( slotIndex, hotbarIndex )
 
 	if actionType == ACTION_TYPE_CRAFTED_ABILITY then
-		slottedId = GetAbilityIdForCraftedAbilityId( id )
+		slottedId = GetAbilityIdForCraftedAbilityId( slottedId )
 	end
 
 	return slottedId
