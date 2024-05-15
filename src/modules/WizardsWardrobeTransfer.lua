@@ -40,7 +40,7 @@ function WWT.Export( zone, pageId, index )
 				and gearSlot ~= EQUIP_SLOT_BACKUP_POISON
 				and gearSlot ~= EQUIP_SLOT_COSTUME then
 				exportTable.gear[ tostring( gearSlot ) ] = {
-					GetItemLinkEquipType( savedGear.link ), -- equipType
+					GetItemLinkEquipType( savedGear.link ),  -- equipType
 					({ GetItemLinkSetInfo( savedGear.link, false ) })[ 6 ], -- setId
 					({ GetItemLinkTraitInfo( savedGear.link ) })[ 1 ], -- traitType
 				}
@@ -107,8 +107,12 @@ function WWT.Import( jsonText, zone, pageId, index )
 			end
 		end
 	end
-	if missing then WW.Log( GetString( WW_MSG_IMPORTGEARENOENT ), WW.LOGTYPES.ERROR ) else WW.Log( GetString(
-		WW_MSG_IMPORTSUCCESS ) ) end
+	if missing then
+		WW.Log( GetString( WW_MSG_IMPORTGEARENOENT ), WW.LOGTYPES.ERROR )
+	else
+		WW.Log( GetString(
+			WW_MSG_IMPORTSUCCESS ) )
+	end
 	setup:SetGear( gearTable )
 
 	-- cp
@@ -215,7 +219,7 @@ function WWT.CreateTransferDialog()
 	local window = WINDOW_MANAGER:CreateTopLevelWindow( "WizardsWardrobeTransfer" )
 	WWT.dialogWindow = window
 	window:SetDimensions( GuiRoot:GetWidth() + 8, GuiRoot:GetHeight() + 8 )
-	window:SetAnchor( CENTER, GUI_ROOT, CENTER, 0, 0 )
+	window:SetAnchor( CENTER, GuiRoot, CENTER, 0, 0 )
 	window:SetDrawTier( DT_HIGH )
 	window:SetClampedToScreen( false )
 	window:SetMouseEnabled( true )

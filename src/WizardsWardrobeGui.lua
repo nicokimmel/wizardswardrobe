@@ -44,7 +44,7 @@ function WWG.Init()
 	WWG.SetupArrangeDialog()
 
 	WWG.RegisterEvents()
-
+	WWG.tree:Initialize()
 	zo_callLater( function() WWG.OnWindowResize( "stop" ) end, 250 )
 end
 
@@ -72,30 +72,45 @@ function WWG.HandleFirstStart()
 		LINK_HANDLER:RegisterCallback( LINK_HANDLER.LINK_MOUSE_UP_EVENT, HandleClickEvent )
 		LINK_HANDLER:RegisterCallback( LINK_HANDLER.LINK_CLICKED_EVENT, HandleClickEvent )
 		zo_callLater( function()
-						  local urlLink = ZO_LinkHandler_CreateLink( "esoui.com", nil, WW.LINK_TYPES.URL, "esoui" )
-						  local pattern = string.format( "|c18bed8[|c65d3b0W|cb2e789W|cfffc61]|r |cFFFFFF%s|r",
-							  GetString( WW_MSG_FIRSTSTART ) )
-						  local output = string.format( pattern, "|r" .. urlLink .. "|cFFFFFF" )
-						  CHAT_ROUTER:AddSystemMessage( output )
-						  WW.settings.initialized = true
-					  end, 500 )
+			local urlLink = ZO_LinkHandler_CreateLink( "esoui.com", nil, WW.LINK_TYPES.URL, "esoui" )
+			local pattern = string.format( "|c18bed8[|c65d3b0W|cb2e789W|cfffc61]|r |cFFFFFF%s|r",
+				GetString( WW_MSG_FIRSTSTART ) )
+			local output = string.format( pattern, "|r" .. urlLink .. "|cFFFFFF" )
+			CHAT_ROUTER:AddSystemMessage( output )
+			WW.settings.initialized = true
+		end, 500 )
 
 		-- dont show changelogs if first time
 		WW.settings.changelogs[ "v1.8.0" ] = true
 		return
 	end
+	local function getMajorMinorVersion( version )
+		version = version:match( "[^%s]+" ):match( "%d+%.%d+" )
+		local major, minor = version:match( "^(%d+)%.(%d+)" )
+		return tonumber( major ), tonumber( minor )
+	end
+	-- only show warning if major or minor patches are updated, do not show it with fixes
+	local currentMajor, currentMinor = getMajorMinorVersion( WW.version )
 
-	if not WW.settings.changelogs[ "v1.8.0" ] then
-		EVENT_MANAGER:RegisterForUpdate( WWG.name .. "UpdateWarning", 1000, function()
-			if not WW.settings.changelogs[ "v1.8.0" ]
-				and not ZO_Dialogs_IsShowingDialog() then
-				WWG.ShowConfirmationDialog( WWG.name .. "UpdateWarning", GetString( WW_CHANGELOG ), function()
-					EVENT_MANAGER:UnregisterForUpdate( WWG.name .. "UpdateWarning" )
-					WW.settings.changelogs[ "v1.8.0" ] = true
-					RequestOpenUnsafeURL( "https://www.esoui.com/downloads/info3170-WizardsWardrobe.html" )
-				end )
-			end
-		end )
+	local highestMajor, highestMinor = 0, 0
+	for version, shown in pairs( WW.settings.changelogs ) do
+		local oldMajor, oldMinor = getMajorMinorVersion( version )
+		if oldMajor > highestMajor or (oldMajor == highestMajor and oldMinor > highestMinor) then
+			highestMajor, highestMinor = oldMajor, oldMinor
+		end
+	end
+	if not PlainStringFind( string.lower( WW.version ), "beta" ) then
+		if highestMajor < currentMajor or (highestMajor == currentMajor and highestMinor < currentMinor) then
+			EVENT_MANAGER:RegisterForUpdate( WWG.name .. "UpdateWarning", 1000, function()
+				if not ZO_Dialogs_IsShowingDialog() then
+					WWG.ShowConfirmationDialog( WWG.name .. "UpdateWarning", GetString( WW_CHANGELOG ), function()
+						EVENT_MANAGER:UnregisterForUpdate( WWG.name .. "UpdateWarning" )
+						WW.settings.changelogs[ WW.version ] = true
+						RequestOpenUnsafeURL( "https://www.esoui.com/downloads/info3170-WizardsWardrobe.html" )
+					end )
+				end
+			end )
+		end
 	end
 end
 
@@ -110,7 +125,8 @@ function WWG.SetSceneManagement()
 			if savedScene then
 				if not savedScene.hidden then
 					WizardsWardrobeWindow:ClearAnchors()
-					WizardsWardrobeWindow:SetAnchor( TOPLEFT, GUI_ROOT, TOPLEFT, savedScene.left, savedScene.top )
+					WizardsWardrobeWindow:SetAnchor( TOPLEFT, GuiRoot, TOPLEFT, savedScene.left, savedScene.top )
+					--WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 0, 1 )
 					WizardsWardrobeWindow:SetHidden( false )
 				end
 			end
@@ -120,6 +136,7 @@ function WWG.SetSceneManagement()
 		if newState == SCENE_HIDING then
 			local savedScene = WW.settings.window[ sceneName ]
 			if savedScene then
+				--WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 1, 0 )
 				WizardsWardrobeWindow:SetHidden( true )
 			end
 			if sceneName == "hud" or sceneName == "hudui" then
@@ -167,12 +184,14 @@ function WWG.SetSceneManagement()
 	CALLBACK_MANAGER:RegisterCallback( "LAM-PanelOpened", function( panel )
 		if panel:GetName() ~= "WizardsWardrobeMenu" then return end
 		WizardsWardrobeWindow:ClearAnchors()
-		WizardsWardrobeWindow:SetAnchor( CENTER, GUI_ROOT, RIGHT, -(WizardsWardrobeWindow:GetWidth() / 2 + 50), 0 )
+		WizardsWardrobeWindow:SetAnchor( CENTER, GuiRoot, RIGHT, -(WizardsWardrobeWindow:GetWidth() / 2 + 50), 0 )
+		--WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 0, 1 )
 		WizardsWardrobeWindow:SetHidden( false )
 		PlaySound( SOUNDS.DEFAULT_WINDOW_OPEN )
 	end )
 	CALLBACK_MANAGER:RegisterCallback( "LAM-PanelClosed", function( panel )
 		if panel:GetName() ~= "WizardsWardrobeMenu" then return end
+		--WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 1, 0 )
 		WizardsWardrobeWindow:SetHidden( true )
 	end )
 
@@ -180,6 +199,9 @@ function WWG.SetSceneManagement()
 		local scene = SCENE_MANAGER:GetCurrentScene()
 		local sceneName = scene:GetName()
 		if sceneName == "gameMenuInGame" then
+			local startAlpha = WizardsWardrobeWindow:IsHidden() and 0 or 1
+			local endAlpha = WizardsWardrobeWindow:IsHidden() and 1 or 0
+			--WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, startAlpha, endAlpha )
 			WizardsWardrobeWindow:SetHidden( not WizardsWardrobeWindow:IsHidden() )
 			return
 		end
@@ -191,13 +213,15 @@ function WWG.SetSceneManagement()
 			if savedScene.hidden then
 				-- open
 				WizardsWardrobeWindow:ClearAnchors()
-				WizardsWardrobeWindow:SetAnchor( TOPLEFT, GUI_ROOT, TOPLEFT, savedScene.left, savedScene.top )
+				WizardsWardrobeWindow:SetAnchor( TOPLEFT, GuiRoot, TOPLEFT, savedScene.left, savedScene.top )
+				--WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 0, 1 )
 				WizardsWardrobeWindow:SetHidden( false )
 				PlaySound( SOUNDS.DEFAULT_WINDOW_OPEN )
 				SCENE_MANAGER:SetInUIMode( true, false )
 				WW.settings.window[ sceneName ].hidden = false
 			else
 				-- close
+				--WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 1, 0 )
 				WizardsWardrobeWindow:SetHidden( true )
 				PlaySound( SOUNDS.DEFAULT_WINDOW_CLOSE )
 				WW.settings.window[ sceneName ].hidden = true
@@ -205,7 +229,8 @@ function WWG.SetSceneManagement()
 		else
 			-- open but new
 			WizardsWardrobeWindow:ClearAnchors()
-			WizardsWardrobeWindow:SetAnchor( CENTER, GUI_ROOT, CENTER, 0, 0 )
+			WizardsWardrobeWindow:SetAnchor( CENTER, GuiRoot, CENTER, 0, 0 )
+			--WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 0, 1 )
 			WizardsWardrobeWindow:SetHidden( false )
 			PlaySound( SOUNDS.DEFAULT_WINDOW_OPEN )
 			SCENE_MANAGER:SetInUIMode( true, false )
@@ -237,7 +262,7 @@ function WWG.ResetUI()
 		setup = true,
 	}
 	WizardsWardrobePanel:ClearAnchors()
-	WizardsWardrobePanel:SetAnchor( TOPLEFT, GUI_ROOT, TOPLEFT, PANEL_DEFAULT_LEFT, PANEL_DEFAULT_TOP )
+	WizardsWardrobePanel:SetAnchor( TOPLEFT, GuiRoot, TOPLEFT, PANEL_DEFAULT_LEFT, PANEL_DEFAULT_TOP )
 	WW.settings.window = {
 		wizard = {
 			width = WINDOW_WIDTH,
@@ -293,7 +318,7 @@ function WWG.SetupPanel()
 	end
 
 	if WW.settings.panel and WW.settings.panel.top and WW.settings.panel.setup then
-		WizardsWardrobePanel:SetAnchor( TOPLEFT, GUI_ROOT, TOPLEFT, WW.settings.panel.left, WW.settings.panel.top )
+		WizardsWardrobePanel:SetAnchor( TOPLEFT, GuiRoot, TOPLEFT, WW.settings.panel.left, WW.settings.panel.top )
 		WizardsWardrobePanel:SetMovable( not WW.settings.panel.locked )
 	else
 		WW.settings.panel = {
@@ -303,7 +328,7 @@ function WWG.SetupPanel()
 			hidden = false,
 			setup = true,
 		}
-		WizardsWardrobePanel:SetAnchor( TOPLEFT, GUI_ROOT, TOPLEFT, PANEL_DEFAULT_LEFT, PANEL_DEFAULT_TOP )
+		WizardsWardrobePanel:SetAnchor( TOPLEFT, GuiRoot, TOPLEFT, PANEL_DEFAULT_LEFT, PANEL_DEFAULT_TOP )
 	end
 end
 
@@ -353,7 +378,7 @@ function WWG.OnWindowResize( action )
 	local function OnResize()
 		local count = #WWG.setupTable
 		local height = WizardsWardrobeWindow:GetHeight() - TITLE_HEIGHT - TOP_MENU_HEIGHT - DIVIDER_HEIGHT - PAGE_MENU_HEIGHT -
-		DIVIDER_HEIGHT - BOTTOM_MENU_HEIGHT
+			DIVIDER_HEIGHT - BOTTOM_MENU_HEIGHT
 		local width = WizardsWardrobeWindow:GetWidth() - 6
 
 		local rows = zo_floor( width / SETUP_BOX_WIDTH )
@@ -380,8 +405,8 @@ function WWG.OnWindowResize( action )
 
 		WizardsWardrobeWindowTitle:SetWidth( width )
 		WizardsWardrobeWindowPageMenu:SetWidth( width )
-		WizardsWardrobeWindowSetupList:SetDimensions( width, height )
-		scrollBox:SetDimensionConstraints( width, height, AUTO_SIZE, AUTO_SIZE )
+		WizardsWardrobeWindowSetupList:SetDimensions( width, height - 20 )
+		scrollBox:SetDimensionConstraints( width, height, FLEX_ALIGNMENT_AUTO, FLEX_ALIGNMENT_AUTO )
 		WizardsWardrobeWindowBottomMenu:SetWidth( width )
 
 		WizardsWardrobeWindowTopDivider:SetWidth( width )
@@ -396,6 +421,8 @@ function WWG.OnWindowResize( action )
 
 		WW.settings.window.wizard.width = WizardsWardrobeWindow:GetWidth()
 		WW.settings.window.wizard.height = WizardsWardrobeWindow:GetHeight()
+		--	d( "WizardsWardrobeWindow resized to " .. WizardsWardrobeWindow:GetWidth() .. "x" .. WizardsWardrobeWindow:GetHeight() )
+		WizardsWardrobeWindowZone:SetHeight( WizardsWardrobeWindow:GetHeight() )
 	end
 
 	local identifier = WW.name .. "WindowResize"
@@ -413,12 +440,13 @@ function WWG.SetupTopMenu()
 	end )
 
 	local selection = GridComboBox:New( "$(parent)Selection", WizardsWardrobeWindow )
-	selection:SetAnchor( LEFT, WizardsWardrobeWindowTopMenu, LEFT, 16 )
+	selection:SetAnchor( TOP, WizardsWardrobeWindowTopMenuButtons, BOTTOM, 0, 5 )
 	selection:SetDimensions( 208, 16 )
 	selection:SetItemsPerRow( 4 )
 	selection:SetItemSize( 49 )
 	selection:SetItemSpacing( 4 )
 	selection:ClearItems()
+
 	for _, zone in ipairs( WWG.GetSortedZoneList() ) do
 		selection:AddItem( {
 			label = zone.name,
@@ -431,7 +459,7 @@ function WWG.SetupTopMenu()
 	end
 	WWG.zoneSelection = selection
 
-	WizardsWardrobeWindowTopMenuTeleportTrial:SetHandler( "OnClicked", function( self )
+	WizardsWardrobeWindowTopMenuButtonsTeleportTrial:SetHandler( "OnClicked", function( self )
 		local nodeId = WW.selection.zone.node
 		if nodeId < 0 then return end
 
@@ -458,18 +486,19 @@ function WWG.SetupTopMenu()
 		WW.Log( GetString( WW_MSG_TELEPORT_WAYSHRINE ), WW.LOGTYPES.NORMAL )
 		FastTravelToNode( nodeId )
 	end )
-	WWG.SetTooltip( WizardsWardrobeWindowTopMenuTeleportTrial, TOP, GetString( WW_BUTTON_TELEPORT ) )
+	WWG.SetTooltip( WizardsWardrobeWindowTopMenuButtonsTeleportTrial, TOP, GetString( WW_BUTTON_TELEPORT ) )
 
-	WizardsWardrobeWindowTopMenuTeleportHouse:SetHandler( "OnClicked", function( self )
+	WizardsWardrobeWindowTopMenuButtonsTeleportHouse:SetHandler( "OnClicked", function( self )
 		WW.Log( GetString( WW_MSG_TELEPORT_HOUSE ), WW.LOGTYPES.NORMAL )
 		RequestJumpToHouse( GetHousingPrimaryHouse() )
 	end )
-	WWG.SetTooltip( WizardsWardrobeWindowTopMenuTeleportHouse, TOP, GetString( WW_BUTTON_TELEPORT ) )
+	WWG.SetTooltip( WizardsWardrobeWindowTopMenuButtonsTeleportHouse, TOP, GetString( WW_BUTTON_TELEPORT ) )
 
-	WizardsWardrobeWindowTopMenuAddPage:SetHandler( "OnClicked", function( self )
-		WWG.CreatePage( WW.selection.zone )
+	WizardsWardrobeWindowTopMenuButtonsAddPage:SetHandler( "OnClicked", function( self )
+		local DO_REFRESH_TREE = true
+		WWG.CreatePage( WW.selection.zone, false, DO_REFRESH_TREE )
 	end )
-	WWG.SetTooltip( WizardsWardrobeWindowTopMenuAddPage, TOP, GetString( WW_BUTTON_ADDPAGE ) )
+	WWG.SetTooltip( WizardsWardrobeWindowTopMenuButtonsAddPage, TOP, GetString( WW_BUTTON_ADDPAGE ) )
 
 	local autoEquipTextures = {
 		[ true ] = "/esoui/art/crafting/smithing_tabicon_armorset_down.dds",
@@ -479,21 +508,24 @@ function WWG.SetupTopMenu()
 		[ true ] = GetString( WW_MSG_TOGGLEAUTOEQUIP_ON ),
 		[ false ] = GetString( WW_MSG_TOGGLEAUTOEQUIP_OFF )
 	}
-	WizardsWardrobeWindowTopMenuAutoEquip:SetHandler( "OnClicked", function( self )
+	WizardsWardrobeWindowTopMenuButtonsAutoEquip:SetHandler( "OnClicked", function( self )
 		WW.settings.autoEquipSetups = not WW.settings.autoEquipSetups
 		WW.storage.autoEquipSetups = WW.settings.autoEquipSetups
 		self:SetNormalTexture( autoEquipTextures[ WW.settings.autoEquipSetups ] )
-		WW.Log( GetString( WW_MSG_TOGGLEAUTOEQUIP ), WW.LOGTYPES.NORMAL, nil, autoEquipMessages[ WW.settings.autoEquipSetups ] )
+		WW.Log( GetString( WW_MSG_TOGGLEAUTOEQUIP ), WW.LOGTYPES.NORMAL, nil, autoEquipMessages
+			[ WW.settings.autoEquipSetups ] )
 	end )
-	WizardsWardrobeWindowTopMenuAutoEquip:SetNormalTexture( autoEquipTextures[ WW.settings.autoEquipSetups ] )
-	WWG.SetTooltip( WizardsWardrobeWindowTopMenuAutoEquip, TOP, GetString( WW_BUTTON_TOGGLEAUTOEQUIP ) )
+	WizardsWardrobeWindowTopMenuButtonsAutoEquip:SetNormalTexture( autoEquipTextures[ WW.settings.autoEquipSetups ] )
+	WWG.SetTooltip( WizardsWardrobeWindowTopMenuButtonsAutoEquip, TOP, GetString( WW_BUTTON_TOGGLEAUTOEQUIP ) )
+	selection:SetHidden( not WW.settings.legacyZoneSelection )
 end
 
 function WWG.OnZoneSelect( zone )
 	PlaySound( SOUNDS.TABLET_PAGE_TURN )
-
+	local node = WWG.tree.tree:GetTreeNodeByData( zone )
 	if not WW.pages[ zone.tag ] then
-		WWG.CreatePage( zone, true )
+		local DO_NOT_REFRESH_TREE = false
+		WWG.CreatePage( zone, true, DO_NOT_REFRESH_TREE )
 	end
 
 	WW.selection.zone = zone
@@ -510,16 +542,21 @@ function WWG.OnZoneSelect( zone )
 	if zone.tag == "GEN"
 		or zone.tag == "SUB"
 		or zone.tag == "PVP" then
-		WizardsWardrobeWindowTopMenuTeleportTrial:SetHidden( true )
-		WizardsWardrobeWindowTopMenuTeleportHouse:SetHidden( false )
+		WizardsWardrobeWindowTopMenuButtonsTeleportTrial:SetHidden( true )
+		WizardsWardrobeWindowTopMenuButtonsTeleportHouse:SetHidden( false )
 	else
-		WizardsWardrobeWindowTopMenuTeleportTrial:SetHidden( false )
-		WizardsWardrobeWindowTopMenuTeleportHouse:SetHidden( true )
+		WizardsWardrobeWindowTopMenuButtonsTeleportTrial:SetHidden( false )
+		WizardsWardrobeWindowTopMenuButtonsTeleportHouse:SetHidden( true )
 	end
 
-	WizardsWardrobeWindowTopMenuTeleportTrial:SetEnabled( not IsInAvAZone() )
-	WizardsWardrobeWindowTopMenuTeleportTrial:SetDesaturation( IsInAvAZone() and 1 or 0 )
-	WizardsWardrobeWindowTopMenuTeleportHouse:SetEnabled( not IsInAvAZone() )
+	WizardsWardrobeWindowTopMenuButtonsTeleportTrial:SetEnabled( not IsInAvAZone() )
+	WizardsWardrobeWindowTopMenuButtonsTeleportTrial:SetDesaturation( IsInAvAZone() and 1 or 0 )
+	WizardsWardrobeWindowTopMenuButtonsTeleportHouse:SetEnabled( not IsInAvAZone() )
+	--WizardsWardrobeWindowZone:SetHidden( true )
+	WizardsWardrobeWindowTopMenuButtonsZoneSelect:SetText( zone.name )
+	if node then
+		WWG.tree.tree:SelectNode( node )
+	end
 end
 
 function WWG.SetupPageMenu()
@@ -527,7 +564,8 @@ function WWG.SetupPageMenu()
 		if mouseButton == MOUSE_BUTTON_INDEX_LEFT then
 			local missingGear = WW.CheckGear( WW.selection.zone, WW.selection.pageId )
 			if #missingGear > 0 then
-				local missingGearText = string.format( GetString( WW_MISSING_GEAR_TT ), WWG.GearLinkTableToString( missingGear ) )
+				local missingGearText = string.format( GetString( WW_MISSING_GEAR_TT ),
+					WWG.GearLinkTableToString( missingGear ) )
 				WWG.SetTooltip( self, TOP, missingGearText )
 			else
 				self:SetHidden( true )
@@ -646,12 +684,30 @@ function WWG.CreateLabel( data )
 	label:SetFont( data.font )
 	label:SetText( data.text or "" )
 	label:SetAnchor( unpack( data.anchor ) )
-	label:SetDimensionConstraints( AUTO_SIZE, AUTO_SIZE, data.constraint or AUTO_SIZE,
-		data.oneline and label:GetFontHeight() or AUTO_SIZE )
+	label:SetDimensionConstraints( FLEX_ALIGNMENT_AUTO, FLEX_ALIGNMENT_AUTO, data.constraint or FLEX_ALIGNMENT_AUTO,
+		data.oneline and label:GetFontHeight() or FLEX_ALIGNMENT_AUTO )
 	label:SetHidden( data.hidden or false )
 	label:SetMouseEnabled( data.mouse or false )
 	if data.tooltip then WWG.SetTooltip( label, TOP, data.tooltip ) end
 	return label
+end
+
+function WWG.CreateHighlight( data )
+	local highlight = WINDOW_MANAGER:CreateControl( data.name, data.parent, CT_BACKDROP )
+	local OFFSET = 0
+
+	highlight:SetDimensions( data.width, data.height )
+	highlight:ClearAnchors()
+	highlight:SetAnchor( TOPLEFT, data.parent, TOPLEFT, -15, 10 )
+	highlight:SetAnchor( BOTTOMRIGHT, data.parent, BOTTOMRIGHT, 0, -5 )
+	highlight:SetDrawLayer( DL_OVERLAY )
+	highlight:SetDrawLevel( 28 )
+	highlight:SetCenterColor( 0, 0, 0, 0 )
+	highlight:SetCenterTexture( "/esoui/art/crafting/crafting_tooltip_glow_center.dds", 4, 4 )
+	highlight:SetEdgeTexture( "/esoui/art/crafting/crafting_tooltip_glow_edge.dds", 32, 4,
+		32 )
+	highlight:SetHidden( true )
+	return highlight
 end
 
 function WWG.CreateSetupPool()
@@ -660,7 +716,11 @@ function WWG.CreateSetupPool()
 	local function FactoryItem()
 		local setup = WINDOW_MANAGER:CreateControl( nil, scrollBox, CT_CONTROL )
 		setup:SetDimensions( SETUP_BOX_WIDTH, SETUP_BOX_HEIGHT )
-
+		setup.highlight = WWG.CreateHighlight( {
+			parent = setup,
+			width = SETUP_BOX_WIDTH,
+			height = SETUP_BOX_HEIGHT,
+		} )
 		setup.name = WWG.CreateLabel( {
 			parent = setup,
 			font = "ZoFontWinH4",
@@ -816,7 +876,8 @@ function WWG.AquireSetupControl( setup )
 	setupControl.name:SetHandler( "OnMouseUp", function( self, mouseButton )
 		if not MouseIsOver( self, 0, 0, 0, 0 ) then return end
 		if mouseButton == MOUSE_BUTTON_INDEX_LEFT then
-			WW.LoadSetupCurrent( index, false )
+			local DO_NOT_SKIP_VALIDATION = false
+			WW.LoadSetupCurrent( index, false, DO_NOT_SKIP_VALIDATION )
 		end
 	end )
 
@@ -884,11 +945,18 @@ function WWG.AquireSetupControl( setup )
 					-- Prevent ult on normal slot and vice versa
 					return
 				end
-
-				if progression:IsChainingAbility() then
-					abilityId = GetEffectiveAbilityIdForAbilityOnHotbar( abilityId, hotbarCategory )
+				local apiVersion = GetAPIVersion()
+				if apiVersion >= 101042 then
+					if not progression:GetSkillData():IsCraftedAbility() then
+						if progression:IsChainingAbility() then
+							abilityId = GetEffectiveAbilityIdForAbilityOnHotbar( abilityId, hotbarCategory )
+						end
+					end
+				else
+					if progression:IsChainingAbility() then
+						abilityId = GetEffectiveAbilityIdForAbilityOnHotbar( abilityId, hotbarCategory )
+					end
 				end
-
 				ClearCursor()
 
 				setup = Setup:FromStorage( WW.selection.zone.tag, WW.selection.pageId, index )
@@ -1131,6 +1199,7 @@ function WWG.CreateSetup()
 	setup:ToStorage( tag, pageId, index )
 
 	local control = WWG.AquireSetupControl( setup )
+
 	WWG.RefreshSetup( control, setup )
 	WWG.OnWindowResize( "stop" )
 end
@@ -1152,6 +1221,9 @@ function WWG.BuildPage( zone, pageId, scroll )
 	for entry in WW.PageIterator( zone, pageId ) do
 		local setup = Setup:FromStorage( zone.tag, pageId, entry.index )
 		local control = WWG.AquireSetupControl( setup )
+		if control.highlight then
+			control.highlight:SetHidden( true )
+		end
 	end
 	if zone.tag == "SUB" and #WWG.setupTable == 0 then
 		WWG.CreateDefaultSetups( zone, pageId )
@@ -1166,7 +1238,7 @@ function WWG.BuildPage( zone, pageId, scroll )
 	end
 end
 
-function WWG.CreatePage( zone, skipBuilding )
+function WWG.CreatePage( zone, skipBuilding, refreshTree )
 	if not WW.pages[ zone.tag ] then
 		WW.pages[ zone.tag ] = {}
 		WW.pages[ zone.tag ][ 0 ] = {}
@@ -1185,6 +1257,9 @@ function WWG.CreatePage( zone, skipBuilding )
 
 	if not skipBuilding then
 		WWG.BuildPage( zone, nextPageId, true )
+	end
+	if refreshTree then
+		WW.gui.tree:RefreshTree( WW.gui.tree.tree )
 	end
 
 	return nextPageId
@@ -1205,8 +1280,8 @@ end
 function WWG.DuplicatePage()
 	local zone = WW.selection.zone
 	local pageId = WW.selection.pageId
-
-	local cloneId = WWG.CreatePage( zone, true )
+	local DO_REFRESH_TREE = true
+	local cloneId = WWG.CreatePage( zone, true, DO_REFRESH_TREE )
 
 	local pageName = WW.pages[ zone.tag ][ pageId ].name
 	WW.pages[ zone.tag ][ cloneId ].name = string.format( GetString( WW_DUPLICATE_NAME ), pageName )
@@ -1248,18 +1323,18 @@ function WWG.RenamePage()
 
 	local initialText = WW.pages[ zone.tag ][ pageId ].name
 	WWG.ShowEditDialog( "PageNameEdit", GetString( WW_RENAME_PAGE ), initialText,
-						function( input )
-							if not input then
-								return
-							end
-							if input == "" then
-								WW.pages[ zone.tag ][ pageId ].name = GetString( WW_UNNAMED )
-							else
-								WW.pages[ zone.tag ][ pageId ].name = input
-							end
-							local pageName = WW.pages[ zone.tag ][ pageId ].name
-							WizardsWardrobeWindowPageMenuLabel:SetText( pageName:upper() )
-						end )
+		function( input )
+			if not input then
+				return
+			end
+			if input == "" then
+				WW.pages[ zone.tag ][ pageId ].name = GetString( WW_UNNAMED )
+			else
+				WW.pages[ zone.tag ][ pageId ].name = input
+			end
+			local pageName = WW.pages[ zone.tag ][ pageId ].name
+			WizardsWardrobeWindowPageMenuLabel:SetText( pageName:upper() )
+		end )
 end
 
 function WWG.PageLeft()
@@ -1295,10 +1370,17 @@ function WWG.RefreshPage()
 	local pageName = WW.pages[ zone.tag ][ pageId ].name
 	WizardsWardrobeWindowPageMenuLabel:SetText( pageName:upper() )
 
-	if pageId == 1 then WizardsWardrobeWindowPageMenuLeft:SetEnabled( false ) else WizardsWardrobeWindowPageMenuLeft
-			:SetEnabled( true ) end
-	if pageId == #WW.pages[ zone.tag ] then WizardsWardrobeWindowPageMenuRight:SetEnabled( false ) else
-		WizardsWardrobeWindowPageMenuRight:SetEnabled( true ) end
+	if pageId == 1 then
+		WizardsWardrobeWindowPageMenuLeft:SetEnabled( false )
+	else
+		WizardsWardrobeWindowPageMenuLeft
+			:SetEnabled( true )
+	end
+	if pageId == #WW.pages[ zone.tag ] then
+		WizardsWardrobeWindowPageMenuRight:SetEnabled( false )
+	else
+		WizardsWardrobeWindowPageMenuRight:SetEnabled( true )
+	end
 
 	local missingGear = WW.CheckGear( zone, pageId )
 	if #missingGear > 0 then
@@ -1392,15 +1474,15 @@ function WWG.ShowPageContextMenu( control )
 
 	local deleteColor = #WW.pages[ zone.tag ] > 1 and ZO_ColorDef:New( 1, 0, 0, 1 ) or ZO_ColorDef:New( 0.35, 0.35, 0.35, 1 )
 	AddMenuItem( GetString( WW_DELETE ):upper(), function()
-					 if #WW.pages[ zone.tag ] > 1 then
-						 local pageName = WW.pages[ zone.tag ][ pageId ].name
-						 WWG.ShowConfirmationDialog( "DeletePageConfirmation",
-													 string.format( GetString( WW_DELETEPAGE_WARNING ), pageName ),
-													 function()
-														 WWG.DeletePage()
-													 end )
-					 end
-				 end, MENU_ADD_OPTION_LABEL, "ZoFontGameBold", deleteColor, deleteColor )
+		if #WW.pages[ zone.tag ] > 1 then
+			local pageName = WW.pages[ zone.tag ][ pageId ].name
+			WWG.ShowConfirmationDialog( "DeletePageConfirmation",
+				string.format( GetString( WW_DELETEPAGE_WARNING ), pageName ),
+				function()
+					WWG.DeletePage()
+				end )
+		end
+	end, MENU_ADD_OPTION_LABEL, "ZoFontGameBold", deleteColor, deleteColor )
 
 	-- lets fix some ZOS bugs(?)
 	if control:GetWidth() >= ZO_Menu.width then
@@ -1420,8 +1502,8 @@ function WWG.ShowSetupContextMenu( control, index )
 
 	-- LINK TO CHAT
 	AddMenuItem( GetString( SI_ITEM_ACTION_LINK_TO_CHAT ), function()
-					 WW.preview.PrintPreviewString( zone, pageId, index )
-				 end, MENU_ADD_OPTION_LABEL )
+		WW.preview.PrintPreviewString( zone, pageId, index )
+	end, MENU_ADD_OPTION_LABEL )
 
 	-- CUSTOM CODE
 	AddMenuItem( GetString( WW_CUSTOMCODE ), function() WW.code.ShowCodeDialog( zone, pageId, index ) end,
@@ -1442,13 +1524,13 @@ function WWG.ShowSetupContextMenu( control, index )
 
 	-- DELETE
 	AddMenuItem( GetString( WW_DELETE ):upper(), function()
-					 PlaySound( SOUNDS.DEFER_NOTIFICATION )
-					 if WW.selection.zone.tag == "SUB" then
-						 WW.ClearSetup( zone, pageId, index )
-					 else
-						 WW.DeleteSetup( zone, pageId, index )
-					 end
-				 end, MENU_ADD_OPTION_LABEL, "ZoFontGameBold", ZO_ColorDef:New( 1, 0, 0, 1 ), ZO_ColorDef:New( 1, 0, 0, 1 ) )
+		PlaySound( SOUNDS.DEFER_NOTIFICATION )
+		if WW.selection.zone.tag == "SUB" then
+			WW.ClearSetup( zone, pageId, index )
+		else
+			WW.DeleteSetup( zone, pageId, index )
+		end
+	end, MENU_ADD_OPTION_LABEL, "ZoFontGameBold", ZO_ColorDef:New( 1, 0, 0, 1 ), ZO_ColorDef:New( 1, 0, 0, 1 ) )
 
 	-- lets fix some ZOS bugs(?)
 	if control:GetWidth() >= ZO_Menu.width then
@@ -1523,7 +1605,7 @@ function WWG.ShowModifyDialog( setupControl, index )
 			function() OnBossCombo( WW.CONDITIONS.NONE ) end ) )
 		local bossId = zone.lookupBosses[ condition.boss ]
 		local selectedBoss = bossId and (zone.bosses[ bossId ].displayName or zone.bosses[ bossId ].name) or
-		GetString( WW_CONDITION_NONE )
+			GetString( WW_CONDITION_NONE )
 		bossCombo:SetSelectedItemText( selectedBoss )
 		OnBossCombo( condition.boss or WW.CONDITIONS.NONE )
 
@@ -1534,7 +1616,7 @@ function WWG.ShowModifyDialog( setupControl, index )
 			function() OnTrashCombo( WW.CONDITIONS.EVERYWHERE ) end ) )
 		local trashId = zone.lookupBosses[ condition.trash ]
 		local selectedTrash = trashId and (zone.bosses[ trashId ].displayName or zone.bosses[ trashId ].name) or
-		GetString( WW_CONDITION_EVERYWHERE )
+			GetString( WW_CONDITION_EVERYWHERE )
 		trashCombo:SetSelectedItemText( selectedTrash )
 		OnTrashCombo( condition.trash or WW.CONDITIONS.EVERYWHERE )
 
@@ -1672,4 +1754,60 @@ function WWG.RearrangeSetups( sortTable, zone, pageId )
 	end
 	WWG.BuildPage( zone, pageId, true )
 	WizardsWardrobeArrange:SetHidden( true )
+end
+
+function WWG.AddZoneToFavorites( data )
+	local tree = WW.gui.tree.tree
+	local node = tree:GetTreeNodeByData( data )
+	if not WW.settings.zoneFavorites then
+		WW.settings.zoneFavorites = {}
+	end
+	table.insert( WW.settings.zoneFavorites, data.id )
+	WWG.tree:RefreshTree( tree, data )
+end
+
+function WWG.RemoveZoneFromFavorites( data )
+	if not WW.settings.zoneFavorites then return end
+	local tree = WW.gui.tree.tree
+	local node = tree:GetTreeNodeByData( data )
+	for i, id in ipairs( WW.settings.zoneFavorites ) do
+		if id == data.id then
+			table.remove( WW.settings.zoneFavorites, i )
+			break
+		end
+	end
+	WWG.tree:RefreshTree( tree, data )
+end
+
+function WWG.IsZoneFavorite( data )
+	if not WW.settings.zoneFavorites then return false end
+	for _, id in ipairs( WW.settings.zoneFavorites ) do
+		if id == data.id then
+			return true
+		end
+	end
+	return false
+end
+
+function WWG.StartAlphaAnimation( control, duration, startAlpha, endAlpha )
+	if not control.animation then
+		control.animation = {}
+		control.animation.timeline = ANIMATION_MANAGER:CreateTimelineFromVirtual( "WW_AlphaTimeline", control )
+		control.animation.animation = control.animation.timeline:GetFirstAnimationOfType( ANIMATION_ALPHA )
+	end
+	local timeline = control.animation.timeline
+	local animation = control.animation.animation
+	if timeline:IsPlaying() then
+		timeline:Stop()
+	end
+	animation:SetAlphaValues( startAlpha, endAlpha )
+	animation:SetDuration( duration )
+	timeline:SetPlaybackType( ANIMATION_PLAYBACK_ONE_SHOT )
+	local currentAlpha = control:GetAlpha()
+	if currentAlpha ~= endAlpha then
+		if currentAlpha == 0 then control:SetHidden( false ) end
+		if endAlpha == 0 then zo_callLater( function() control:SetHidden( true ) end, duration ) end
+		timeline:PlayFromStart()
+	end
+	return animation, timeline
 end

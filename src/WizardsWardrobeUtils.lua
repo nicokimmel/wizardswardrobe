@@ -25,10 +25,21 @@ function WW.ChangeItemLinkStyle( itemLink, linkStyle )
 	return string.format( "%s%d%s", itemLink:sub( 1, 2 ), linkStyle, itemLink:sub( 4 ) )
 end
 
+function WW.GetSlotBoundAbilityId( slotIndex, hotbarIndex )
+	local slottedId = GetSlotBoundId( slotIndex, hotbarIndex )
+	local actionType = GetSlotType( slotIndex, hotbarIndex )
+
+	if actionType == ACTION_TYPE_CRAFTED_ABILITY then
+		slottedId = GetAbilityIdForCraftedAbilityId( slottedId )
+	end
+
+	return slottedId
+end
+
 function WW.CompareCP( setup )
 	for slotIndex = 1, 12 do
 		local savedSkillId = setup:GetCP()[ slotIndex ]
-		local selectedSkilId = GetSlotBoundId( slotIndex, HOTBAR_CATEGORY_CHAMPION )
+		local selectedSkilId = WW.GetSlotBoundAbilityId( slotIndex, HOTBAR_CATEGORY_CHAMPION )
 		if not savedSkillId or savedSkillId ~= selectedSkilId then
 			return false
 		end
@@ -99,6 +110,24 @@ function WW.IsWipe()
 end
 
 function WW.Log( logMessage, logType, formatColor, ... )
+	if logType and logType == WW.LOGTYPES.CRITICAL then
+		if not formatColor then formatColor = "FF0000" end
+		logMessage = string.format( logMessage, ... )
+		logMessage = string.gsub( logMessage, "%[", "|c" .. formatColor .. "[" )
+		logMessage = string.gsub( logMessage, "%]", "]|c" .. logType )
+		logMessage = string.format( "|c18bed8[|c65d3b0W|cb2e789W|cfffc61]|r|c%s %s|r", logType, logMessage )
+		local sound = SOUNDS.GENERAL_ALERT_ERROR
+
+		local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams( CSA_CATEGORY_MAJOR_TEXT,
+			sound )
+		messageParams:SetText( "CRITICAL ERROR", logMessage )
+		messageParams:SetLifespanMS( 10000 )
+		messageParams:SetCSAType( CENTER_SCREEN_ANNOUNCE_TYPE_BATTLEGROUND_NEARING_VICTORY )
+		CENTER_SCREEN_ANNOUNCE:AddMessageWithParams( messageParams )
+		CHAT_ROUTER:AddSystemMessage( logMessage )
+		return
+	end
+
 	if WW.settings.printMessages == "chat" or WW.settings.printMessages == "alert" or WW.settings.printMessages == "announcement" then
 		if not logType then logType = WW.LOGTYPES.NORMAL end
 		if not formatColor then formatColor = "FFFFFF" end
@@ -114,11 +143,13 @@ function WW.Log( logMessage, logType, formatColor, ... )
 			if logType == WW.LOGTYPES.ERROR then
 				sound = SOUNDS.GENERAL_ALERT_ERROR
 			end
-			local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams( CSA_CATEGORY_MAJOR_TEXT,
-																			  sound )
+			local messageParams = CENTER_SCREEN_ANNOUNCE:CreateMessageParams( CSA_CATEGORY_SMALL_TEXT,
+				sound )
 			messageParams:SetText( logMessage )
-			messageParams:SetCSAType( CENTER_SCREEN_ANNOUNCE_TYPE_BATTLEGROUND_NEARING_VICTORY )
+			--messageParams:SetLifespanMS( 1500 )
+			messageParams:SetCSAType( CENTER_SCREEN_ANNOUNCE_TYPE_AVENGE_KILL )
 			CENTER_SCREEN_ANNOUNCE:AddMessageWithParams( messageParams )
+			return
 		else
 			CHAT_ROUTER:AddSystemMessage( logMessage )
 		end
@@ -281,4 +312,23 @@ function WWG.ShowEditDialog( name, dialogText, initialText, confirmCallback, can
 		setup = function() end,
 	}
 	ZO_Dialogs_ShowDialog( uniqueId, nil, { mainTextParams = {}, initialEditText = initialText } )
+end
+
+function WW.SetPanelText( text, color, warningReason )
+	local warningIcon = ""
+	local startWarning = ""
+	if warningReason then
+		startWarning = "|t100%:100%:/esoui/art/miscellaneous/eso_icon_warning.dds:inheritcolor|t"
+		if warningReason == WW.WARNING.INVENTORY then
+			warningIcon = "|t100%:100%:/esoui/art/inventory/gamepad/gp_inventory_icon_all.dds:inheritcolor|t"
+		elseif warningReason == WW.WARNING.FOOD then
+			warningIcon = "|t100%:100%:/esoui/art/crafting/provisioner_indexicon_meat_disabled.dds:inheritcolor|t"
+		elseif warningReason == WW.WARNING.CP then
+			warningIcon = "|t100%:100%:/esoui/art/champion/champion_icon.dds:inheritcolor|t"
+		end
+	end
+	local middleText = string.format( "|c%s%s %s %s|r", color, startWarning,
+		text, warningIcon )
+
+	WizardsWardrobePanelBottomLabel:SetText( middleText )
 end
