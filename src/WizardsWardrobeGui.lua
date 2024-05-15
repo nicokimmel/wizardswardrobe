@@ -126,7 +126,8 @@ function WWG.SetSceneManagement()
 				if not savedScene.hidden then
 					WizardsWardrobeWindow:ClearAnchors()
 					WizardsWardrobeWindow:SetAnchor( TOPLEFT, GuiRoot, TOPLEFT, savedScene.left, savedScene.top )
-					WizardsWardrobeWindow:SetHidden( false )
+					WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 0, 1 )
+					--WizardsWardrobeWindow:SetHidden( false )
 				end
 			end
 		end
@@ -135,7 +136,8 @@ function WWG.SetSceneManagement()
 		if newState == SCENE_HIDING then
 			local savedScene = WW.settings.window[ sceneName ]
 			if savedScene then
-				WizardsWardrobeWindow:SetHidden( true )
+				WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 1, 0 )
+				--WizardsWardrobeWindow:SetHidden( true )
 			end
 			if sceneName == "hud" or sceneName == "hudui" then
 				if not WW.settings.window[ sceneName ] then
@@ -183,19 +185,24 @@ function WWG.SetSceneManagement()
 		if panel:GetName() ~= "WizardsWardrobeMenu" then return end
 		WizardsWardrobeWindow:ClearAnchors()
 		WizardsWardrobeWindow:SetAnchor( CENTER, GuiRoot, RIGHT, -(WizardsWardrobeWindow:GetWidth() / 2 + 50), 0 )
-		WizardsWardrobeWindow:SetHidden( false )
+		WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 0, 1 )
+		--WizardsWardrobeWindow:SetHidden( false )
 		PlaySound( SOUNDS.DEFAULT_WINDOW_OPEN )
 	end )
 	CALLBACK_MANAGER:RegisterCallback( "LAM-PanelClosed", function( panel )
 		if panel:GetName() ~= "WizardsWardrobeMenu" then return end
-		WizardsWardrobeWindow:SetHidden( true )
+		WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 1, 0 )
+		--WizardsWardrobeWindow:SetHidden( true )
 	end )
 
 	SLASH_COMMANDS[ "/wizard" ] = function()
 		local scene = SCENE_MANAGER:GetCurrentScene()
 		local sceneName = scene:GetName()
 		if sceneName == "gameMenuInGame" then
-			WizardsWardrobeWindow:SetHidden( not WizardsWardrobeWindow:IsHidden() )
+			local startAlpha = WizardsWardrobeWindow:IsHidden() and 0 or 1
+			local endAlpha = WizardsWardrobeWindow:IsHidden() and 1 or 0
+			WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, startAlpha, endAlpha )
+			--WizardsWardrobeWindow:SetHidden( not WizardsWardrobeWindow:IsHidden() )
 			return
 		end
 		if sceneName == "inventory" and KEYBOARD_QUICKSLOT_FRAGMENT:IsShowing() then
@@ -207,13 +214,15 @@ function WWG.SetSceneManagement()
 				-- open
 				WizardsWardrobeWindow:ClearAnchors()
 				WizardsWardrobeWindow:SetAnchor( TOPLEFT, GuiRoot, TOPLEFT, savedScene.left, savedScene.top )
-				WizardsWardrobeWindow:SetHidden( false )
+				WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 0, 1 )
+				--WizardsWardrobeWindow:SetHidden( false )
 				PlaySound( SOUNDS.DEFAULT_WINDOW_OPEN )
 				SCENE_MANAGER:SetInUIMode( true, false )
 				WW.settings.window[ sceneName ].hidden = false
 			else
 				-- close
-				WizardsWardrobeWindow:SetHidden( true )
+				WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 1, 0 )
+				--WizardsWardrobeWindow:SetHidden( true )
 				PlaySound( SOUNDS.DEFAULT_WINDOW_CLOSE )
 				WW.settings.window[ sceneName ].hidden = true
 			end
@@ -221,7 +230,8 @@ function WWG.SetSceneManagement()
 			-- open but new
 			WizardsWardrobeWindow:ClearAnchors()
 			WizardsWardrobeWindow:SetAnchor( CENTER, GuiRoot, CENTER, 0, 0 )
-			WizardsWardrobeWindow:SetHidden( false )
+			WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 0, 1 )
+			--WizardsWardrobeWindow:SetHidden( false )
 			PlaySound( SOUNDS.DEFAULT_WINDOW_OPEN )
 			SCENE_MANAGER:SetInUIMode( true, false )
 			WW.settings.window[ sceneName ] = {
@@ -1744,4 +1754,60 @@ function WWG.RearrangeSetups( sortTable, zone, pageId )
 	end
 	WWG.BuildPage( zone, pageId, true )
 	WizardsWardrobeArrange:SetHidden( true )
+end
+
+function WWG.AddZoneToFavorites( data )
+	local tree = WW.gui.tree.tree
+	local node = tree:GetTreeNodeByData( data )
+	if not WW.settings.zoneFavorites then
+		WW.settings.zoneFavorites = {}
+	end
+	table.insert( WW.settings.zoneFavorites, data.id )
+	WWG.tree:RefreshTree( tree, data )
+end
+
+function WWG.RemoveZoneFromFavorites( data )
+	if not WW.settings.zoneFavorites then return end
+	local tree = WW.gui.tree.tree
+	local node = tree:GetTreeNodeByData( data )
+	for i, id in ipairs( WW.settings.zoneFavorites ) do
+		if id == data.id then
+			table.remove( WW.settings.zoneFavorites, i )
+			break
+		end
+	end
+	WWG.tree:RefreshTree( tree, data )
+end
+
+function WWG.IsZoneFavorite( data )
+	if not WW.settings.zoneFavorites then return false end
+	for _, id in ipairs( WW.settings.zoneFavorites ) do
+		if id == data.id then
+			return true
+		end
+	end
+	return false
+end
+
+function WWG.StartAlphaAnimation( control, duration, startAlpha, endAlpha )
+	if not control.animation then
+		control.animation = {}
+		control.animation.timeline = ANIMATION_MANAGER:CreateTimelineFromVirtual( "WW_AlphaTimeline", control )
+		control.animation.animation = control.animation.timeline:GetFirstAnimationOfType( ANIMATION_ALPHA )
+	end
+	local timeline = control.animation.timeline
+	local animation = control.animation.animation
+	if timeline:IsPlaying() then
+		timeline:Stop()
+	end
+	animation:SetAlphaValues( startAlpha, endAlpha )
+	animation:SetDuration( duration )
+	timeline:SetPlaybackType( ANIMATION_PLAYBACK_ONE_SHOT )
+	local currentAlpha = control:GetAlpha()
+	if currentAlpha ~= endAlpha then
+		if currentAlpha == 0 then control:SetHidden( false ) end
+		if endAlpha == 0 then zo_callLater( function() control:SetHidden( true ) end, duration ) end
+		timeline:PlayFromStart()
+	end
+	return animation, timeline
 end
