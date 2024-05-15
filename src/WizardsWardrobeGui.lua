@@ -126,8 +126,8 @@ function WWG.SetSceneManagement()
 				if not savedScene.hidden then
 					WizardsWardrobeWindow:ClearAnchors()
 					WizardsWardrobeWindow:SetAnchor( TOPLEFT, GuiRoot, TOPLEFT, savedScene.left, savedScene.top )
-					WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 0, 1 )
-					--WizardsWardrobeWindow:SetHidden( false )
+					--WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 0, 1 )
+					WizardsWardrobeWindow:SetHidden( false )
 				end
 			end
 		end
@@ -136,8 +136,8 @@ function WWG.SetSceneManagement()
 		if newState == SCENE_HIDING then
 			local savedScene = WW.settings.window[ sceneName ]
 			if savedScene then
-				WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 1, 0 )
-				--WizardsWardrobeWindow:SetHidden( true )
+				--WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 1, 0 )
+				WizardsWardrobeWindow:SetHidden( true )
 			end
 			if sceneName == "hud" or sceneName == "hudui" then
 				if not WW.settings.window[ sceneName ] then
@@ -185,14 +185,14 @@ function WWG.SetSceneManagement()
 		if panel:GetName() ~= "WizardsWardrobeMenu" then return end
 		WizardsWardrobeWindow:ClearAnchors()
 		WizardsWardrobeWindow:SetAnchor( CENTER, GuiRoot, RIGHT, -(WizardsWardrobeWindow:GetWidth() / 2 + 50), 0 )
-		WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 0, 1 )
-		--WizardsWardrobeWindow:SetHidden( false )
+		--WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 0, 1 )
+		WizardsWardrobeWindow:SetHidden( false )
 		PlaySound( SOUNDS.DEFAULT_WINDOW_OPEN )
 	end )
 	CALLBACK_MANAGER:RegisterCallback( "LAM-PanelClosed", function( panel )
 		if panel:GetName() ~= "WizardsWardrobeMenu" then return end
-		WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 1, 0 )
-		--WizardsWardrobeWindow:SetHidden( true )
+		--WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 1, 0 )
+		WizardsWardrobeWindow:SetHidden( true )
 	end )
 
 	SLASH_COMMANDS[ "/wizard" ] = function()
@@ -201,8 +201,8 @@ function WWG.SetSceneManagement()
 		if sceneName == "gameMenuInGame" then
 			local startAlpha = WizardsWardrobeWindow:IsHidden() and 0 or 1
 			local endAlpha = WizardsWardrobeWindow:IsHidden() and 1 or 0
-			WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, startAlpha, endAlpha )
-			--WizardsWardrobeWindow:SetHidden( not WizardsWardrobeWindow:IsHidden() )
+			--WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, startAlpha, endAlpha )
+			WizardsWardrobeWindow:SetHidden( not WizardsWardrobeWindow:IsHidden() )
 			return
 		end
 		if sceneName == "inventory" and KEYBOARD_QUICKSLOT_FRAGMENT:IsShowing() then
@@ -214,15 +214,15 @@ function WWG.SetSceneManagement()
 				-- open
 				WizardsWardrobeWindow:ClearAnchors()
 				WizardsWardrobeWindow:SetAnchor( TOPLEFT, GuiRoot, TOPLEFT, savedScene.left, savedScene.top )
-				WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 0, 1 )
-				--WizardsWardrobeWindow:SetHidden( false )
+				--WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 0, 1 )
+				WizardsWardrobeWindow:SetHidden( false )
 				PlaySound( SOUNDS.DEFAULT_WINDOW_OPEN )
 				SCENE_MANAGER:SetInUIMode( true, false )
 				WW.settings.window[ sceneName ].hidden = false
 			else
 				-- close
-				WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 1, 0 )
-				--WizardsWardrobeWindow:SetHidden( true )
+				--WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 1, 0 )
+				WizardsWardrobeWindow:SetHidden( true )
 				PlaySound( SOUNDS.DEFAULT_WINDOW_CLOSE )
 				WW.settings.window[ sceneName ].hidden = true
 			end
@@ -230,8 +230,8 @@ function WWG.SetSceneManagement()
 			-- open but new
 			WizardsWardrobeWindow:ClearAnchors()
 			WizardsWardrobeWindow:SetAnchor( CENTER, GuiRoot, CENTER, 0, 0 )
-			WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 0, 1 )
-			--WizardsWardrobeWindow:SetHidden( false )
+			--WWG.StartAlphaAnimation( WizardsWardrobeWindow, 50, 0, 1 )
+			WizardsWardrobeWindow:SetHidden( false )
 			PlaySound( SOUNDS.DEFAULT_WINDOW_OPEN )
 			SCENE_MANAGER:SetInUIMode( true, false )
 			WW.settings.window[ sceneName ] = {
