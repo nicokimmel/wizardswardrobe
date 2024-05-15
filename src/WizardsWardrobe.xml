@@ -41,7 +41,7 @@
 			<OnMoveStop>WizardsWardrobe.gui.OnWindowMove()</OnMoveStop>
 			<OnResizeStart>WizardsWardrobe.gui.OnWindowResize("start")</OnResizeStart>
 			<OnResizeStop>WizardsWardrobe.gui.OnWindowResize("stop")</OnResizeStop>
-			<OnHide>WizardsWardrobe.gui.StartAlphaAnimation(WizardsWardrobeWindowZone,50,1,0)</OnHide>
+			<OnHide>WizardsWardsWardrobe.gui.StartAlphaAnimation(WizardsWardrobeZone,50,0,1)</OnHide>
 			<!-- <OnMouseExit>WizardsWardrobeWindowZone:SetHidden( true )</OnMouseExit> -->
 
 			<Controls>
@@ -79,14 +79,14 @@
 							<Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP" offsetY="0" />
 							<Controls>
 								<Button name="$(parent)ZoneSelect" inherits="ZO_DefaultButton" text="ZONE NAME" hidden="false">
-									<OnClicked><!-- WizardsWardrobeWindowZone:ToggleHidden() --> 
-										local alpha = WizardsWardrobeWindowZone:GetAlpha() 
+									<OnClicked>WizardsWardrobeWindowZone:ToggleHidden()
+										<!-- local alpha = WizardsWardrobeWindowZone:GetAlpha() 
 										local duration = 50 
 										if alpha == 1 then 
 											WizardsWardrobe.gui.StartAlphaAnimation( WizardsWardrobeWindowZone, duration, 1, 0 ) 
 										else 
 											WizardsWardrobe.gui.StartAlphaAnimation( WizardsWardrobeWindowZone, duration, 0, 1 ) 
-										end
+										end -->
 									</OnClicked>
 									<Dimensions x="200" y="30" />
 									<Anchor point="TOP" relativeTo="$(parent)" relativePoint="BOTTOM" offsetX="0" offsetY="0" />
