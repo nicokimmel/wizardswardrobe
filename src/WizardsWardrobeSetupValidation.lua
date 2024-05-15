@@ -41,13 +41,19 @@ function WWV.CompareItemLinks( linkEquipped, linkSaved, uniqueIdEquipped, unique
     logger:Verbose(
         "traitEquipped: %d, traitSaved: %d, weaponTypeEquipped: %d, weaponTypeSaved: %d, setIdEquipped: %d, setIdSaved: %d",
         traitEquipped, traitSaved, weaponTypeEquipped, weaponTypeSaved, setIdEquipped, setIdSaved )
-
+    --If unique Id matches all the other checks are redundant
+    if uniqueIdEquipped == uniqueIdSaved then
+        logger:Debug( "Default: UniqueId matched" )
+        return true
+    end
+    --! All of this should be redundant, uniqueId should always match and if it doesnt something failed already
+    --? Should we keep this for redundancy?
     if WW.settings.comparisonDepth == 1 then -- easy
-        if (traitEquipped ~= traitSaved) or (weaponTypeEquipped ~= weaponTypeSaved) or (setIdEquipped ~= setIdSaved) then
-            logger:Warn( "Trait / Weapon Type and set Id did not match" )
+        if (weaponTypeEquipped ~= weaponTypeSaved) or (setIdEquipped ~= setIdSaved) then
+            logger:Warn( "Easy: Weapon Type or set Id did not match" )
             return false
         end
-        logger:Debug( "Trait / Weapon Type and set Id matched" )
+        logger:Debug( "Easy: Weapon Type or set Id matched" )
         return true
     end
     local qualityEquipped = GetItemLinkDisplayQuality( linkEquipped )
@@ -59,36 +65,32 @@ function WWV.CompareItemLinks( linkEquipped, linkSaved, uniqueIdEquipped, unique
         tostring( qualitySaved ), tostring( enchantEquipped ), tostring( enchantSaved ) )
     if WW.settings.comparisonDepth == 2 then -- detailed
         if (traitEquipped ~= traitSaved) or (weaponTypeEquipped ~= weaponTypeSaved) or (setIdEquipped ~= setIdSaved) or (qualityEquipped ~= qualitySaved) then
-            logger:Warn( "Trait / Weapon Type / Set Id / Quality did not match" )
+            logger:Warn( "Detailed: Trait / Weapon Type / Set Id / Quality did not match" )
             return false
         end
-        logger:Debug( "Trait / Weapon Type / Set Id / Quality matched" )
+        logger:Debug( "Detailed: Trait / Weapon Type / Set Id / Quality matched" )
         return true
     end
 
 
     if WW.settings.comparisonDepth == 3 then -- thorough
         if (traitEquipped ~= traitSaved) or (weaponTypeEquipped ~= weaponTypeSaved) or (setIdEquipped ~= setIdSaved) or (qualityEquipped ~= qualitySaved) or (enchantEquipped ~= enchantSaved) then
-            logger:Warn( "Trait / Weapon Type / Set Id / Quality / Enchant did not match" )
+            logger:Warn( "Thorough: Trait / Weapon Type / Set Id / Quality / Enchant did not match" )
             return false
         end
-        logger:Debug( "Trait / Weapon Type / Set Id / Quality / Enchant matched" )
+        logger:Debug( "Thorough: Trait / Weapon Type / Set Id / Quality / Enchant matched" )
         return true
     end
-
-    if WW.settings.comparisonDepth == 4 then -- strict
+    --! Redundant check, uniqueId is checked first
+    --[[ if WW.settings.comparisonDepth == 4 then -- Strict
         if uniqueIdEquipped ~= uniqueIdSaved then
             logger:Warn( "UniqueId did not match" )
             return false
         end
         logger:Debug( "UniqueId matched" )
         return true
-    end
+    end ]]
 end
-
---[[ local WW = WizardsWardrobe
-local WWV = WW.validation
-WWV.DidSetupSwapCorrectly( 2 ) ]]
 
 --TODO: untangle this mess. should prob make a metamethod to compare setups instead of this
 function WWV.DidSetupSwapCorrectly( workAround )

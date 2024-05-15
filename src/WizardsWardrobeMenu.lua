@@ -14,19 +14,16 @@ local addonMenuChoices = {
 		GetString( WW_MENU_COMPARISON_DEPTH_EASY ),
 		GetString( WW_MENU_COMPARISON_DEPTH_DETAILED ),
 		GetString( WW_MENU_COMPARISON_DEPTH_THOROUGH ),
-		GetString( WW_MENU_COMPARISON_DEPTH_STRICT )
 	},
 	values = {
 		1,
 		2,
-		3,
-		4
+		3
 	},
 	tooltips = {
 		GetString( WW_MENU_COMPARISON_DEPTH_EASY_TT ),
 		GetString( WW_MENU_COMPARISON_DEPTH_DETAILED_TT ),
 		GetString( WW_MENU_COMPARISON_DEPTH_THOROUGH_TT ),
-		GetString( WW_MENU_COMPARISON_DEPTH_STRICT_TT )
 	}
 }
 function WWM.InitSV()
@@ -101,7 +98,10 @@ function WWM.InitSV()
 	elseif WW.settings.printMessages == false then
 		WW.settings.printMessages = "off"
 	end
-
+	-- migrate comparisonDepth settings
+	if WW.settings.comparisonDepth == 4 then
+		WW.settings.comparisonDepth = 1
+	end
 	-- dont look at this
 	WW.settings.autoEquipSetups = WW.storage.autoEquipSetups
 end

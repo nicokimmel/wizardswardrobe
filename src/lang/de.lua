@@ -128,12 +128,10 @@ local language = {
 	WW_MENU_COMPARISON_DEPTH_EASY = "Einfach",
 	WW_MENU_COMPARISON_DEPTH_DETAILED = "Detailliert",
 	WW_MENU_COMPARISON_DEPTH_THOROUGH = "Gründlich",
-	WW_MENU_COMPARISON_DEPTH_STRICT = "Streng",
-	WW_MENU_COMPARISON_DEPTH_EASY_TT = "Überprüft nur den Trait, den Waffentyp und das Set.",
+	WW_MENU_COMPARISON_DEPTH_EASY_TT = "Überprüft nur den Waffentyp und das Set.",
 	WW_MENU_COMPARISON_DEPTH_DETAILED_TT = "Überprüft den Trait, den Waffentyp das Set und Qualität.",
 	WW_MENU_COMPARISON_DEPTH_THOROUGH_TT = "Überprüft den Trait, den Waffentyp das Set, Qualität und Verzauberung.",
-	WW_MENU_COMPARISON_DEPTH_STRICT_TT =
-	"Überprüft, ob es genau das gleiche Ausrüstungsteil ist, das gespeichert wurde. Scheiterd, wenn irgendetwas verändert wurde",
+
 
 
 	-- USER INTERFACE
