@@ -148,7 +148,7 @@ function WWV.DidSetupSwapCorrectly( workAround )
                         end
                     elseif WW.settings.unequipEmpty and equippedLink == "" then
                         success = true
-                    elseif not WW.settings.unequipEmpty then
+                    elseif not WW.settings.unequipEmpty and savedLink == "" then
                         success = true
                     else
                         failedT[ # failedT + 1 ] = GetString( "SI_EQUIPSLOT", equipSlot )

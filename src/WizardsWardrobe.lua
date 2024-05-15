@@ -202,6 +202,7 @@ function WW.LoadSkills( setup )
 	local movedCryptCanon = false
 	--skillTask:Cancel()
 	local skillTable = setup:GetSkills()
+	local gearTable = setup:GetGear()
 	skillTask:For( 0, 1 ):Do( function( hotbarCategory )
 		skillTask:For( 3, 8 ):Do( function( slotIndex )
 			local abilityId = skillTable[ hotbarCategory ][ slotIndex ]
@@ -222,7 +223,7 @@ function WW.LoadSkills( setup )
 				return WW.IsReadyToSwap()
 			end ):Then( function()
 				-- check if cryptcanon gets changed
-				if slotIndex == 8 and WW.HasCryptCanon() and not movedCryptCanon then
+				if slotIndex == 8 and WW.HasCryptCanon() and gearTable[ EQUIP_SLOT_CHEST ].id == 194509 and not movedCryptCanon then
 					logger:Debug( "Unequip cryptcanon" )
 					local equippedLink = GetItemLink( BAG_WORN, EQUIP_SLOT_CHEST, LINK_STYLE_DEFAULT )
 
@@ -365,8 +366,7 @@ end
 local runningGearTasks = {}
 local gearMoveTask = async:Create( WW.name .. "GearMoveTask" )
 
-local function updateItemLocation( index, item )
-	local freeSlotMap = WW.GetFreeSlots( BAG_BACKPACK )
+local function updateItemLocation( index, item, freeSlotMap )
 	if not item.destSlot then
 		item.destSlot = freeSlotMap[ index ]
 	end
@@ -417,9 +417,11 @@ function WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons )
 	local timeStamp = GetTimeStamp()
 	isMovingItems = true
 	local hasBeenWarnedAboutBlocking = false
+	local freeSlots = WW.GetFreeSlots( BAG_BACKPACK )
 	gearMoveTask:WaitUntil( function()
 		return WW.IsReadyToSwap()
 	end )
+
 	--[[ :WaitUntil( function()--!As soon as i figure out how to see if someone is heavy attacking this will be updated
 		logger:Warn( "channeling heavy = " .. tostring( WW.IsHeavyAttacking ) )
 		return not WW.IsHeavyAttacking
@@ -450,7 +452,7 @@ function WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons )
 		--! the above check is only performed if it bugs out and nothing happened after 5 seconds
 		return ArePlayerWeaponsSheathed() or not isChangingWeapons
 	end ):For( ipairs( itemTaskList ) ):Do( function( index, item )
-		updateItemLocation( index, item )
+		updateItemLocation( index, item, freeSlots )
 
 		if not item.sourceSlot or not item.destSlot then return end
 
