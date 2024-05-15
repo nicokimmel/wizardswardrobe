@@ -133,12 +133,9 @@ local language = {
     WW_MENU_COMPARISON_DEPTH_EASY = "Fácil",
     WW_MENU_COMPARISON_DEPTH_DETAILED = "Detallado",
     WW_MENU_COMPARISON_DEPTH_THOROUGH = "Exhaustivo",
-    WW_MENU_COMPARISON_DEPTH_STRICT = "Estricto",
-    WW_MENU_COMPARISON_DEPTH_EASY_TT = "Solo comprobará el rasgo, el tipo de arma y el conjunto.",
+    WW_MENU_COMPARISON_DEPTH_EASY_TT = "Solo comprobará el tipo de arma y el conjunto.",
     WW_MENU_COMPARISON_DEPTH_DETAILED_TT = "Comprobará el rasgo, el tipo de arma, el conjunto y la calidad.",
     WW_MENU_COMPARISON_DEPTH_THOROUGH_TT = "Comprobará el rasgo, el tipo de arma, el conjunto, la calidad y el encantamiento.",
-    WW_MENU_COMPARISON_DEPTH_STRICT_TT =
-    "Comprobará si es exactamente la misma pieza de equipo que se guardó. Fallará si cambias algo.",
     WW_MENU_COMPARISON_IGNORE_COSTUME_SLOTS = "Ignorar disfraces",
     WW_MENU_COMPARISON_IGNORE_COSTUME_SLOTS_TT = "Si está activado, se ignorarán los disfraces.",
     WW_MENU_COMPARISON_IGNORE_POISON_SLOTS = "Ignorar espacios de veneno",

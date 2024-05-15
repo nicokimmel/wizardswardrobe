@@ -1,4 +1,15 @@
 <GuiXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sir.insidi.at/or/schema/esoui.xsd">
+	<Animations>
+		<AnimationTimeline name="WW_AlphaTimeline">
+			<Animations>
+				<AlphaAnimation duration="200" startAlpha="0" endAlpha="1">
+					<EasingFunction> 
+                        return ZO_LinearEase(progress)
+                    </EasingFunction>
+				</AlphaAnimation>
+			</Animations>
+		</AnimationTimeline>
+	</Animations>
 	<Controls>
 		<TopLevelControl name="WizardsWardrobePanel" tier="LOW" layer="CONTROLS" mouseEnabled="true" movable="false" clampedToScreen="true" hidden="true">
 			<Dimensions x="245" y="70" />
@@ -30,6 +41,7 @@
 			<OnMoveStop>WizardsWardrobe.gui.OnWindowMove()</OnMoveStop>
 			<OnResizeStart>WizardsWardrobe.gui.OnWindowResize("start")</OnResizeStart>
 			<OnResizeStop>WizardsWardrobe.gui.OnWindowResize("stop")</OnResizeStop>
+			<OnHide>WizardsWardsWardrobe.gui.StartAlphaAnimation(WizardsWardrobeZone,50,0,1)</OnHide>
 			<!-- <OnMouseExit>WizardsWardrobeWindowZone:SetHidden( true )</OnMouseExit> -->
 
 			<Controls>
@@ -68,8 +80,13 @@
 							<Controls>
 								<Button name="$(parent)ZoneSelect" inherits="ZO_DefaultButton" text="ZONE NAME" hidden="false">
 									<OnClicked>WizardsWardrobeWindowZone:ToggleHidden()
-										<!-- self:SetState(BSTATE_CLICKED, true) -->
-
+										<!-- local alpha = WizardsWardrobeWindowZone:GetAlpha() 
+										local duration = 50 
+										if alpha == 1 then 
+											WizardsWardrobe.gui.StartAlphaAnimation( WizardsWardrobeWindowZone, duration, 1, 0 ) 
+										else 
+											WizardsWardrobe.gui.StartAlphaAnimation( WizardsWardrobeWindowZone, duration, 0, 1 ) 
+										end -->
 									</OnClicked>
 									<Dimensions x="200" y="30" />
 									<Anchor point="TOP" relativeTo="$(parent)" relativePoint="BOTTOM" offsetX="0" offsetY="0" />
@@ -244,7 +261,7 @@
 						</Texture>
 						<Button name="$(parent)Hide" inherits="ZO_ButtonBehaviorClickSound">
 							<Dimensions x="24" y="24" />
-							<OnClicked>WizardsWardrobeWindowZone:SetHidden( true )</OnClicked>
+							<OnClicked>WizardsWardrobe.gui.StartAlphaAnimation( WizardsWardrobeWindowZone, 50, 1, 0 )</OnClicked>
 							<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="5" offsetY="5" />
 							<Textures normal="/esoui/art/buttons/decline_up.dds"
 								pressed="/esoui/art/buttons/decline_down.dds"
@@ -404,15 +421,21 @@
 			</Controls>
 		</TopLevelControl>
 		<!-- ZO_Tree templates -->
-		<!-- <Control name="WW_ZoneEntry" virtual="true" mouseEnabled="true" inherits="ZO_TreeLabelSubCategory">
+		<Control name="WW_ZoneEntry" virtual="true" mouseEnabled="true" inherits="ZO_TreeLabelSubCategory">
 			<Dimensions y="25" />
+			<Controls>
+				<Texture name="$(parent)Icon" textureFile="/esoui/art/collections/favorite_staronly.dds">
+					<Dimensions x="16" y="16" />
+					<Anchor point="LEFT" relativeTo="$(parent)" relativePoint="LEFT" offsetX="10" />
+				</Texture>
+			</Controls>
 		</Control>
 		<Control name="WW_ZoneCategory" virtual="true" mouseEnabled="true" inherits="ZO_StatusIconHeader">
 			<OnInitialized>WW_IconHeader_OnInitialized( self )</OnInitialized>
 		</Control>
-		<Control name="WW_ZoneGeneral" virtual="true" mouseEnabled="true" inherits="ZO_StatusIconHeader">
+		<Control name="WW_ZoneCategory_Childless" virtual="true" mouseEnabled="true" inherits="ZO_IconChildlessHeader">
 			<OnInitialized>WW_IconHeader_OnInitialized( self )</OnInitialized>
-		</Control> -->
+		</Control>
 
 	</Controls>
 </GuiXml>

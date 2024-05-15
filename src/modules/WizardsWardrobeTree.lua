@@ -5,6 +5,7 @@ WW.gui.tree = WW.gui.tree or {}
 local WWG = WW.gui
 local WWT = WWG.tree
 WWT.lastSelectedCategory = nil
+WWT.lastSelectedNode = nil
 local logger = LibDebugLogger:Create( "WizardsWardrobe/Tree" )
 local icons = {
     --[[ [ 1 ] = { -- Ouroboros
@@ -55,9 +56,26 @@ local CHILD_SPACING = 0          --?
 local TREE_WIDTH = 300           -- width of the tree
 local TEXT_LABEL_MAX_WIDTH = 300 -- max width of the text label
 
+-------------
+--ContextMenu
+-------------
+local function showZoneContextMenu( data )
+    ClearMenu()
+    if WWG.IsZoneFavorite( data ) then
+        AddMenuItem( "Remove from favorites", function()
+            WWG.RemoveZoneFromFavorites( data )
+        end )
+    else
+        AddMenuItem( "Add to favorites", function()
+            WWG.AddZoneToFavorites( data )
+        end )
+    end
+    ShowMenu()
+end
 
-
-
+-----------
+---Tree----
+-----------
 function WWT.GetCategoryName( categoryKey )
     if categoryKey == WW.ACTIVITIES.GENERAL then
         return "General"
@@ -108,7 +126,6 @@ local function categoryHeaderSetup_Childless( node, control, data, open, userReq
     control.text:SetText( name )
     local pages = WW.pages[ data.tag ]
     local t = {}
-    -- control:SetText( data.name )
     if pages then
         for k, v in pairs( pages ) do
             t[ #t + 1 ] = v.name
@@ -127,14 +144,26 @@ local function categoryHeaderSetup_Childless( node, control, data, open, userReq
     baseTreeHeaderSetup( control, data, open, true )
 end
 
+
 local function treeEntrySelected( control, data, selected, reselectingDuringRebuild )
+    local node = control.node
+    local categoryNode = node:GetParent()
     if selected then
         WW.gui.OnZoneSelect( data )
+        if categoryNode == WWT.lastSelectedCategory or data.isChildless then
+            if node ~= WWT.lastSelectedNode then
+                WWG.StartAlphaAnimation( WizardsWardrobeWindowZone, 200, 1, 0 )
+                --WizardsWardrobeWindowZone:SetHidden( true )
+            end
+        end
+        WWT.lastSelectedCategory = categoryNode
+        WWT.lastSelectedNode = node
     end
     control:SetSelected( selected )
 end
 
 local function treeEntrySelected_Childless( control, data, selected, reselectingDuringRebuild )
+    data.isChildless = true
     treeEntrySelected( control, data, selected, reselectingDuringRebuild )
     baseTreeHeaderIconSetup( control, data, selected )
 end
@@ -144,7 +173,21 @@ end
 local function treeEntrySetup( node, control, data, open )
     local pages = WW.pages[ data.tag ]
     local t = {}
+    if not control.icon then
+        control.icon = WINDOW_MANAGER:CreateControl( control:GetName() .. "Icon", control, CT_TEXTURE )
+        control.icon:SetAnchor( RIGHT, control, LEFT, 0, 0 )
+        control.icon:SetDimensions( 32, 32 )
+        control.icon:SetTexture( "/esoui/art/collections/favorite_staronly.dds" )
+    end
+    control.icon:SetHidden( not WWG.IsZoneFavorite( data ) )
     control:SetText( data.name )
+    control:SetHandler( "OnMouseUp", function( self, button, upInside )
+        if button == MOUSE_BUTTON_INDEX_RIGHT then
+            showZoneContextMenu( data )
+        elseif button == MOUSE_BUTTON_INDEX_LEFT then
+            ZO_TreeEntry_OnMouseUp( control, upInside )
+        end
+    end )
     if pages then
         for k, v in pairs( pages ) do
             t[ #t + 1 ] = v.name
@@ -163,7 +206,9 @@ local function treeEntrySetup( node, control, data, open )
 end
 
 
-
+local function treeEntry_OnMouseUp( self, upInside )
+    ZO_TreeEntry_OnMouseUp( self, upInside )
+end
 
 local function addNodes( tree, categoryKey, entries )
     local headerName = WWT.GetCategoryName( categoryKey )
@@ -178,7 +223,16 @@ local function addNodes( tree, categoryKey, entries )
     end
     --TODO: SortSetting?
     table.sort( entries, function( a, b )
-        return a.priority < b.priority
+        local aIsFavorite = WWG.IsZoneFavorite( a )
+        local bIsFavorite = WWG.IsZoneFavorite( b )
+
+        if aIsFavorite and not bIsFavorite then
+            return true
+        elseif not aIsFavorite and bIsFavorite then
+            return false
+        else
+            return a.priority < b.priority
+        end
     end )
     for entryKey, zone in ipairs( entries ) do
         if #entries == 1 then
@@ -227,16 +281,19 @@ local function addCategoriesToTree( tree )
         addNodes( tree, categoryKey, entries )
     end
 end
-function WWT:RefreshTree( tree )
+function WWT:RefreshTree( tree, data )
     if not tree then
         logger:Debug( "RefreshTree: No tree" )
         return
     end
+    tree:ClearSelectedNode()
     -- Remove all nodes
     tree:Reset()
     -- Add nodes back
     addCategoriesToTree( tree )
     tree:RefreshVisible()
+    local BRING_PARENT_INTO_VIEW = true
+    tree:Commit( tree:GetTreeNodeByData( data ), BRING_PARENT_INTO_VIEW )
     tree:SetSuspendAnimations( false )
 end
 
@@ -265,6 +322,9 @@ local function createTree()
     tree:Commit()
     tree:SetExclusive( true )
 end
+
+
+
 function WWT:Initialize()
     logger:Debug( "Initializing Tree" )
     createTree()
