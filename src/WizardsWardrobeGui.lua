@@ -948,12 +948,12 @@ function WWG.AquireSetupControl( setup )
 				local apiVersion = GetAPIVersion()
 				if apiVersion >= 101042 then
 					if not progression:GetSkillData():IsCraftedAbility() then
-						if progression:IsChainingAbility() then
+						if progression.IsChainingAbility and progression:IsChainingAbility() then
 							abilityId = GetEffectiveAbilityIdForAbilityOnHotbar( abilityId, hotbarCategory )
 						end
 					end
 				else
-					if progression:IsChainingAbility() then
+					if progression.IsChainingAbility and progression:IsChainingAbility() then
 						abilityId = GetEffectiveAbilityIdForAbilityOnHotbar( abilityId, hotbarCategory )
 					end
 				end
