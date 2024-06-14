@@ -260,7 +260,7 @@ function WWP.CreatePrebuffWindow()
 					return
 				end
 
-				if progression:IsChainingAbility() then
+				if progression.IsChainingAbility and progression:IsChainingAbility() then
 					abilityId = GetEffectiveAbilityIdForAbilityOnHotbar( abilityId, GetActiveHotbarCategory() )
 				end
 
