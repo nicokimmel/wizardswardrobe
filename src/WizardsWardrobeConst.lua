@@ -197,7 +197,7 @@ WW.CONDITIONS = {
 WW.DISABLEDBAGS = {
 	[ BAG_GUILDBANK ] = true,
 	[ BAG_BUYBACK ] = true,
-	[ BAG_DELETE ] = true,
+	-- [ BAG_DELETE ] = true,
 	[ BAG_VIRTUAL ] = true,
 }
 
