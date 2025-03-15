@@ -723,7 +723,7 @@ function WW.LoadCP( setup )
 		PrepareChampionPurchaseRequest()
 		cpTask:For( 1, MAX_CHAMPION_SLOTTABLES ):Do( function( slotIndex )
 			local starId = setup:GetCP()[ slotIndex ]
-			if starId and starId > 0 then
+			if starId and starId > 0 and CanChampionSkillTypeBeSlotted(GetChampionSkillType(starId)) then
 				local skillPoints = GetNumPointsSpentOnChampionSkill( starId )
 				if skillPoints > 0 then
 					AddHotbarSlotToChampionPurchaseRequest( slotIndex, starId )
