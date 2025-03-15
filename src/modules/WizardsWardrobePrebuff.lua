@@ -259,9 +259,11 @@ function WWP.CreatePrebuffWindow()
 					-- Prevent ult on normal slot and vice versa
 					return
 				end
-
-				if progression.IsChainingAbility and progression:IsChainingAbility() then
-					abilityId = GetEffectiveAbilityIdForAbilityOnHotbar( abilityId, GetActiveHotbarCategory() )
+				
+				if not progression:GetSkillData():IsCraftedAbility() then
+					if progression.IsChainingAbility and progression:IsChainingAbility() then
+						abilityId = GetEffectiveAbilityIdForAbilityOnHotbar( abilityId, GetActiveHotbarCategory() )
+					end
 				end
 
 				ClearCursor()

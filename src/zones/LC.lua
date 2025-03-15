@@ -100,11 +100,15 @@ function LC.GetBossByLocation()
     if x > LC.LOCATIONS.RYELAZ.x1 and x < LC.LOCATIONS.RYELAZ.x2
         and y > LC.LOCATIONS.RYELAZ.y1 and y < LC.LOCATIONS.RYELAZ.y2
         and z > LC.LOCATIONS.RYELAZ.z1 and z < LC.LOCATIONS.RYELAZ.z2 then
+		if DoesUnitExist('boss1') and not IsUnitDead('boss1') then
         return GetString( WW_LC_RYELAZ )
+		end
     elseif x > LC.LOCATIONS.CAVOT_AGNAN.x1 and x < LC.LOCATIONS.CAVOT_AGNAN.x2
         and y > LC.LOCATIONS.CAVOT_AGNAN.y1 and y < LC.LOCATIONS.CAVOT_AGNAN.y2
         and z > LC.LOCATIONS.CAVOT_AGNAN.z1 and z < LC.LOCATIONS.CAVOT_AGNAN.z2 then
+		if DoesUnitExist('boss1') and not IsUnitDead('boss1') then
         return GetString( WW_LC_CAVOT_AGNAN )
+		end
     elseif x > LC.LOCATIONS.ORPHIC.x1 and x < LC.LOCATIONS.ORPHIC.x2
         and y > LC.LOCATIONS.ORPHIC.y1 and y < LC.LOCATIONS.ORPHIC.y2
         and z > LC.LOCATIONS.ORPHIC.z1 and z < LC.LOCATIONS.ORPHIC.z2 then

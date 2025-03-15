@@ -7,7 +7,7 @@ WW.name = "WizardsWardrobe"
 WW.simpleName = "Wizard's Wardrobe"
 WW.displayName =
 "|c18bed8W|c26c2d1i|c35c6c9z|c43cac2a|c52cebar|c60d1b3d|c6fd5ab'|c7dd9a4s|c8cdd9d |c9ae195W|ca8e58ea|cb7e986r|cc5ed7fd|cd4f077r|ce2f470o|cf1f868b|cfffc61e|r"
-WW.version = "1.18.2"
+WW.version = "1.20.0"
 WW.zones = {}
 WW.currentIndex = 0
 WW.IsHeavyAttacking = false
@@ -272,8 +272,7 @@ end
 
 function WW.SlotSkill( hotbarCategory, slotIndex, abilityId )
 	local hotbarData = ACTION_BAR_ASSIGNMENT_MANAGER:GetHotbar( hotbarCategory )
-	logger:Verbose( "SlotSkill %s %s %s (%s) ", tostring( hotbarCategory ), tostring( slotIndex ), tostring( abilityId ),
-		GetAbilityName( abilityId ) )
+	logger:Verbose( "SlotSkill %s %s %s (%s) ", tostring( hotbarCategory ), tostring( slotIndex ), tostring( abilityId ), GetAbilityName( abilityId ) )
 	-- if using cryptcanon dont slot skill, since cryptcanon does it on its own
 	--if not abilityId then return end
 	if abilityId == 195031 then
@@ -288,8 +287,11 @@ function WW.SlotSkill( hotbarCategory, slotIndex, abilityId )
 	end
 	if abilityId and abilityId > 0 then
 		local progressionData = SKILLS_DATA_MANAGER:GetProgressionDataByAbilityId( abilityId )
-		if progressionData
-			and progressionData:GetSkillData()
+		if not progressionData then 		
+			WW.Log( zo_strformat( "Scribed Skill not switched, Please save scribed skills new to Wizzards!! <<C:1>>", abilityId ), WW.LOGTYPES.ERROR, "FFFFFF", abilityId )
+			return false
+		end
+		if progressionData:GetSkillData()
 			and progressionData:GetSkillData():IsPurchased() then
 			hotbarData:AssignSkillToSlotByAbilityId( slotIndex, abilityId )
 			return true
@@ -726,7 +728,14 @@ function WW.LoadCP( setup )
 			if starId and starId > 0 then
 				local skillPoints = GetNumPointsSpentOnChampionSkill( starId )
 				if skillPoints > 0 then
-					AddHotbarSlotToChampionPurchaseRequest( slotIndex, starId )
+					-- fixes to ignore non slotable CP (Will be empty) by BloodStainChild666
+					if CHAMPION_SKILL_TYPE_NORMAL ~= GetChampionSkillType(starId) then					
+						AddHotbarSlotToChampionPurchaseRequest( slotIndex, starId )
+					else
+						AddHotbarSlotToChampionPurchaseRequest( slotIndex, 0 )
+						WW.Log( "CP can't be sloted, ignored. [%s]", WW.LOGTYPES.INFO, WW.CPCOLOR[ slotIndex ],
+							zo_strformat( "<<C:1>>", GetChampionSkillName( starId ) ) )
+					end
 				else
 					WW.Log( GetString( WW_MSG_CPENOENT ), WW.LOGTYPES.ERROR, WW.CPCOLOR[ slotIndex ],
 						zo_strformat( "<<C:1>>", GetChampionSkillName( starId ) ) )
@@ -738,7 +747,6 @@ function WW.LoadCP( setup )
 			end
 		end ):Then( function()
 			SendChampionPurchaseRequest()
-			PlaySound( "Champion_PointsCommitted" )
 		end )
 	end )
 end

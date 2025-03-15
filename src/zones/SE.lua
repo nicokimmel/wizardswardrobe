@@ -34,18 +34,18 @@ SE.bosses = {
 
 SE.LOCATIONS = {
     YASEYLA = {
-        x1 = 83530,
-        x2 = 89530,
-        y1 = 12637,
-        y2 = 17637,
-        z1 = 31077,
-        z2 = 45277,
+        x1 = 81000,
+        x2 = 88000,
+        y1 = 14000,
+        y2 = 18000,
+        z1 = 30000,
+        z2 = 38000,
     },
     TWELVANE = {
         x1 = 181951,
-        x2 = 197951,
-        y1 = 37840,
-        y2 = 42840,
+        x2 = 187951,
+        y1 = 39840,
+        y2 = 40840,
         z1 = 216024,
         z2 = 225224,
     },
@@ -89,19 +89,25 @@ function SE.GetBossByLocation()
     local zone, x, y, z = GetUnitWorldPosition( "player" )
 
     if zone ~= SE.id then return nil end
-
+    
     if x > SE.LOCATIONS.YASEYLA.x1 and x < SE.LOCATIONS.YASEYLA.x2
         and y > SE.LOCATIONS.YASEYLA.y1 and y < SE.LOCATIONS.YASEYLA.y2
         and z > SE.LOCATIONS.YASEYLA.z1 and z < SE.LOCATIONS.YASEYLA.z2 then
+		if DoesUnitExist('boss1') and not IsUnitDead('boss1') then
         return GetString( WW_SE_YASEYLA )
+		end
     elseif x > SE.LOCATIONS.TWELVANE.x1 and x < SE.LOCATIONS.TWELVANE.x2
         and y > SE.LOCATIONS.TWELVANE.y1 and y < SE.LOCATIONS.TWELVANE.y2
         and z > SE.LOCATIONS.TWELVANE.z1 and z < SE.LOCATIONS.TWELVANE.z2 then
+		if DoesUnitExist('boss1') and not IsUnitDead('boss1') then
         return GetString( WW_SE_TWELVANE )
+		end
     elseif x > SE.LOCATIONS.ANSUUL.x1 and x < SE.LOCATIONS.ANSUUL.x2
         and y > SE.LOCATIONS.ANSUUL.y1 and y < SE.LOCATIONS.ANSUUL.y2
         and z > SE.LOCATIONS.ANSUUL.z1 and z < SE.LOCATIONS.ANSUUL.z2 then
+		if DoesUnitExist('boss1') and not IsUnitDead('boss1') then
         return GetString( WW_SE_ANSUUL )
+		end
     else
         return GetString( WW_TRASH )
     end
