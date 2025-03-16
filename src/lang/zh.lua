@@ -26,6 +26,7 @@ local language = {
     WW_MSG_LOADCP = "装载CP %s , 位于 [%s]  配装页.",
     WW_MSG_SAVECP = "存储CP至配装 %s.",
     WW_MSG_CPENOENT = "无法装载 [%s]. CP未解锁.",
+	WW_MSG_CPNOTSLOTTABLEINFO = "Could not slot [%s]. Star is not slottable.", -- Need help in translation
     WW_MSG_CPCOOLDOWN = "将在 %s 秒后应用CP变更.",
     WW_MSG_CPCOOLDOWNOVER = "CP点变更.",
     WW_MSG_TELEPORT_PLAYER = "传送至 %s.",

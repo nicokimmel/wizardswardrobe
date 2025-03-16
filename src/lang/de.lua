@@ -26,6 +26,7 @@ local language = {
 	WW_MSG_LOADCP = "Lade CP [%s] aus [%s].",
 	WW_MSG_SAVECP = "Speichere CP in Setup %s.",
 	WW_MSG_CPENOENT = "Stern [%s] ist nicht freigeschaltet.",
+	WW_MSG_CPNOTSLOTTABLEINFO = "Stern [%s] kann nicht geslottet werden, wird ignoriert.",
 	WW_MSG_CPCOOLDOWN = "Champion Punkte werden in %ss gewechselt.",
 	WW_MSG_CPCOOLDOWNOVER = "Champion Punkte gewechselt.",
 	WW_MSG_TELEPORT_PLAYER = "Teleportiere zu %s.",
