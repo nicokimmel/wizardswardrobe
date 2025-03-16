@@ -25,6 +25,7 @@ local language = {
 	WW_MSG_LOADCP = "Loading CP %s from [%s].",
 	WW_MSG_SAVECP = "Saving CP to setup %s.",
 	WW_MSG_CPENOENT = "Could not slot [%s]. Star is not unlocked.",
+	WW_MSG_CPNOTSLOTTABLEINFO = "Could not slot [%s]. Star is not slottable.",
 	WW_MSG_CPCOOLDOWN = "Champion points will be changed in %ss.",
 	WW_MSG_CPCOOLDOWNOVER = "Champion points changed.",
 	WW_MSG_TELEPORT_PLAYER = "Teleporting to %s.",

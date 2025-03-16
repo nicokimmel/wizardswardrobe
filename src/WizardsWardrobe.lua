@@ -725,19 +725,17 @@ function WW.LoadCP( setup )
 		PrepareChampionPurchaseRequest()
 		cpTask:For( 1, MAX_CHAMPION_SLOTTABLES ):Do( function( slotIndex )
 			local starId = setup:GetCP()[ slotIndex ]
-			if starId and starId > 0 and CanChampionSkillTypeBeSlotted(GetChampionSkillType(starId)) then
-				local skillPoints = GetNumPointsSpentOnChampionSkill( starId )
-				if skillPoints > 0 then
-					-- fixes to ignore non slotable CP (Will be empty) by BloodStainChild666
-					if CHAMPION_SKILL_TYPE_NORMAL ~= GetChampionSkillType(starId) then					
-						AddHotbarSlotToChampionPurchaseRequest( slotIndex, starId )
+			if starId and starId > 0 then
+				if CanChampionSkillTypeBeSlotted(GetChampionSkillType(starId)) then
+					local skillPoints = GetNumPointsSpentOnChampionSkill( starId )
+					if skillPoints > 0 then									
+							AddHotbarSlotToChampionPurchaseRequest( slotIndex, starId )
 					else
-						AddHotbarSlotToChampionPurchaseRequest( slotIndex, 0 )
-						WW.Log( "CP can't be sloted, ignored. [%s]", WW.LOGTYPES.INFO, WW.CPCOLOR[ slotIndex ],
+						WW.Log( GetString( WW_MSG_CPENOENT ), WW.LOGTYPES.ERROR, WW.CPCOLOR[ slotIndex ],
 							zo_strformat( "<<C:1>>", GetChampionSkillName( starId ) ) )
 					end
 				else
-					WW.Log( GetString( WW_MSG_CPENOENT ), WW.LOGTYPES.ERROR, WW.CPCOLOR[ slotIndex ],
+					WW.Log( GetString( WW_MSG_CPNOTSLOTTABLEINFO ), WW.LOGTYPES.INFO, WW.CPCOLOR[ slotIndex ],
 						zo_strformat( "<<C:1>>", GetChampionSkillName( starId ) ) )
 				end
 			else

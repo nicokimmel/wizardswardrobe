@@ -26,6 +26,7 @@ local language = {
 	WW_MSG_LOADCP = "Chargement CP %s de [%s].",
 	WW_MSG_SAVECP = "Sauvegarde CP to profil %s.",
 	WW_MSG_CPENOENT = "Impossible à équiper [%s]. CP non débloqué.",
+	WW_MSG_CPNOTSLOTTABLEINFO = "Impossible à équiper [%s]. CP non équipable.",
 	WW_MSG_CPCOOLDOWN = "Les points champion seront changés dans %s s.",
 	WW_MSG_CPCOOLDOWNOVER = "Points champion changés.",
 	WW_MSG_TELEPORT_PLAYER = "Téléportation vers %s.",

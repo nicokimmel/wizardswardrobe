@@ -25,6 +25,7 @@ local language = {
 	WW_MSG_LOADCP = "Загрузка CP %s из [%s].",
 	WW_MSG_SAVECP = "Сохранение CP для набора %s.",
 	WW_MSG_CPENOENT = "Не удалось поставить [%s] потому что созвездие не разблокировано.",
+	WW_MSG_CPNOTSLOTTABLEINFO = "Could not slot [%s]. Star is not slottable.", -- Need help in translation
 	WW_MSG_CPCOOLDOWN = "Созвездия будут изменены через %ss.",
 	WW_MSG_CPCOOLDOWNOVER = "Созвездия изменены.",
 	WW_MSG_TOGGLEAUTOEQUIP = "Автопереключение %s.",

@@ -26,6 +26,7 @@ local language = {
     WW_MSG_LOADCP = "Cargando CP %s desde [%s].",
     WW_MSG_SAVECP = "Guardando CP en la configuración %s.",
     WW_MSG_CPENOENT = "No se pudo equipar [%s]. La estrella no está desbloqueada.",
+	WW_MSG_CPNOTSLOTTABLEINFO = "No se pudo equipar [%s]. La estrella no es equipable.",
     WW_MSG_CPCOOLDOWN = "Los puntos de campeón se cambiarán en %ss.",
     WW_MSG_CPCOOLDOWNOVER = "Puntos de campeón cambiados.",
     WW_MSG_TELEPORT_PLAYER = "Teletransportándote a %s.",
