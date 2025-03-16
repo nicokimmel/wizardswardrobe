@@ -41,7 +41,7 @@
 			<OnMoveStop>WizardsWardrobe.gui.OnWindowMove()</OnMoveStop>
 			<OnResizeStart>WizardsWardrobe.gui.OnWindowResize("start")</OnResizeStart>
 			<OnResizeStop>WizardsWardrobe.gui.OnWindowResize("stop")</OnResizeStop>
-			<OnHide>WizardsWardsWardrobe.gui.StartAlphaAnimation(WizardsWardrobeZone,50,0,1)</OnHide>
+			<OnHide><!-- WizardsWardsWardrobe.gui.StartAlphaAnimation(WizardsWardrobeZone,50,0,1) --></OnHide>
 			<!-- <OnMouseExit>WizardsWardrobeWindowZone:SetHidden( true )</OnMouseExit> -->
 
 			<Controls>
