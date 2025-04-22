@@ -140,6 +140,12 @@ local language = {
 	WW_MENU_ZONE_SELECTION = "Use legacy zone selection",
 	WW_MENU_ZONE_SELECTION_TT =
 	"If set to on it will use the grid dropdown box from previous versions, if off it will use the new selection method.",
+  WW_MENU_AUTO_ZONE_SELECT = "Auto zone select",
+  WW_MENU_AUTO_ZONE_SELECT_DESCRIPTION = "Automatically select the corresponding zone section when the character loads in to a supported zone.",
+  WW_MENU_AUTO_SELECT_INSTANCE = "Auto select Instance",
+  WW_MENU_AUTO_SELECT_INSTANCE_TT = "Automatically selects the trial section when entering a trial.",
+  WW_MENU_AUTO_SELECT_GENERAL = "Auto select General",
+  WW_MENU_AUTO_SELECT_GENERAL_TT = "Automatically selects the general section when entering a zone without a dedicated section.",
 
 	-- USER INTERFACE
 	WW_CHANGELOG =

@@ -521,6 +521,10 @@ function WWG.SetupTopMenu()
 end
 
 function WWG.OnZoneSelect( zone )
+	if (WW.currentZoneId ~= 0) then
+		WW.storage.selectedZoneTag = zone.tag
+	end
+	
 	PlaySound( SOUNDS.TABLET_PAGE_TURN )
 	local node = WWG.tree.tree:GetTreeNodeByData( zone )
 	if not WW.pages[ zone.tag ] then

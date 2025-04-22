@@ -955,9 +955,20 @@ function WW.OnZoneChange( _, _ )
 	zo_callLater( function()
 		-- init new zone
 		WW.currentZone.Init()
-		-- change ui if loaded, only swap if trial zone
-		if isFirstZoneAfterReload or WW.currentZone.tag ~= "GEN" then
-			WW.gui.OnZoneSelect( WW.currentZone )
+
+		-- only swap according to user settings
+		local shouldSelectInstance = WW.settings.autoSelectInstance and WW.currentZone.tag ~= "GEN"
+		local shouldSelectGeneral = WW.settings.autoSelectGeneral and WW.currentZone.tag == "GEN"
+		local shouldSelectCurrent = shouldSelectInstance or shouldSelectGeneral
+		if isFirstZoneAfterReload then
+			if shouldSelectCurrent then
+				WW.gui.OnZoneSelect(WW.currentZone)
+			else
+				-- select the last selected zone before reload
+				WW.gui.OnZoneSelect(WW.zones[WW.storage.selectedZoneTag])
+			end
+		elseif shouldSelectCurrent then
+			WW.gui.OnZoneSelect(WW.currentZone)
 		end
 
 		if WW.settings.fixes.surfingWeapons then
