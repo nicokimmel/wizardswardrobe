@@ -64,3 +64,4 @@ zones/SE.lua
 zones/BRP.lua
 zones/EA.lua
 zones/LC.lua
+zones/OC.lua

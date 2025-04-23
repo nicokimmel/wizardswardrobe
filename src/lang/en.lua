@@ -300,6 +300,14 @@ local language = {
 	WW_LC_ORPHIC = "Orphic Shattered Shard",
 	WW_LC_KNOT = "Arcane Knot",
 
+	WW_OC_NAME = "Ossein Cage",
+	WW_OC_RED_WITCH_GEDNA_RELVEL = "Red Witch Gedna Relvel",
+	WW_OC_HALL_OF_FLESHCRAFT = "Hall of Fleshcraft",
+	WW_OC_TORTURED_RANYU = "Tortured Ranyu",
+	WW_OC_JYNORAH_AND_SKORKHIF = "Jynorah and Skorkhif",
+	WW_OC_BLOOD_DRINKER_THISA = "Blood Drinker Thisa",
+	WW_OC_OVERFIEND_KAZPIAN = "Overfiend Kazpian",
+
 	WW_MSA_NAME = "Maelstrom Arena",
 
 	WW_VH_NAME = "Vateshran Hollows",
