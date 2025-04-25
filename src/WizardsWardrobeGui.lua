@@ -1286,7 +1286,7 @@ function WWG.CreatePage( zone, skipBuilding, refreshTree )
 		WWG.BuildPage( zone, nextPageId, true )
 	end
 	if refreshTree then
-		WW.gui.tree:RefreshTree( WW.gui.tree.tree )
+		WW.gui.tree:RefreshTree( WW.gui.tree.tree, zone )
 	end
 
 	return nextPageId
@@ -1360,6 +1360,7 @@ function WWG.RenamePage()
 				WW.pages[ zone.tag ][ pageId ].name = input
 			end
 			WWG.SetupPagesDropdown()
+			WWG.tree:RefreshTree( WWG.tree.tree, zone )
 		end )
 end
 
@@ -1816,6 +1817,7 @@ function WWG.RearrangePages( sortTable, zone, pageId )
 		end
 	end
 	WWG.BuildPage( zone, pageId, true )
+	WWG.tree:RefreshTree( WWG.tree.tree, zone )
 	WizardsWardrobeArrange:SetHidden( true )
 end
 
