@@ -32,6 +32,7 @@ function WWM.InitSV()
 		pages = {},
 		prebuffs = {},
 		autoEquipSetups = true,
+		selectedZoneTag = 'GEN',
 	} )
 	WW.setups = WW.storage.setups
 	WW.pages = WW.storage.pages
@@ -84,7 +85,9 @@ function WWM.InitSV()
 			ignorePoisons = true,
 			ignoreCostumes = true
 		},
-		legacyZoneSelection = false
+		legacyZoneSelection = false,
+		autoSelectInstance = true,
+		autoSelectGeneral = false
 	} )
 
 	-- migrate validation settings
@@ -285,6 +288,33 @@ function WWM.InitAM()
 			getFunc = function() return WW.settings.auto.food end,
 			setFunc = function( value ) WW.settings.auto.food = value end,
 			width = "half",
+		},
+		{
+			type = "divider",
+			height = 15,
+			alpha = 0,
+		},
+		{
+			type = "header",
+			name = GetString( WW_MENU_AUTO_ZONE_SELECT ),
+		},
+		{
+			type = "description",
+			text = GetString( WW_MENU_AUTO_ZONE_SELECT_DESCRIPTION ),
+		},
+		{
+			type = "checkbox",
+			name = GetString( WW_MENU_AUTO_SELECT_INSTANCE ),
+			getFunc = function() return WW.settings.autoSelectInstance end,
+			setFunc = function( value ) WW.settings.autoSelectInstance = value end,
+			tooltip = GetString( WW_MENU_AUTO_SELECT_INSTANCE_TT ),
+		},
+		{
+			type = "checkbox",
+			name = GetString( WW_MENU_AUTO_SELECT_GENERAL ),
+			getFunc = function() return WW.settings.autoSelectGeneral end,
+			setFunc = function( value ) WW.settings.autoSelectGeneral = value end,
+			tooltip = GetString( WW_MENU_AUTO_SELECT_GENERAL_TT ),
 		},
 		{
 			type = "divider",

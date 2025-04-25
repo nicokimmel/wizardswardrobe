@@ -521,6 +521,10 @@ function WWG.SetupTopMenu()
 end
 
 function WWG.OnZoneSelect( zone )
+	if (WW.currentZoneId ~= 0) then
+		WW.storage.selectedZoneTag = zone.tag
+	end
+	
 	PlaySound( SOUNDS.TABLET_PAGE_TURN )
 	local node = WWG.tree.tree:GetTreeNodeByData( zone )
 	if not WW.pages[ zone.tag ] then
@@ -573,12 +577,12 @@ function WWG.SetupPageMenu()
 			end
 		end
 	end )
-	WizardsWardrobeWindowPageMenuDropdown:SetHandler( "OnClicked", function( self, mouseButton )
+	WizardsWardrobeWindowPageMenuOptionsDropdown:SetHandler( "OnClicked", function( self, mouseButton )
 		if mouseButton == MOUSE_BUTTON_INDEX_LEFT then
 			if IsMenuVisible() then
 				ClearMenu()
 			else
-				WWG.ShowPageContextMenu( WizardsWardrobeWindowPageMenuLabel )
+				WWG.ShowPageContextMenu( WizardsWardrobeWindowPageMenuOptionsDropdown )
 			end
 		end
 	end )
@@ -596,6 +600,29 @@ function WWG.SetupPageMenu()
 	WizardsWardrobeWindowPageMenuRight:SetHandler( "OnClicked", function( self )
 		WWG.PageRight()
 	end )
+	
+	local comboBox = ZO_ComboBox_ObjectFromContainer(WizardsWardrobeWindowPageMenuPagesDropdown)
+	comboBox:SetSortsItems(false)
+	WizardsWardrobeWindowPageMenuPagesDropdown.comboBox = comboBox
+end
+
+function WWG.SetupPagesDropdown()
+	local comboBox = WizardsWardrobeWindowPageMenuPagesDropdown.comboBox
+	
+	comboBox:ClearItems()
+	for pageId, page in pairs(WW.pages[ WW.selection.zone.tag ]) do
+		if pageId ~= 0 then
+			entry = comboBox:CreateItemEntry(page.name, function() 
+					WW.selection.pageId = pageId
+					WW.pages[ WW.selection.zone.tag ][ 0 ].selected = pageId
+					WWG.BuildPage( WW.selection.zone, WW.selection.pageId, true )
+				end
+			)
+			comboBox:AddItem(entry)
+		end
+	end
+
+	comboBox:SetSelectedItem(WW.pages[ WW.selection.zone.tag ][ WW.selection.pageId ].name)
 end
 
 function WWG.SetupSetupList()
@@ -1259,7 +1286,7 @@ function WWG.CreatePage( zone, skipBuilding, refreshTree )
 		WWG.BuildPage( zone, nextPageId, true )
 	end
 	if refreshTree then
-		WW.gui.tree:RefreshTree( WW.gui.tree.tree )
+		WW.gui.tree:RefreshTree( WW.gui.tree.tree, zone )
 	end
 
 	return nextPageId
@@ -1332,8 +1359,8 @@ function WWG.RenamePage()
 			else
 				WW.pages[ zone.tag ][ pageId ].name = input
 			end
-			local pageName = WW.pages[ zone.tag ][ pageId ].name
-			WizardsWardrobeWindowPageMenuLabel:SetText( pageName:upper() )
+			WWG.SetupPagesDropdown()
+			WWG.tree:RefreshTree( WWG.tree.tree, zone )
 		end )
 end
 
@@ -1367,8 +1394,7 @@ function WWG.RefreshPage()
 		WWG.RefreshSetup( setupControl, setup )
 	end
 
-	local pageName = WW.pages[ zone.tag ][ pageId ].name
-	WizardsWardrobeWindowPageMenuLabel:SetText( pageName:upper() )
+	WWG.SetupPagesDropdown()
 
 	if pageId == 1 then
 		WizardsWardrobeWindowPageMenuLeft:SetEnabled( false )
@@ -1464,9 +1490,12 @@ function WWG.ShowPageContextMenu( control )
 	ClearMenu()
 
 	AddMenuItem( GetString( WW_BUTTON_RENAME ), function() WWG.RenamePage() end, MENU_ADD_OPTION_LABEL )
+	
+	AddMenuItem( GetString( WW_BUTTON_REARRANGE_PAGES ), function() WWG.ShowPageArrangeDialog( zone, pageId ) end,
+		MENU_ADD_OPTION_LABEL )
 
 	if WW.selection.zone.tag ~= "SUB" then
-		AddMenuItem( GetString( WW_BUTTON_REARRANGE ), function() WWG.ShowArrangeDialog( zone, pageId ) end,
+		AddMenuItem( GetString( WW_BUTTON_REARRANGE_SETUPS ), function() WWG.ShowSetupArrangeDialog( zone, pageId ) end,
 			MENU_ADD_OPTION_LABEL )
 	end
 
@@ -1710,34 +1739,34 @@ function WWG.SetupArrangeDialog()
 	table.insert( WWG.dialogList, WizardsWardrobeArrange )
 end
 
-function WWG.ShowArrangeDialog( zone, pageId )
-	local function GetSetupList()
-		local setupList = {}
-		for entry in WW.PageIterator( zone, pageId ) do
-			table.insert( setupList, {
-				name = entry.setup.name,
-				index = entry.index
-			} )
-		end
-		return setupList
+function WWG.UpdateArrangeDialogScrollList( data )
+	local dataCopy = ZO_DeepTableCopy( data )
+	local dataList = ZO_ScrollList_GetDataList( WizardsWardrobeArrangeDialogList )
+
+	ZO_ClearNumericallyIndexedTable( dataList )
+
+	for _, value in ipairs( dataCopy ) do
+		local entry = ZO_ScrollList_CreateDataEntry( 1, value )
+		table.insert( dataList, entry )
 	end
 
-	local function UpdateScrollList( data )
-		local dataCopy = ZO_DeepTableCopy( data )
+	ZO_ScrollList_Commit( WizardsWardrobeArrangeDialogList )
+end
+
+function WWG.ShowSetupArrangeDialog( zone, pageId )
+	WizardsWardrobeArrangeDialogSave:SetHandler( "OnClicked", function()
 		local dataList = ZO_ScrollList_GetDataList( WizardsWardrobeArrangeDialogList )
-
-		ZO_ClearNumericallyIndexedTable( dataList )
-
-		for _, value in ipairs( dataCopy ) do
-			local entry = ZO_ScrollList_CreateDataEntry( 1, value )
-			table.insert( dataList, entry )
-		end
-
-		ZO_ScrollList_Commit( WizardsWardrobeArrangeDialogList )
+		WWG.RearrangeSetups( dataList, zone, pageId )
+	end )
+	
+	local setupList = {}
+	for entry in WW.PageIterator( zone, pageId ) do
+		table.insert( setupList, {
+			name = entry.setup.name,
+			index = entry.index
+		} )
 	end
-
-	local data = GetSetupList()
-	UpdateScrollList( data )
+	WWG.UpdateArrangeDialogScrollList( setupList )
 
 	WizardsWardrobeArrange:SetHidden( false )
 
@@ -1753,6 +1782,42 @@ function WWG.RearrangeSetups( sortTable, zone, pageId )
 		end
 	end
 	WWG.BuildPage( zone, pageId, true )
+	WizardsWardrobeArrange:SetHidden( true )
+end
+
+function WWG.ShowPageArrangeDialog( zone, pageId )
+	WizardsWardrobeArrangeDialogSave:SetHandler( "OnClicked", function()
+		local dataList = ZO_ScrollList_GetDataList( WizardsWardrobeArrangeDialogList )
+		WWG.RearrangePages( dataList, zone, pageId )
+	end )
+	
+	local pageList = {}
+	for pageId, page in pairs(WW.pages[ zone.tag ]) do
+		if pageId ~= 0 then
+			table.insert( pageList, {
+				name = page.name,
+				index = pageId
+			} )
+		end
+	end
+
+	WWG.UpdateArrangeDialogScrollList( pageList )
+	WizardsWardrobeArrange:SetHidden( false )
+	WizardsWardrobeArrangeDialogList:GetNamedChild( "ScrollBar" ):SetHidden( false )
+end
+
+function WWG.RearrangePages( sortTable, zone, pageId )
+	local pagesCopy = ZO_DeepTableCopy( WW.pages[ zone.tag ] )
+	local setupsCopy = ZO_DeepTableCopy( WW.setups[ zone.tag ] )
+	for newIndex, entry in ipairs( sortTable ) do
+		local oldIndex = entry.data.index
+		if newIndex ~= oldIndex then
+			WW.pages[ zone.tag ][ newIndex ] = pagesCopy[ oldIndex ]
+			WW.setups[ zone.tag ][ newIndex ] = setupsCopy[ oldIndex ]
+		end
+	end
+	WWG.BuildPage( zone, pageId, true )
+	WWG.tree:RefreshTree( WWG.tree.tree, zone )
 	WizardsWardrobeArrange:SetHidden( true )
 end
 

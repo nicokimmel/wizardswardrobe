@@ -140,6 +140,12 @@ local language = {
 	WW_MENU_ZONE_SELECTION = "Use legacy zone selection",
 	WW_MENU_ZONE_SELECTION_TT =
 	"If set to on it will use the grid dropdown box from previous versions, if off it will use the new selection method.",
+  WW_MENU_AUTO_ZONE_SELECT = "Auto zone select",
+  WW_MENU_AUTO_ZONE_SELECT_DESCRIPTION = "Automatically select the corresponding zone section when the character loads in to a supported zone.",
+  WW_MENU_AUTO_SELECT_INSTANCE = "Auto select Instance",
+  WW_MENU_AUTO_SELECT_INSTANCE_TT = "Automatically selects the trial section when entering a trial.",
+  WW_MENU_AUTO_SELECT_GENERAL = "Auto select General",
+  WW_MENU_AUTO_SELECT_GENERAL_TT = "Automatically selects the general section when entering a zone without a dedicated section.",
 
 	-- USER INTERFACE
 	WW_CHANGELOG =
@@ -155,7 +161,8 @@ local language = {
 	WW_BUTTON_SAVE = "Save",
 	WW_BUTTON_MODIFY = "Modify",
 	WW_BUTTON_RENAME = "Rename",
-	WW_BUTTON_REARRANGE = "Rearrange",
+	WW_BUTTON_REARRANGE_PAGES = "Rearrange pages",
+	WW_BUTTON_REARRANGE_SETUPS = "Rearrange setups",
 	WW_BUTTON_TELEPORT = "Teleport",
 	WW_BUTTON_TOGGLEAUTOEQUIP = "Toggle auto-equip",
 	WW_BUTTON_ADDPAGE = "Add page",
@@ -292,6 +299,14 @@ local language = {
 	WW_LC_CAVOT_AGNAN = "Cavot Agnan",
 	WW_LC_ORPHIC = "Orphic Shattered Shard",
 	WW_LC_KNOT = "Arcane Knot",
+
+	WW_OC_NAME = "Ossein Cage",
+	WW_OC_RED_WITCH_GEDNA_RELVEL = "Red Witch Gedna Relvel",
+	WW_OC_HALL_OF_FLESHCRAFT = "Hall of Fleshcraft",
+	WW_OC_TORTURED_RANYU = "Tortured Ranyu",
+	WW_OC_JYNORAH_AND_SKORKHIF = "Jynorah and Skorkhif",
+	WW_OC_BLOOD_DRINKER_THISA = "Blood Drinker Thisa",
+	WW_OC_OVERFIEND_KAZPIAN = "Overfiend Kazpian",
 
 	WW_MSA_NAME = "Maelstrom Arena",
 
