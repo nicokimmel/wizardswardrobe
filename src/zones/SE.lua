@@ -10,7 +10,7 @@ SE.tag = "SE"
 SE.icon = "/esoui/art/icons/achievement_u38_vtrial_meta.dds"
 SE.priority = 12
 SE.id = 1427
-SE.node = 568
+SE.node = 534
 SE.category = WW.ACTIVITIES.TRIALS
 
 SE.bosses = {
