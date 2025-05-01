@@ -21,6 +21,14 @@ local logger = LibDebugLogger( WW.name )
 WW.callbackManager = ZO_CallbackObject:New()
 
 
+function WW.IsAnySceneShown()
+  for sceneName, scene in pairs(SCENE_MANAGER.scenes) do
+	if scene:GetState() == SCENE_SHOWN and sceneName ~= "hud" and sceneName ~= "hudui" then
+	  return true
+	end
+  end
+  return false
+end
 
 function WW.GetSetupsAmount()
 	local count = 0
@@ -31,11 +39,15 @@ function WW.GetSetupsAmount()
 end
 
 function WW.LoadSetupAdjacent( direct, skipValidation )
+	local isOpen = WW.IsAnySceneShown()
+    if isOpen then return end
 	local zone = WW.selection.zone
 	local pageId = WW.selection.pageId
 	local newSetupId = WW.currentIndex + direct
 	if newSetupId > WW.GetSetupsAmount() then newSetupId = 1 end
 	if newSetupId < 1 then newSetupId = WW.GetSetupsAmount() end
+
+	-- WW.ChangeDisplayedName(zone, pageId,  index)
 	WW.LoadSetup( zone, pageId, newSetupId, false, skipValidation )
 end
 
@@ -43,7 +55,6 @@ function WW.IsReadyToSwap()
 	return not IsUnitInCombat( "player" ) and not IsUnitDeadOrReincarnating( "player" )
 end
 
-local setupTask = async:Create( WW.name .. "SetupTask" )
 local validationTask = async:Create( WW.name .. "ValidationTask" )
 function WW.LoadSetup( zone, pageId, index, auto, skipValidation )
 	if not zone or not pageId or not index then
@@ -51,6 +62,22 @@ function WW.LoadSetup( zone, pageId, index, auto, skipValidation )
 	end
 	if skipValidation == nil then skipValidation = false end
 	local setup = Setup:FromStorage( zone.tag, pageId, index )
+
+	local pageName = WW.pages[ zone.tag ][ pageId ].name
+	WW.gui.SetPanelText( zone.tag, pageName, setup:GetName() )
+	WW.currentIndex = index
+
+	 -- Cancel previous task if it's running
+	 if setupTask and setupTask.IsRunning and setupTask:IsRunning() then
+		setupTask:Cancel()
+		logger:Info("Previous task cancelled")
+	end
+
+	-- Create new task
+	if not setupTask  then 
+		setupTask = async:Create(WW.name .. "SetupTask")
+	end
+	   
 
 	logger:Info( "LoadSetup " .. setup:GetName() )
 
@@ -68,8 +95,6 @@ function WW.LoadSetup( zone, pageId, index, auto, skipValidation )
 	local areAllItemsInInventory = false
 	local isChangingWeapons = false
 	setupTask:Call( function()
-		local pageName = WW.pages[ zone.tag ][ pageId ].name
-		WW.gui.SetPanelText( zone.tag, pageName, setup:GetName() )
 		local logMessage = WW.IsReadyToSwap() and GetString( WW_MSG_LOADSETUP ) or GetString( WW_MSG_LOADINFIGHT )
 		local logColor = WW.IsReadyToSwap() and WW.LOGTYPES.NORMAL or WW.LOGTYPES.INFO
 
@@ -99,7 +124,7 @@ function WW.LoadSetup( zone, pageId, index, auto, skipValidation )
 		if WW.settings.auto.food then WW.EatFood( setup ) end
 	end ):Then( function()
 		setup:ExecuteCode( setup, zone, pageId, index, auto )
-		WW.currentIndex = index
+		-- WW.currentIndex = index
 		--WWV.SetupFailWorkaround( setup:GetName() ) -- Wait until something actually swapped before doing the workaround
 	end ):Then( function()
 		if areAllItemsInInventory then
