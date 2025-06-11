@@ -695,6 +695,7 @@ function WW.SaveGear( setup )
 		if GetItemLinkItemType( gearTable[ gearSlot ].link ) == ITEMTYPE_TABARD then
 			gearTable[ gearSlot ].creator = GetItemCreatorName( BAG_WORN, gearSlot )
 		end
+		if WW.settings.lockSavedGear then SetItemIsPlayerLocked(BAG_WORN, gearSlot, true) end
 	end
 	setup:SetGear( gearTable )
 end

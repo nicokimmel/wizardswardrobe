@@ -77,6 +77,8 @@ local language = {
 	WW_MENU_OVERWRITEWARNING_TT = "Shows a warning if an already saved setup is overwritten.",
 	WW_MENU_INVENTORYMARKER = "Inventory marker",
 	WW_MENU_INVENTORYMARKER_TT = "Shows a small icon over items in the inventory that are saved in setups.",
+	WW_MENU_LOCKSAVEDGEAR = "Lock saved gear",
+	WW_MENU_LOCKSAVEDGEAR_TT = "Automatically locks gear when saved to a setup.",
 	WW_MENU_UNEQUIPEMPTY = "Unequip empty slots",
 	WW_MENU_UNEQUIPEMPTY_TT =
 	"If something is saved as empty in the setup, the item/champion point/skill will be unequipped.",

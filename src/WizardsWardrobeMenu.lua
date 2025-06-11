@@ -87,7 +87,8 @@ function WWM.InitSV()
 		},
 		legacyZoneSelection = false,
 		autoSelectInstance = true,
-		autoSelectGeneral = false
+		autoSelectGeneral = false,
+		lockSavedGear = true
 	} )
 
 	-- migrate validation settings
@@ -157,6 +158,13 @@ function WWM.InitAM()
 			setFunc = function( value ) WW.settings.inventoryMarker = value end,
 			tooltip = GetString( WW_MENU_INVENTORYMARKER_TT ),
 			requiresReload = true,
+		},
+		{
+			type = "checkbox",
+			name = GetString( WW_MENU_LOCKSAVEDGEAR ),
+			getFunc = function() return WW.settings.lockSavedGear end,
+			setFunc = function( value ) WW.settings.lockSavedGear = value end,
+			tooltip = GetString( WW_MENU_LOCKSAVEDGEAR_TT ),
 		},
 		{
 			type = "checkbox",
