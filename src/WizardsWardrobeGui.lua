@@ -81,9 +81,14 @@ function WWG.HandleFirstStart()
 		end, 500 )
 
 		-- dont show changelogs if first time
-		WW.settings.changelogs[ "v1.8.0" ] = true
+		WW.settings.changelogs[ WW.version ] = true
 		return
 	end
+
+	-- changelogs weren't updated with useful info so skipping for now
+	WW.settings.changelogs[ WW.version ] = true
+	if true then return end
+
 	local function getMajorMinorVersion( version )
 		version = version:match( "[^%s]+" ):match( "%d+%.%d+" )
 		local major, minor = version:match( "^(%d+)%.(%d+)" )
@@ -101,7 +106,8 @@ function WWG.HandleFirstStart()
 	end
 	if not PlainStringFind( string.lower( WW.version ), "beta" ) then
 		if highestMajor < currentMajor or (highestMajor == currentMajor and highestMinor < currentMinor) then
-			EVENT_MANAGER:RegisterForUpdate( WWG.name .. "UpdateWarning", 1000, function()
+			EVENT_MANAGER:RegisterForUpdate( WWG.name .. "UpdateWarning", 1000,
+			function()
 				if not ZO_Dialogs_IsShowingDialog() then
 					WWG.ShowConfirmationDialog( WWG.name .. "UpdateWarning", GetString( WW_CHANGELOG ), function()
 						EVENT_MANAGER:UnregisterForUpdate( WWG.name .. "UpdateWarning" )
@@ -109,6 +115,10 @@ function WWG.HandleFirstStart()
 						RequestOpenUnsafeURL( "https://www.esoui.com/downloads/info3170-WizardsWardrobe.html" )
 					end )
 				end
+			end,
+			function()
+				EVENT_MANAGER:UnregisterForUpdate( WWG.name .. "UpdateWarning" )
+				WW.settings.changelogs[ WW.version ] = true
 			end )
 		end
 	end
