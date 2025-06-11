@@ -1693,7 +1693,6 @@ end
 
 function WWG.SetupArrangeDialog()
 	WizardsWardrobeArrange:SetDimensions( GuiRoot:GetWidth() + 8, GuiRoot:GetHeight() + 8 )
-	WizardsWardrobeArrangeDialogTitle:SetText( GetString( WW_BUTTON_REARRANGE ):upper() )
 	WizardsWardrobeArrangeDialogSave:SetText( GetString( WW_BUTTON_SAVE ) )
 	WizardsWardrobeArrangeDialogSave:SetHandler( "OnClicked", function( self )
 		local dataList = ZO_ScrollList_GetDataList( WizardsWardrobeArrangeDialogList )
@@ -1767,6 +1766,7 @@ function WWG.UpdateArrangeDialogScrollList( data )
 end
 
 function WWG.ShowSetupArrangeDialog( zone, pageId )
+	WizardsWardrobeArrangeDialogTitle:SetText( GetString( WW_BUTTON_REARRANGE_SETUPS ):upper() )
 	WizardsWardrobeArrangeDialogSave:SetHandler( "OnClicked", function()
 		local dataList = ZO_ScrollList_GetDataList( WizardsWardrobeArrangeDialogList )
 		WWG.RearrangeSetups( dataList, zone, pageId )
@@ -1799,6 +1799,7 @@ function WWG.RearrangeSetups( sortTable, zone, pageId )
 end
 
 function WWG.ShowPageArrangeDialog( zone, pageId )
+	WizardsWardrobeArrangeDialogTitle:SetText( GetString( WW_BUTTON_REARRANGE_PAGES ):upper() )
 	WizardsWardrobeArrangeDialogSave:SetHandler( "OnClicked", function()
 		local dataList = ZO_ScrollList_GetDataList( WizardsWardrobeArrangeDialogList )
 		WWG.RearrangePages( dataList, zone, pageId )
