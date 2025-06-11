@@ -147,6 +147,18 @@ function WW.SaveSetup( zone, pageId, index, skip )
 	WW.Log( GetString( WW_MSG_SAVESETUP ), WW.LOGTYPES.NORMAL, "FFFFFF", setup:GetName() )
 end
 
+function WW.DuplicateSetup( zone, pageId, index )
+	local setup = Setup:FromStorage( zone.tag, pageId, index )
+	local setupName = setup:GetName()
+	local newIndex = index + 1
+
+	table.insert(WW.setups[ zone.tag ][ pageId ], newIndex, ZO_DeepTableCopy( setup ))
+	WW.setups[ zone.tag ][ pageId ][ newIndex ].name = string.format( GetString( WW_DUPLICATE_NAME ), setupName )
+	
+	WW.markers.BuildGearList()
+	WW.gui.BuildPage( zone, pageId )
+end
+
 function WW.DeleteSetup( zone, pageId, index )
 	local setup = Setup:FromStorage( zone.tag, pageId, index )
 	local setupName = setup:GetName()
