@@ -1307,16 +1307,16 @@ end
 function WWG.DuplicatePage()
 	local zone = WW.selection.zone
 	local pageId = WW.selection.pageId
-	local DO_REFRESH_TREE = true
-	local cloneId = WWG.CreatePage( zone, true, DO_REFRESH_TREE )
-
 	local pageName = WW.pages[ zone.tag ][ pageId ].name
-	WW.pages[ zone.tag ][ cloneId ].name = string.format( GetString( WW_DUPLICATE_NAME ), pageName )
+	local newIndex = pageId + 1
+	
+	table.insert(WW.pages[ zone.tag ], newIndex, ZO_DeepTableCopy( WW.setups[ zone.tag ][ pageId ] ) )
+	WW.pages[ zone.tag ][ newIndex ].name = string.format( GetString( WW_DUPLICATE_NAME ), pageName )
+	table.insert(WW.setups[ zone.tag ], newIndex, ZO_DeepTableCopy( WW.setups[ zone.tag ][ pageId ] ))
 
-	WW.setups[ zone.tag ][ cloneId ] = {}
-	ZO_DeepTableCopy( WW.setups[ zone.tag ][ pageId ], WW.setups[ zone.tag ][ cloneId ] )
-
+	WW.markers.BuildGearList()
 	WWG.BuildPage( WW.selection.zone, WW.selection.pageId, true )
+	WWG.tree:RefreshTree( WWG.tree.tree, zone )
 end
 
 function WWG.DeletePage()
