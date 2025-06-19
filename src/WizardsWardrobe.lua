@@ -212,6 +212,7 @@ local skillTask = async:Create( WW.name .. "SkillTask" )
 function WW.LoadSkills( setup )
 	logger:Debug( "LoadSkills" )
 	local movedCryptCanon = false
+	local boundAegisEquipped = nil
 	--skillTask:Cancel()
 	local skillTable = setup:GetSkills()
 	local gearTable = setup:GetGear()
@@ -227,6 +228,7 @@ function WW.LoadSkills( setup )
 					return false
 				end
 			end
+			if abilityId == 24163 then boundAegisEquipped = { hotbarCategory = hotbarCategory, slotIndex = slotIndex } end
 			logger:Debug( "SlotSkill %s %s %s (%s)", tostring( hotbarCategory ), tostring( slotIndex ), tostring( abilityId ),
 				GetAbilityName( abilityId ) )
 
@@ -275,6 +277,12 @@ function WW.LoadSkills( setup )
 
 			CallSecureProtected( "RequestMoveItem", BAG_BACKPACK, cryptCanonLocation.slot, BAG_WORN, EQUIP_SLOT_CHEST, 1 )
 			logger:Debug( "Re-equipped cryptcanon" )
+		end
+		-- Bound Aegis can bug when moving skill slots, where the passive minor protection and resolve drop. Reslot to mitigate
+		if boundAegisEquipped then
+			local hotbarData = ACTION_BAR_ASSIGNMENT_MANAGER:GetHotbar( boundAegisEquipped.hotbarCategory )
+			hotbarData:ClearSlot( boundAegisEquipped.slotIndex )
+			WW.SlotSkill( boundAegisEquipped.hotbarCategory, boundAegisEquipped.slotIndex, 24163 )
 		end
 	end )
 	--WWV.SetupFailWorkaround()
