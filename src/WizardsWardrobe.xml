@@ -137,8 +137,8 @@
 					<Dimensions x="FLEX_ALIGNMENT_AUTO" y="40" />
 					<Anchor point="TOP" relativeTo="$(parent)TopDivider" relativePoint="BOTTOM" />
 					<Controls>
-						<Control name="$(parent)PagesDropdown" inherits="ZO_ScrollableComboBox" mouseEnabled="true">
-							<Dimensions y="29" />
+						<Control name="$(parent)PagesDropdown" inherits="ZO_ComboBoxResizeToFit" mouseEnabled="true">
+							<DimensionConstraints minX="140" maxY="29" />
 							<Anchor point="CENTER" relativeTo="$(parent)" relativePoint="CENTER" />
 						</Control>
 						<Texture name="$(parent)Warning" layer="CONTROLS" hidden="true" mouseEnabled="true" textureFile="/esoui/art/miscellaneous/eso_icon_warning.dds" color="FFFF00">

@@ -421,6 +421,8 @@ function WWG.OnWindowResize( action )
 
 		WizardsWardrobeWindowTopDivider:SetWidth( width )
 		WizardsWardrobeWindowBottomDivider:SetWidth( width )
+		
+		WizardsWardrobeWindowPageMenuPagesDropdownSelectedItemText:SetDimensionConstraints(140, 0, width - 200, 29)
 	end
 
 	local function OnResizeEnd()
