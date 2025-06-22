@@ -530,6 +530,11 @@ function WWG.SetupTopMenu()
 	WizardsWardrobeWindowTopMenuButtonsAutoEquip:SetNormalTexture( autoEquipTextures[ WW.settings.autoEquipSetups ] )
 	WWG.SetTooltip( WizardsWardrobeWindowTopMenuButtonsAutoEquip, TOP, GetString( WW_BUTTON_TOGGLEAUTOEQUIP ) )
 	selection:SetHidden( not WW.settings.legacyZoneSelection )
+
+	WizardsWardrobeWindowTopMenuButtonsBankAll:SetHandler( "OnClicked", function()
+		if IsShiftKeyDown() then WW.banking.DepositAllSetups() end
+	end )
+	WWG.SetTooltip( WizardsWardrobeWindowTopMenuButtonsBankAll, TOP, GetString( WW_BUTTON_BANKALL ) )
 end
 
 function WWG.OnZoneSelect( zone )
@@ -1489,9 +1494,11 @@ function WWG.RefreshSetup( control, setup )
 	if IsBankOpen() and not WW.DISABLEDBAGS[ GetBankingBag() ] then
 		control.banking:SetHidden( false )
 		WizardsWardrobeWindowPageMenuBank:SetHidden( false )
+		WizardsWardrobeWindowTopMenuButtonsBankAll:SetHidden( false )
 	else
 		control.banking:SetHidden( true )
 		WizardsWardrobeWindowPageMenuBank:SetHidden( true )
+		WizardsWardrobeWindowTopMenuButtonsBankAll:SetHidden( true )
 	end
 end
 

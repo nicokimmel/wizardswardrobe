@@ -108,7 +108,14 @@
 										mouseOver="/esoui/art/buttons/plus_over.dds"
 										disabled="/esoui/art/buttons/plus_disabled.dds" />
 								</Button>
-
+								<Button name="$(parent)BankAll" hidden="true" inherits="ZO_ButtonBehaviorClickSound">
+									<Dimensions x="36" y="36" />
+									<Anchor point="LEFT" relativeTo="$(parent)AddPage" relativePoint="RIGHT" />
+									<Textures normal="/esoui/art/icons/guildranks/guild_indexicon_misc09_up.dds"
+										pressed="/esoui/art/icons/guildranks/guild_indexicon_misc09_down.dds"
+										mouseOver="/esoui/art/icons/guildranks/guild_indexicon_misc09_over.dds"
+										disabled="/esoui/art/icons/guildranks/guild_indexicon_misc09_disabled.dds" />
+								</Button>
 								<Button name="$(parent)TeleportHouse" inherits="ZO_ButtonBehaviorClickSound">
 									<Dimensions x="36" y="36" />
 									<Anchor point="RIGHT" relativeTo="$(parent)AutoEquip" relativePoint="LEFT" />
@@ -171,7 +178,7 @@
 						</Button>
 						<Button name="$(parent)Right" inherits="ZO_ButtonBehaviorClickSound">
 							<Dimensions x="36" y="36" />
-							<Anchor point="RIGHT" relativeTo="$(parent)AddPage" relativePoint="RIGHT" />
+							<Anchor point="RIGHT" relativeTo="$(parent)" relativePoint="RIGHT" />
 							<Textures normal="/esoui/art/buttons/large_rightarrow_up.dds"
 								pressed="/esoui/art/buttons/large_rightarrow_down.dds"
 								mouseOver="/esoui/art/buttons/large_rightarrow_over.dds"
