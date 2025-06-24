@@ -3,8 +3,8 @@
 ## Version: 1.21.0
 ## AddOnVersion: 1200
 ## Description: Throw all your setups into the wardrobe and let the wizard equip them exactly when you need it.
-## APIVersion: 101045
-## DependsOn: LibAddonMenu-2.0>=35 LibChatMessage>=105 LibDebugLogger>=105 LibAsync>=20304
+## APIVersion: 101046
+## DependsOn: LibAddonMenu-2.0>=40 LibChatMessage>=118 LibDebugLogger>=268 LibAsync>=30002
 ## SavedVariables: WizardsWardrobeSV
 
 ## This Add-on is not created by, affiliated with or sponsored by ZeniMax Media Inc. or its affiliates.
