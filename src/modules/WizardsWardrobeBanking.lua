@@ -116,6 +116,54 @@ function WWB.DepositSetup(zone, pageId, index)
 	WWB.MoveItems(gearTable, bankBag)
 end
 
+function WWB.DepositAllSetups(skipCurrentCharacter)
+	local bankBag = GetBankingBag()
+	if WW.DISABLEDBAGS[bankBag] then return end
+	
+	local itemLocationTable = WW.GetItemLocation()
+	local preGearTable = {}
+	WW.Log(GetString(WW_MSG_DEPOSIT_ALL), WW.LOGTYPES.NORMAL, "FFFFFF")
+	
+	for characterId, characterSv in pairs(WizardsWardrobeSV.Default[GetDisplayName()]) do
+		if characterId ~= "$AccountWide" then		
+			for zoneTag, setupPages in pairs(characterSv.setups) do
+				for pageId, setups in pairs(setupPages) do
+					
+					for _, setup in ipairs( setups ) do
+						if setup.gear then
+							for __, gearSlot in ipairs(WW.GEARSLOTS) do
+								local gear = Setup.GetGearInSlot(setup, gearSlot )
+								if gearSlot ~= EQUIP_SLOT_POISON
+									and gearSlot ~= EQUIP_SLOT_BACKUP_POISON
+									and gearSlot ~= EQUIP_SLOT_COSTUME
+									and gear then
+									
+									if itemLocationTable[gear.id] and not preGearTable[gear.id] then
+										preGearTable[gear.id] = {
+											bag = itemLocationTable[gear.id].bag,
+											slot = itemLocationTable[gear.id].slot,
+										}
+									end
+								end
+							end
+						end
+					end					
+				end
+			end
+		end
+	end
+	
+	local gearTable = {}
+	for id, item in pairs(preGearTable) do
+		table.insert(gearTable, {
+			id = id,
+			bag = item.bag,
+			slot = item.slot,
+		})
+	end
+	WWB.MoveItems(gearTable, bankBag)
+end
+
 function WWB.DepositPage(zone, pageId)
 	local bankBag = GetBankingBag()
 	if WW.DISABLEDBAGS[bankBag] then return end

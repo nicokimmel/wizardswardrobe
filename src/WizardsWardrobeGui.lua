@@ -81,9 +81,14 @@ function WWG.HandleFirstStart()
 		end, 500 )
 
 		-- dont show changelogs if first time
-		WW.settings.changelogs[ "v1.8.0" ] = true
+		WW.settings.changelogs[ WW.version ] = true
 		return
 	end
+
+	-- changelogs weren't updated with useful info so skipping for now
+	WW.settings.changelogs[ WW.version ] = true
+	if true then return end
+
 	local function getMajorMinorVersion( version )
 		version = version:match( "[^%s]+" ):match( "%d+%.%d+" )
 		local major, minor = version:match( "^(%d+)%.(%d+)" )
@@ -101,7 +106,8 @@ function WWG.HandleFirstStart()
 	end
 	if not PlainStringFind( string.lower( WW.version ), "beta" ) then
 		if highestMajor < currentMajor or (highestMajor == currentMajor and highestMinor < currentMinor) then
-			EVENT_MANAGER:RegisterForUpdate( WWG.name .. "UpdateWarning", 1000, function()
+			EVENT_MANAGER:RegisterForUpdate( WWG.name .. "UpdateWarning", 1000,
+			function()
 				if not ZO_Dialogs_IsShowingDialog() then
 					WWG.ShowConfirmationDialog( WWG.name .. "UpdateWarning", GetString( WW_CHANGELOG ), function()
 						EVENT_MANAGER:UnregisterForUpdate( WWG.name .. "UpdateWarning" )
@@ -109,6 +115,10 @@ function WWG.HandleFirstStart()
 						RequestOpenUnsafeURL( "https://www.esoui.com/downloads/info3170-WizardsWardrobe.html" )
 					end )
 				end
+			end,
+			function()
+				EVENT_MANAGER:UnregisterForUpdate( WWG.name .. "UpdateWarning" )
+				WW.settings.changelogs[ WW.version ] = true
 			end )
 		end
 	end
@@ -411,6 +421,8 @@ function WWG.OnWindowResize( action )
 
 		WizardsWardrobeWindowTopDivider:SetWidth( width )
 		WizardsWardrobeWindowBottomDivider:SetWidth( width )
+		
+		WizardsWardrobeWindowPageMenuPagesDropdownSelectedItemText:SetDimensionConstraints(140, 0, width - 200, 29)
 	end
 
 	local function OnResizeEnd()
@@ -518,6 +530,11 @@ function WWG.SetupTopMenu()
 	WizardsWardrobeWindowTopMenuButtonsAutoEquip:SetNormalTexture( autoEquipTextures[ WW.settings.autoEquipSetups ] )
 	WWG.SetTooltip( WizardsWardrobeWindowTopMenuButtonsAutoEquip, TOP, GetString( WW_BUTTON_TOGGLEAUTOEQUIP ) )
 	selection:SetHidden( not WW.settings.legacyZoneSelection )
+
+	WizardsWardrobeWindowTopMenuButtonsBankAll:SetHandler( "OnClicked", function()
+		if IsShiftKeyDown() then WW.banking.DepositAllSetups() end
+	end )
+	WWG.SetTooltip( WizardsWardrobeWindowTopMenuButtonsBankAll, TOP, GetString( WW_BUTTON_BANKALL ) )
 end
 
 function WWG.OnZoneSelect( zone )
@@ -1307,16 +1324,16 @@ end
 function WWG.DuplicatePage()
 	local zone = WW.selection.zone
 	local pageId = WW.selection.pageId
-	local DO_REFRESH_TREE = true
-	local cloneId = WWG.CreatePage( zone, true, DO_REFRESH_TREE )
-
 	local pageName = WW.pages[ zone.tag ][ pageId ].name
-	WW.pages[ zone.tag ][ cloneId ].name = string.format( GetString( WW_DUPLICATE_NAME ), pageName )
+	local newIndex = pageId + 1
+	
+	table.insert(WW.pages[ zone.tag ], newIndex, ZO_DeepTableCopy( WW.setups[ zone.tag ][ pageId ] ) )
+	WW.pages[ zone.tag ][ newIndex ].name = string.format( GetString( WW_DUPLICATE_NAME ), pageName )
+	table.insert(WW.setups[ zone.tag ], newIndex, ZO_DeepTableCopy( WW.setups[ zone.tag ][ pageId ] ))
 
-	WW.setups[ zone.tag ][ cloneId ] = {}
-	ZO_DeepTableCopy( WW.setups[ zone.tag ][ pageId ], WW.setups[ zone.tag ][ cloneId ] )
-
+	WW.markers.BuildGearList()
 	WWG.BuildPage( WW.selection.zone, WW.selection.pageId, true )
+	WWG.tree:RefreshTree( WWG.tree.tree, zone )
 end
 
 function WWG.DeletePage()
@@ -1477,9 +1494,11 @@ function WWG.RefreshSetup( control, setup )
 	if IsBankOpen() and not WW.DISABLEDBAGS[ GetBankingBag() ] then
 		control.banking:SetHidden( false )
 		WizardsWardrobeWindowPageMenuBank:SetHidden( false )
+		WizardsWardrobeWindowTopMenuButtonsBankAll:SetHidden( false )
 	else
 		control.banking:SetHidden( true )
 		WizardsWardrobeWindowPageMenuBank:SetHidden( true )
+		WizardsWardrobeWindowTopMenuButtonsBankAll:SetHidden( true )
 	end
 end
 
@@ -1538,6 +1557,9 @@ function WWG.ShowSetupContextMenu( control, index )
 	AddMenuItem( GetString( WW_CUSTOMCODE ), function() WW.code.ShowCodeDialog( zone, pageId, index ) end,
 		MENU_ADD_OPTION_LABEL )
 
+	-- DUPLICATE
+	AddMenuItem( GetString( WW_DUPLICATE ), function() WW.DuplicateSetup( zone, pageId, index ) end, MENU_ADD_OPTION_LABEL )
+	
 	-- IMPORT / EXPORT
 	AddMenuItem( GetString( WW_IMPORT ), function() WW.transfer.ShowImportDialog( zone, pageId, index ) end,
 		MENU_ADD_OPTION_LABEL )
@@ -1680,7 +1702,6 @@ end
 
 function WWG.SetupArrangeDialog()
 	WizardsWardrobeArrange:SetDimensions( GuiRoot:GetWidth() + 8, GuiRoot:GetHeight() + 8 )
-	WizardsWardrobeArrangeDialogTitle:SetText( GetString( WW_BUTTON_REARRANGE ):upper() )
 	WizardsWardrobeArrangeDialogSave:SetText( GetString( WW_BUTTON_SAVE ) )
 	WizardsWardrobeArrangeDialogSave:SetHandler( "OnClicked", function( self )
 		local dataList = ZO_ScrollList_GetDataList( WizardsWardrobeArrangeDialogList )
@@ -1754,6 +1775,7 @@ function WWG.UpdateArrangeDialogScrollList( data )
 end
 
 function WWG.ShowSetupArrangeDialog( zone, pageId )
+	WizardsWardrobeArrangeDialogTitle:SetText( GetString( WW_BUTTON_REARRANGE_SETUPS ):upper() )
 	WizardsWardrobeArrangeDialogSave:SetHandler( "OnClicked", function()
 		local dataList = ZO_ScrollList_GetDataList( WizardsWardrobeArrangeDialogList )
 		WWG.RearrangeSetups( dataList, zone, pageId )
@@ -1786,6 +1808,7 @@ function WWG.RearrangeSetups( sortTable, zone, pageId )
 end
 
 function WWG.ShowPageArrangeDialog( zone, pageId )
+	WizardsWardrobeArrangeDialogTitle:SetText( GetString( WW_BUTTON_REARRANGE_PAGES ):upper() )
 	WizardsWardrobeArrangeDialogSave:SetHandler( "OnClicked", function()
 		local dataList = ZO_ScrollList_GetDataList( WizardsWardrobeArrangeDialogList )
 		WWG.RearrangePages( dataList, zone, pageId )

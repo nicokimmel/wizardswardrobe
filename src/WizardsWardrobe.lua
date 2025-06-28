@@ -147,6 +147,18 @@ function WW.SaveSetup( zone, pageId, index, skip )
 	WW.Log( GetString( WW_MSG_SAVESETUP ), WW.LOGTYPES.NORMAL, "FFFFFF", setup:GetName() )
 end
 
+function WW.DuplicateSetup( zone, pageId, index )
+	local setup = Setup:FromStorage( zone.tag, pageId, index )
+	local setupName = setup:GetName()
+	local newIndex = index + 1
+
+	table.insert(WW.setups[ zone.tag ][ pageId ], newIndex, ZO_DeepTableCopy( setup ))
+	WW.setups[ zone.tag ][ pageId ][ newIndex ].name = string.format( GetString( WW_DUPLICATE_NAME ), setupName )
+	
+	WW.markers.BuildGearList()
+	WW.gui.BuildPage( zone, pageId )
+end
+
 function WW.DeleteSetup( zone, pageId, index )
 	local setup = Setup:FromStorage( zone.tag, pageId, index )
 	local setupName = setup:GetName()
@@ -200,6 +212,7 @@ local skillTask = async:Create( WW.name .. "SkillTask" )
 function WW.LoadSkills( setup )
 	logger:Debug( "LoadSkills" )
 	local movedCryptCanon = false
+	local boundAegisEquipped = nil
 	--skillTask:Cancel()
 	local skillTable = setup:GetSkills()
 	local gearTable = setup:GetGear()
@@ -215,6 +228,7 @@ function WW.LoadSkills( setup )
 					return false
 				end
 			end
+			if abilityId == 24163 then boundAegisEquipped = { hotbarCategory = hotbarCategory, slotIndex = slotIndex } end
 			logger:Debug( "SlotSkill %s %s %s (%s)", tostring( hotbarCategory ), tostring( slotIndex ), tostring( abilityId ),
 				GetAbilityName( abilityId ) )
 
@@ -263,6 +277,12 @@ function WW.LoadSkills( setup )
 
 			CallSecureProtected( "RequestMoveItem", BAG_BACKPACK, cryptCanonLocation.slot, BAG_WORN, EQUIP_SLOT_CHEST, 1 )
 			logger:Debug( "Re-equipped cryptcanon" )
+		end
+		-- Bound Aegis can bug when moving skill slots, where the passive minor protection and resolve drop. Reslot to mitigate
+		if boundAegisEquipped then
+			local hotbarData = ACTION_BAR_ASSIGNMENT_MANAGER:GetHotbar( boundAegisEquipped.hotbarCategory )
+			hotbarData:ClearSlot( boundAegisEquipped.slotIndex )
+			WW.SlotSkill( boundAegisEquipped.hotbarCategory, boundAegisEquipped.slotIndex, 24163 )
 		end
 	end )
 	--WWV.SetupFailWorkaround()
@@ -683,6 +703,7 @@ function WW.SaveGear( setup )
 		if GetItemLinkItemType( gearTable[ gearSlot ].link ) == ITEMTYPE_TABARD then
 			gearTable[ gearSlot ].creator = GetItemCreatorName( BAG_WORN, gearSlot )
 		end
+		if WW.settings.lockSavedGear then SetItemIsPlayerLocked(BAG_WORN, gearSlot, true) end
 	end
 	setup:SetGear( gearTable )
 end
