@@ -85,10 +85,6 @@ function WWG.HandleFirstStart()
 		return
 	end
 
-	-- changelogs weren't updated with useful info so skipping for now
-	WW.settings.changelogs[ WW.version ] = true
-	if true then return end
-
 	local function getMajorMinorVersion( version )
 		version = version:match( "[^%s]+" ):match( "%d+%.%d+" )
 		local major, minor = version:match( "^(%d+)%.(%d+)" )
@@ -112,13 +108,13 @@ function WWG.HandleFirstStart()
 					WWG.ShowConfirmationDialog( WWG.name .. "UpdateWarning", GetString( WW_CHANGELOG ), function()
 						EVENT_MANAGER:UnregisterForUpdate( WWG.name .. "UpdateWarning" )
 						WW.settings.changelogs[ WW.version ] = true
-						RequestOpenUnsafeURL( "https://www.esoui.com/downloads/info3170-WizardsWardrobe.html" )
+						RequestOpenUnsafeURL( "https://www.esoui.com/downloads/info3170-WizardsWardrobe.html#changelog" )
+					end,
+					function()
+						EVENT_MANAGER:UnregisterForUpdate( WWG.name .. "UpdateWarning" )
+						WW.settings.changelogs[ WW.version ] = true
 					end )
 				end
-			end,
-			function()
-				EVENT_MANAGER:UnregisterForUpdate( WWG.name .. "UpdateWarning" )
-				WW.settings.changelogs[ WW.version ] = true
 			end )
 		end
 	end
