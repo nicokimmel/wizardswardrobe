@@ -1,10 +1,11 @@
 ## Title: Wizard's Wardrobe
 ## Author: ownedbynico, |c268074JN_Slevin|r, STUDLETON
 ## Version: 1.22.0
-## AddOnVersion: 1200
+## AddOnVersion: 1220
 ## Description: Throw all your setups into the wardrobe and let the wizard equip them exactly when you need it.
 ## APIVersion: 101046
-## DependsOn: LibAddonMenu-2.0>=40 LibChatMessage>=118 LibDebugLogger>=268 LibAsync>=30002
+## PCDependsOn: LibAddonMenu-2.0>=40 LibChatMessage>=118 LibDebugLogger>=268 LibAsync>=30002
+## ConsoleDependsOn LibAddonMenu-2.0 LibHarvensAddonMenu LibChatMessage>=118 LibDebugLogger>=268 LibAsync>=30002
 ## SavedVariables: WizardsWardrobeSV
 
 ## This Add-on is not created by, affiliated with or sponsored by ZeniMax Media Inc. or its affiliates.
@@ -13,8 +14,9 @@
 ##
 ## You can read the full terms at https://account.elderscrollsonline.com/add-on-terms
 
-Bindings.xml
-WizardsWardrobe.xml
+PC/WizardsWardrobe.xml
+PC/Bindings.xml
+Console/WizardsWardrobe.xml
 
 libs/json.lua
 libs/gridcombobox.lua
@@ -22,7 +24,9 @@ libs/gridcombobox.lua
 lang/en.lua
 lang/$(language).lua
 
-WizardsWardrobeSetup.lua
+PC/WizardsWardrobeSetup.lua
+Console/WizardsWardrobeSetup.lua
+
 WizardsWardrobeConst.lua
 WizardsWardrobeUtils.lua
 WizardsWardrobeQueue.lua
@@ -41,10 +45,13 @@ modules/WizardsWardrobeCode.lua
 modules/WizardsWardrobeFixes.lua
 modules/WizardsWardrobeTree.lua
 
-WizardsWardrobeGui.lua
-WizardsWardrobeMenu.lua
-WizardsWardrobe.lua
-
+PC/WizardsWardrobeGui.lua
+PC/WizardsWardrobeMenu.lua
+PC/WizardsWardrobe.lua
+Console/WizardsWardrobeGui.lua
+Console/WizardsWardrobeMenu.lua
+Console/WizardsWardrobeConsoleControl.lua
+Console/WizardsWardrobe.lua
 
 zones/GEN.lua
 zones/SUB.lua
@@ -65,3 +72,5 @@ zones/BRP.lua
 zones/EA.lua
 zones/LC.lua
 zones/OC.lua
+
+

@@ -1,0 +1,495 @@
+<GuiXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sir.insidi.at/or/schema/esoui.xsd">
+	<Animations>
+		<AnimationTimeline name="WW_AlphaTimeline">
+			<Animations>
+				<AlphaAnimation duration="200" startAlpha="0" endAlpha="1">
+					<EasingFunction> 
+                        return ZO_LinearEase(progress)
+                    </EasingFunction>
+				</AlphaAnimation>
+			</Animations>
+		</AnimationTimeline>
+	</Animations>
+	<Controls>
+		<TopLevelControl name="WizardsWardrobePanel" tier="LOW" layer="CONTROLS" mouseEnabled="true" movable="false" clampedToScreen="true" hidden="true">
+			<Dimensions x="245" y="70" />
+			<OnMoveStop>WizardsWardrobe.gui.OnPanelMove()</OnMoveStop>
+			<Controls>
+				<Backdrop name="$(parent)BG" inherits="ZO_DarkThinFrame" alpha="0.5">
+					<AnchorFill />
+				</Backdrop>
+				<Texture name="$(parent)Icon" layer="CONTROLS" textureFile="/WizardsWardrobe/assets/icon64.dds" mouseEnabled="true">
+					<Dimensions x="46" y="46" />
+					<Anchor point="LEFT" relativeTo="$(parent)" relativePoint="LEFT" offsetX="10" />
+				</Texture>
+				<Label name="$(parent)TopLabel" font="ZoFontGamepadChat" verticalAlignment="TEXT_ALIGN_CENTER">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="60" offsetY="7" />
+				</Label>
+				<Label name="$(parent)MiddleLabel" font="ZoFontGamepadChat" verticalAlignment="TEXT_ALIGN_CENTER">
+					<Anchor point="LEFT" relativeTo="$(parent)" relativePoint="LEFT" offsetX="60" />
+				</Label>
+				<Label name="$(parent)BottomLabel" font="ZoFontGamepadChat" verticalAlignment="TEXT_ALIGN_CENTER">
+					<Anchor point="BOTTOMLEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="60" offsetY="-7" />
+				</Label>
+			</Controls>
+		</TopLevelControl>
+		
+		<Texture name="WizardsWardrobeSetupPreviewSkill" textureFile="/esoui/art/itemtooltip/eso_itemtooltip_emptyslot.dds" level="2" virtual="true">
+			<Dimensions x="40" y="40" />
+			<Anchor point="TOPLEFT"/>
+			<Controls>
+				<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+					<Dimensions x="40" y="40" />
+					<Anchor point="CENTER"/>
+				</Texture>
+			</Controls>
+		</Texture>
+		<Control name="WizardsWardrobeCPItem" resizeToFitDescendents="true" virtual="true">
+			<Anchor point="TOPLEFT"/>
+			<Controls>
+				<Texture name="$(parent)Icon" textureFile="/esoui/art/champion/champion_points_stamina_icon.dds" level="2">
+						<Dimensions x="20" y="20" />
+						<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="10" offsetY="10" />
+				</Texture>
+				<Texture name="$(parent)Frame" textureFile="/esoui/art/champion/actionbar/champion_bar_slot_frame.dds" level="3">
+						<Dimensions x="26" y="26" />
+						<Anchor point="CENTER" relativeTo="$(parent)Icon" relativePoint="CENTER" />
+				</Texture>
+				<Label name="$(parent)Label" font="ZoFontGamepadChat" >
+						<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5" />
+				</Label>
+			</Controls>
+		</Control>
+		<Control name="WizardsWardrobeSetupPreview" virtual="true">
+			<Controls>
+				<Label name="$(parent)Name" font="ZoFontGamepadChat" >
+					<Anchor point="TOPLEFT"/>
+				</Label>
+				<Control name="$(parent)Skills" resizeToFitDescendents="true">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)Name" relativePoint="BOTTOMLEFT" offsetY="20"/>
+					<Controls>
+						<Texture name="$(parent)Skill_0_3" inherits="WizardsWardrobeSetupPreviewSkill">
+							<Anchor offsetY="50"/>
+						</Texture>
+						<Texture name="$(parent)Skill_0_4" inherits="WizardsWardrobeSetupPreviewSkill">
+							<Anchor offsetX="42" offsetY="50"/>
+						</Texture>
+						<Texture name="$(parent)Skill_0_5" inherits="WizardsWardrobeSetupPreviewSkill">
+							<Anchor offsetX="84" offsetY="50"/>
+						</Texture>
+						<Texture name="$(parent)Skill_0_6" inherits="WizardsWardrobeSetupPreviewSkill">
+							<Anchor offsetX="126" offsetY="50"/>
+						</Texture>
+						<Texture name="$(parent)Skill_0_7" inherits="WizardsWardrobeSetupPreviewSkill">
+							<Anchor offsetX="168" offsetY="50"/>
+						</Texture>
+						<Texture name="$(parent)Skill_0_8" inherits="WizardsWardrobeSetupPreviewSkill">
+							<Anchor offsetX="230" offsetY="50"/>
+						</Texture>
+
+						<Texture name="$(parent)Skill_1_3" inherits="WizardsWardrobeSetupPreviewSkill"/>
+						<Texture name="$(parent)Skill_1_4" inherits="WizardsWardrobeSetupPreviewSkill">
+							<Anchor offsetX="42"/>
+						</Texture>
+						<Texture name="$(parent)Skill_1_5" inherits="WizardsWardrobeSetupPreviewSkill">
+							<Anchor offsetX="84"/>
+						</Texture>
+						<Texture name="$(parent)Skill_1_6" inherits="WizardsWardrobeSetupPreviewSkill">
+							<Anchor offsetX="126"/>
+						</Texture>
+						<Texture name="$(parent)Skill_1_7" inherits="WizardsWardrobeSetupPreviewSkill">
+							<Anchor offsetX="168"/>
+						</Texture>
+						<Texture name="$(parent)Skill_1_8" inherits="WizardsWardrobeSetupPreviewSkill">
+							<Anchor offsetX="230"/>
+						</Texture>
+					</Controls>
+				</Control>
+				<Control name="$(parent)Gear" resizeToFitDescendents="true">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)Skills" relativePoint="BOTTOMLEFT" offsetY="20"/> 
+					<Controls>
+						<Control name="$(parent)GearSlot_0" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="0"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_head.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+						<Control name="$(parent)GearSlot_1" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="40"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_shoulders.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+						<Control name="$(parent)GearSlot_2" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="80"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_chest.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+						<Control name="$(parent)GearSlot_3" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="120"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_hands.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+						<Control name="$(parent)GearSlot_4" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="160"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_belt.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+						<Control name="$(parent)GearSlot_5" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="200"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_legs.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+						<Control name="$(parent)GearSlot_6" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="240"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_feet.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+						<Control name="$(parent)GearSlot_7" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="280"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_neck.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+						<Control name="$(parent)GearSlot_8" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="320"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_ring.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+						<Control name="$(parent)GearSlot_9" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="360"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_ring.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+						<Control name="$(parent)GearSlot_10" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="400"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_costume.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+						<Control name="$(parent)GearSlot_11" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="440"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_mainhand.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+						<Control name="$(parent)GearSlot_12" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="480"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_offhand.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+						<Control name="$(parent)GearSlot_13" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="520"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_poison.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+						<Control name="$(parent)GearSlot_14" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="560"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_mainhand.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+						<Control name="$(parent)GearSlot_15" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="600"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_offhand.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+						<Control name="$(parent)GearSlot_16" resizeToFitDescendents="true">
+							<Anchor point="TOPLEFT" offsetY="640"/> 
+							<Controls>
+								<Texture name="$(parent)Icon" textureFile="/esoui/art/characterwindow/gearslot_poison.dds" level="2">
+									<Dimensions x="36" y="36" />
+									<Anchor point="TOPLEFT"/>
+								</Texture>
+								<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+									<Dimensions x="36" y="36" />
+									<Anchor point="CENTER" relativeTo="$(parent)Icon"/>
+								</Texture>
+								<Label name="$(parent)Name" font="ZoFontGamepadChat">
+									<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5"/>
+								</Label>
+							</Controls>
+						</Control>
+					</Controls>
+				</Control>
+				<Control name="$(parent)CP" resizeToFitDescendents="true">
+            <Anchor point="TOPLEFT" relativeTo="$(parent)Gear" relativePoint="BOTTOMLEFT"  />
+            <Controls>
+                <Control name="$(parent)Green1" inherits="WizardsWardrobeCPItem">
+									<Anchor point="TOPLEFT"/>
+								</Control>
+								<Control name="$(parent)Green2" inherits="WizardsWardrobeCPItem">
+									<Anchor offsetY="30"/>
+								</Control>
+								<Control name="$(parent)Green3" inherits="WizardsWardrobeCPItem">
+									<Anchor offsetX="200"/>
+								</Control>
+								<Control name="$(parent)Green4" inherits="WizardsWardrobeCPItem">
+									<Anchor offsetY="30" offsetX="200"/>
+								</Control>
+								<Control name="$(parent)Blue1" inherits="WizardsWardrobeCPItem">
+									<Anchor offsetY="60"/>
+								</Control>
+								<Control name="$(parent)Blue2" inherits="WizardsWardrobeCPItem">
+									<Anchor offsetY="90"/>
+								</Control>
+								<Control name="$(parent)Blue3" inherits="WizardsWardrobeCPItem">
+									<Anchor offsetY="60" offsetX="200"/>
+								</Control>
+								<Control name="$(parent)Blue4" inherits="WizardsWardrobeCPItem">
+									<Anchor offsetY="90" offsetX="200"/>
+								</Control>
+								<Control name="$(parent)Red1" inherits="WizardsWardrobeCPItem">
+									<Anchor offsetY="120"/>
+								</Control>
+								<Control name="$(parent)Red2" inherits="WizardsWardrobeCPItem">
+									<Anchor offsetY="150"/>
+								</Control>
+								<Control name="$(parent)Red3" inherits="WizardsWardrobeCPItem">
+									<Anchor offsetY="120" offsetX="200"/>
+								</Control>
+								<Control name="$(parent)Red4" inherits="WizardsWardrobeCPItem">
+									<Anchor offsetY="150" offsetX="200"/>
+								</Control>
+            </Controls>
+        </Control>
+			</Controls>
+    </Control>
+		
+		<Texture name="WizardsWardrobeSetupRearrangeSkill" textureFile="/esoui/art/itemtooltip/eso_itemtooltip_emptyslot.dds" level="2" virtual="true">
+			<Dimensions x="20" y="20" />
+			<Anchor point="TOPLEFT"/>
+			<Controls>
+				<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+					<Dimensions x="20" y="20" />
+					<Anchor point="CENTER"/>
+				</Texture>
+			</Controls>
+		</Texture>
+		<Control name="WizardsWardrobeRearrangeItem" resizeToFitDescendents="true" virtual="true">
+			<Controls>
+				<Label name="$(parent)Name" font="ZoFontGamepadChat">
+					<Dimensions x="200" y="20" />
+					<Anchor point="TOPLEFT"/>
+				</Label>
+				<Label name="$(parent)Equipped" font="ZoFontGamepadChat">
+					<Dimensions x="200" y="30" />
+					<Anchor point="TOPLEFT" relativeTo="$(parent)Name" relativePoint="BOTTOMLEFT"/>
+				</Label>
+				<Control name="$(parent)Skills" resizeToFitDescendents="true">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)Name" relativePoint="TOPRIGHT"/>
+					<Controls>
+						<Texture name="$(parent)Skill_0_3" inherits="WizardsWardrobeSetupRearrangeSkill">
+							<Anchor offsetY="22"/>
+						</Texture>
+						<Texture name="$(parent)Skill_0_4" inherits="WizardsWardrobeSetupRearrangeSkill">
+							<Anchor offsetX="22" offsetY="22"/>
+						</Texture>
+						<Texture name="$(parent)Skill_0_5" inherits="WizardsWardrobeSetupRearrangeSkill">
+							<Anchor offsetX="44" offsetY="22"/>
+						</Texture>
+						<Texture name="$(parent)Skill_0_6" inherits="WizardsWardrobeSetupRearrangeSkill">
+							<Anchor offsetX="66" offsetY="22"/>
+						</Texture>
+						<Texture name="$(parent)Skill_0_7" inherits="WizardsWardrobeSetupRearrangeSkill">
+							<Anchor offsetX="88" offsetY="22"/>
+						</Texture>
+						<Texture name="$(parent)Skill_0_8" inherits="WizardsWardrobeSetupRearrangeSkill">
+							<Anchor offsetX="110" offsetY="22"/>
+						</Texture>
+
+						<Texture name="$(parent)Skill_1_3" inherits="WizardsWardrobeSetupRearrangeSkill"/>
+						<Texture name="$(parent)Skill_1_4" inherits="WizardsWardrobeSetupRearrangeSkill">
+							<Anchor offsetX="22"/>
+						</Texture>
+						<Texture name="$(parent)Skill_1_5" inherits="WizardsWardrobeSetupRearrangeSkill">
+							<Anchor offsetX="44"/>
+						</Texture>
+						<Texture name="$(parent)Skill_1_6" inherits="WizardsWardrobeSetupRearrangeSkill">
+							<Anchor offsetX="66"/>
+						</Texture>
+						<Texture name="$(parent)Skill_1_7" inherits="WizardsWardrobeSetupRearrangeSkill">
+							<Anchor offsetX="88"/>
+						</Texture>
+						<Texture name="$(parent)Skill_1_8" inherits="WizardsWardrobeSetupRearrangeSkill">
+							<Anchor offsetX="110"/>
+						</Texture>
+					</Controls>
+				</Control>
+			</Controls>
+		</Control>
+		<Label name="WizardsWardrobeScrollListItem" font="ZoFontGamepadChat" virtual="true">
+			<Dimensions x="200" y="20" />
+		</Label>
+	</Controls>
+</GuiXml>

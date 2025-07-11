@@ -304,5 +304,4 @@ WW.ACTIVITIES = {
 	ARENAS = 5,
 	ENDLESS = 6,
 	MISC = 7,
-
 }

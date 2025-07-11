@@ -18,13 +18,15 @@ OC.bosses = {
 		name = GetString( WW_OC_RED_WITCH_GEDNA_RELVEL ),
 	},
 	[ 3 ] = {
-		name = GetString( WW_OC_HALL_OF_FLESHCRAFT ),
+		displayName = GetString( WW_OC_HALL_OF_FLESHCRAFT ),
+		name = "Shaper of Flesh",
 	},
 	[ 4 ] = {
 		name = GetString( WW_OC_TORTURED_RANYU ),
 	},
 	[ 5 ] = {
-		name = GetString( WW_OC_JYNORAH_AND_SKORKHIF ),
+		displayName = GetString( WW_OC_JYNORAH_AND_SKORKHIF ),
+		name = "Jynorah",
 	},
 	[ 6 ] = {
 		name = GetString( WW_OC_BLOOD_DRINKER_THISA ),

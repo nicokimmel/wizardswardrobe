@@ -88,8 +88,9 @@ local language = {
 	WW_MENU_RESETUI = "Reset UI",
 	WW_MENU_RESETUI_TT =
 	"|cFF0000This resets the window and all its positions on the scenes.|r\nIt must then be opened again with /wizard or the hotkey.",
-	WW_MENU_AUTOEQUIP = "Auto-Equip",
-	WW_MENU_AUTOEQUIP_DESC = "These settings control what exactly is loaded/saved from the setup.",
+	WW_MENU_AUTOEQUIP = "Setups",
+	WW_MENU_AUTOEQUIP_SETUP = "Auto equip setup when instance boss/trash is detected",
+	WW_MENU_AUTOEQUIP_DESC = "These settings control what exactly is loaded/saved from the setup when it is equipped.",
 	WW_MENU_AUTOEQUIP_GEAR = "Gear",
 	WW_MENU_AUTOEQUIP_SKILLS = "Skills",
 	WW_MENU_AUTOEQUIP_CP = "Champion points",

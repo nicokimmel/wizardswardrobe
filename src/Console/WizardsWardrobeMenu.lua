@@ -39,14 +39,6 @@ function WWM.InitSV()
 	WW.prebuffs = WW.storage.prebuffs
 
 	WW.settings = ZO_SavedVars:NewAccountWide( "WizardsWardrobeSV", 1, nil, {
-		window = {
-			wizard = {
-				width = 360,
-				height = 665,
-				scale = 1,
-				locked = false,
-			},
-		},
 		panel = {
 			locked = true,
 			hidden = false,
@@ -56,7 +48,7 @@ function WWM.InitSV()
 			gear = true,
 			skills = true,
 			cp = true,
-			food = true,
+			food = false,
 		},
 		substitute = {
 			overland = false,
@@ -68,9 +60,7 @@ function WWM.InitSV()
 		failedSwapLog = {},
 		comparisonDepth = 1,
 		changelogs = {},
-		printMessages = "chat",
-		overwriteWarning = true,
-		inventoryMarker = true,
+		printMessages = "announcement",
 		ignoreTabards = true,
 		unequipEmpty = false,
 		chargeWeapons = false,
@@ -85,7 +75,6 @@ function WWM.InitSV()
 			ignorePoisons = true,
 			ignoreCostumes = true
 		},
-		legacyZoneSelection = false,
 		autoSelectInstance = true,
 		autoSelectGeneral = false,
 		lockSavedGear = true
@@ -113,9 +102,9 @@ end
 function WWM.InitAM()
 	local panelData = {
 		type = "panel",
-		name = WW.simpleName,
-		displayName = WW.displayName:upper(),
-		author = "ownedbynico",
+		name = "Wizards Wardrobe",
+		displayName = "Wizards Wardrobe",
+		author = "STUDLETON",
 		version = WW.version,
 		registerForRefresh = true,
 	}
@@ -146,21 +135,6 @@ function WWM.InitAM()
 		},
 		{
 			type = "checkbox",
-			name = GetString( WW_MENU_OVERWRITEWARNING ),
-			getFunc = function() return WW.settings.overwriteWarning end,
-			setFunc = function( value ) WW.settings.overwriteWarning = value end,
-			tooltip = GetString( WW_MENU_OVERWRITEWARNING_TT ),
-		},
-		{
-			type = "checkbox",
-			name = GetString( WW_MENU_INVENTORYMARKER ),
-			getFunc = function() return WW.settings.inventoryMarker end,
-			setFunc = function( value ) WW.settings.inventoryMarker = value end,
-			tooltip = GetString( WW_MENU_INVENTORYMARKER_TT ),
-			requiresReload = true,
-		},
-		{
-			type = "checkbox",
 			name = GetString( WW_MENU_LOCKSAVEDGEAR ),
 			getFunc = function() return WW.settings.lockSavedGear end,
 			setFunc = function( value ) WW.settings.lockSavedGear = value end,
@@ -182,19 +156,6 @@ function WWM.InitAM()
 			disabled = function() return not WW.settings.unequipEmpty end, -- only enabled if unequip empty is true
 
 		},
-		{
-			type = "checkbox",
-			name = GetString( WW_MENU_ZONE_SELECTION ),
-			getFunc = function() return WW.settings.legacyZoneSelection end,
-			setFunc = function( value )
-				WW.settings.legacyZoneSelection = value
-				WizardsWardrobeWindowTopMenuButtonsZoneSelect:SetHidden( value )
-				WizardsWardrobeWindowSelection:SetHidden( not value )
-			end,
-			tooltip = GetString( WW_MENU_ZONE_SELECTION_TT ),
-
-		},
-
 		{
 			type = "header",
 			name = "Setup Validation",
@@ -268,6 +229,16 @@ function WWM.InitAM()
 		{
 			type = "description",
 			text = GetString( WW_MENU_AUTOEQUIP_DESC ),
+		},
+		{
+			type = "checkbox",
+			name = GetString( WW_MENU_AUTOEQUIP_SETUP ),
+			getFunc = function() return WW.storage.autoEquipSetups end,
+			setFunc = function( value ) 
+				WW.storage.autoEquipSetups = value 
+				WW.settings.autoEquipSetups = value
+				end,
+			width = "half",
 		},
 		{
 			type = "checkbox",
@@ -375,6 +346,7 @@ function WWM.InitAM()
 			getFunc = function() return WW.settings.panel.mini end,
 			setFunc = function( value )
 				WW.settings.panel.mini = value
+				ReloadUI()
 			end,
 			disabled = function() return WW.settings.panel.hidden end,
 			tooltip = GetString( WW_MENU_PANEL_MINI_TT ),
