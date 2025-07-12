@@ -77,7 +77,10 @@ function WWM.InitSV()
 		},
 		autoSelectInstance = true,
 		autoSelectGeneral = false,
-		lockSavedGear = true
+		lockSavedGear = true,
+		quickslotsEnabled = false,
+		resetToOriginalQuickslot = false,
+		quickslots = {}
 	} )
 
 	-- migrate validation settings

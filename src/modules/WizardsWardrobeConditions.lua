@@ -14,14 +14,12 @@ function WWC.Init()
 end
 
 function WWC.LoadConditions()
-	d("Loading conditions for current zone: " .. WW.currentZone.name)
 	WWC.bossList = {}
 	WWC.trashList = {}
 	
 	local zone = WW.currentZone
 	if not WW.pages[zone.tag] then return end
 	local pageId = WW.pages[zone.tag][0].selected
-	d(zo_strformat("Loading conditions for zone: <<1>> page: <<2>>", zone.name, pageId))
 	
 	for entry in WW.PageIterator(zone, pageId) do
 		local setup = Setup:FromStorage(zone.tag, pageId, entry.index)

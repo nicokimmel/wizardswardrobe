@@ -7,7 +7,7 @@ WW.name = "WizardsWardrobe"
 WW.simpleName = "Wizard's Wardrobe"
 WW.displayName =
 "|c18bed8W|c26c2d1i|c35c6c9z|c43cac2a|c52cebar|c60d1b3d|c6fd5ab'|c7dd9a4s|c8cdd9d |c9ae195W|ca8e58ea|cb7e986r|cc5ed7fd|cd4f077r|ce2f470o|cf1f868b|cfffc61e|r"
-WW.version = "1.22.0"
+WW.version = "0.2.0"
 WW.zones = {}
 WW.currentIndex = 0
 WW.IsHeavyAttacking = false
@@ -46,7 +46,6 @@ end
 local setupTask = async:Create( WW.name .. "SetupTask" )
 local validationTask = async:Create( WW.name .. "ValidationTask" )
 function WW.LoadSetup( zone, pageId, index, auto, skipValidation )
-	d("LoadSetup", zone.tag, pageId, index, auto, skipValidation )
 	if not zone or not pageId or not index then
 		return false
 	end
@@ -132,6 +131,7 @@ function WW.SaveSetup( zone, pageId, index, skip )
 	if WW.settings.auto.food then WW.SaveFood( setup ) end
 
 	setup:ToStorage( zone.tag, pageId, index )
+	ZO_SavePlayerConsoleProfile()
 
 	WW.Log( GetString( WW_MSG_SAVESETUP ), WW.LOGTYPES.NORMAL, "FFFFFF", setup:GetName() )
 end
@@ -969,6 +969,7 @@ function WW.OnZoneChange( _, _ )
 				-- select the last selected zone before reload
 				WW.gui.OnZoneSelect(WW.zones[WW.storage.selectedZoneTag])
 			end
+			WW.consoleControl.Init()
 		elseif shouldSelectCurrent then
 			WW.gui.OnZoneSelect(WW.currentZone)
 		end
@@ -1089,7 +1090,6 @@ function WW.OnAddOnLoaded( _, addonName )
 	WW.conditions.Init()
 	WW.conditions.LoadConditions()
 	WW.fixes.Init()
-	WW.consoleControl.Init()
 
 	SLASH_COMMANDS["/wwep"] = function() WW.LoadSetupAdjacent(-1) end
 	SLASH_COMMANDS["/wwec"] = function() WW.LoadSetupAdjacent(0) end

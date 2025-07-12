@@ -8,14 +8,9 @@ function WWCC.Init()
 	local LibHarvensAddonSettings = LibHarvensAddonSettings
 	
 	local options = {
-		allowDefaults = true, --will allow users to reset the settings to default values
-		allowRefresh = false, --if this is true, when one of settings is changed, all other settings will be checked for state change (disable/enable)
-		name = "Wizard's Wardrobe",
+		allowRefresh = false,
 		author = "STUDLETON",
 	}
-	--Create settings "container" for your addon
-	--First parameter is the name that will be displayed in the options,
-	--Second parameter is the options table (it is optional)
 	local menuName = "Wizards Wardrobe Control"
 	local settings = LibHarvensAddonSettings:AddAddon(menuName, options)
 	if not settings then
@@ -215,6 +210,7 @@ function WWCC.Init()
 		tooltip = "Rename currently selected Page",
 		setFunction = function(value)
 			WW.pages[WW.selection.zone.tag][WW.selection.pageId].name = value
+			showSetupList()
 		end,
 		getFunction = function() return WW.pages[WW.selection.zone.tag][WW.selection.pageId].name end,
 		disable = function() return areSettingsDisabled end,
@@ -345,7 +341,7 @@ function WWCC.Init()
 	local rearrangeDropdownSetting = nil
 	local setupsDropdown = {
 		type = LibHarvensAddonSettings.ST_DROPDOWN,
-		label = "Setups Dropdown",
+		label = "Setups",
 		tooltip = "Setup Preview",
 		setFunction = function(combobox, name, item)
 			setupIndex = findSetupItemIndex(item)
@@ -368,7 +364,7 @@ function WWCC.Init()
 
 	local rearrangeDropdown = {
 		type = LibHarvensAddonSettings.ST_DROPDOWN,
-		label = "Rearrange Dropdown",
+		label = "Rearrange Setups",
 		setFunction = function(combobox, name, item)
 			if rearrangeDropdownSetting.control == LibHarvensAddonSettings.list:GetSelectedControl() then
 				local wws = WW.setups[WW.selection.zone.tag][WW.selection.pageId]
@@ -459,17 +455,24 @@ function WWCC.Init()
 		setFunction = function(value)
 			WW.setups[WW.selection.zone.tag][WW.selection.pageId][setupIndex].name = value
 			selectedName = value
+			showSetupList()
 		end,
 		getFunction = function() return selectedName end,
 		disable = function() return areSettingsDisabled end,
 	}
 	settings:AddSetting(renameSetup)
 
+	local panelSection = {
+		type = LibHarvensAddonSettings.ST_SECTION,
+		label = "Panel Position",
+	}
+	settings:AddSetting(panelSection)
+
 	local incSliderValue = 100
 	local incSlider = {
 		type = LibHarvensAddonSettings.ST_SLIDER,
 		label = "Reposition increments",
-		tooltip = "This is an example slider",
+		tooltip = "Multiplier to move the panel quicker/slower",
 		setFunction = function(value) incSliderValue = value end,
 		getFunction = function() return incSliderValue end,
 		min = 1,
@@ -479,24 +482,27 @@ function WWCC.Init()
 	}
 	settings:AddSetting(incSlider)
 
+	local function temporarilyShowPanel()
+		SCENE_MANAGER:GetCurrentScene():AddFragment(WizardsWardrobePanel.fragment)
+		WizardsWardrobePanel:SetDrawTier(2)
+		WizardsWardrobePanel:SetDrawLayer(2)
+		
+		EVENT_MANAGER:UnregisterForUpdate("WizardsWardrobePanelMove")
+		EVENT_MANAGER:RegisterForUpdate("WizardsWardrobePanelMove", 5000, function()
+			SCENE_MANAGER:GetCurrentScene():RemoveFragment(WizardsWardrobePanel.fragment)
+			WizardsWardrobePanel:SetDrawTier(0)
+			WizardsWardrobePanel:SetDrawLayer(1)
+			EVENT_MANAGER:UnregisterForUpdate("WizardsWardrobePanelMove")
+		end)
+	end
+	
 	local xSliderSetting
 	local xSlider = {
 		type = LibHarvensAddonSettings.ST_SLIDER,
 		label = "Panel X",
-		tooltip = "This is an example slider",
+		tooltip = "Move the panel left or right",
 		setFunction = function(value)
-			SCENE_MANAGER:GetCurrentScene():AddFragment(WizardsWardrobePanel.fragment)
-			WizardsWardrobePanel:SetDrawTier(2)
-			WizardsWardrobePanel:SetDrawLayer(2)
-			
-			EVENT_MANAGER:UnregisterForUpdate("WizardsWardrobePanelMove")
-			EVENT_MANAGER:RegisterForUpdate("WizardsWardrobePanelMove", 5000, function()
-				SCENE_MANAGER:GetCurrentScene():RemoveFragment(WizardsWardrobePanel.fragment)
-				WizardsWardrobePanel:SetDrawTier(0)
-				WizardsWardrobePanel:SetDrawLayer(1)
-				EVENT_MANAGER:UnregisterForUpdate("WizardsWardrobePanelMove")
-			end)
-		
+			temporarilyShowPanel()
 			local offset = (value - WW.settings.panel.left) * incSliderValue
 			WW.settings.panel.left = WW.settings.panel.left + offset
 			xSliderSetting:UpdateControl()
@@ -515,20 +521,9 @@ function WWCC.Init()
 	local ySlider = {
 		type = LibHarvensAddonSettings.ST_SLIDER,
 		label = "Panel Y",
-		tooltip = "This is an example slider",
-		setFunction = function(value)
-			SCENE_MANAGER:GetCurrentScene():AddFragment(WizardsWardrobePanel.fragment)
-			WizardsWardrobePanel:SetDrawTier(2)
-			WizardsWardrobePanel:SetDrawLayer(2)
-			
-			EVENT_MANAGER:UnregisterForUpdate("WizardsWardrobePanelMove")
-			EVENT_MANAGER:RegisterForUpdate("WizardsWardrobePanelMove", 5000, function()
-				SCENE_MANAGER:GetCurrentScene():RemoveFragment(WizardsWardrobePanel.fragment)
-				WizardsWardrobePanel:SetDrawTier(0)
-				WizardsWardrobePanel:SetDrawLayer(1)
-				EVENT_MANAGER:UnregisterForUpdate("WizardsWardrobePanelMove")
-			end)
-		
+		tooltip = "Move the panel up or down",
+		setFunction = function(value)	
+			temporarilyShowPanel()
 			local offset = (value - WW.settings.panel.top) * incSliderValue
 			WW.settings.panel.top = WW.settings.panel.top + offset
 			ySliderSetting:UpdateControl()
@@ -542,16 +537,168 @@ function WWCC.Init()
 	}
 	ySliderSetting = settings:AddSetting(ySlider)
 
-	local saveButton = {
+	local resetPanelButton = {
 		type = LibHarvensAddonSettings.ST_BUTTON,
 		label = "Reset panel position",
-		tooltip = "Save to setup",
+		tooltip = "Reset panel to the default position",
 		buttonText = "Reset",
 		clickHandler = function(control, button)
 			WW.settings.panel.left, WW.settings.panel.top = 1290, 980
 			WizardsWardrobePanel:SetAnchor( TOPLEFT, GuiRoot, TOPLEFT, WW.settings.panel.left, WW.settings.panel.top )
+			temporarilyShowPanel()
 		end,
 		disable = function() return areSettingsDisabled end,
 	}
-	settings:AddSetting(saveButton)
+	settings:AddSetting(resetPanelButton)
+	
+	local quickslotSection = {
+		type = LibHarvensAddonSettings.ST_SECTION,
+		label = "Quickslot bindings",
+	}
+	settings:AddSetting(quickslotSection)
+	
+	local selectedQuickslot = 1
+	local quickslotItems = {
+		{name = "1 (SE)", data = 1},
+		{name = "2 (E)", data = 2},
+		{name = "3 (NE)", data = 3},
+		{name = "4 (N)", data = 4},
+		{name = "5 (NW)", data = 5},
+		{name = "6 (W)", data = 6},
+		{name = "7 (SW)", data = 7},
+		{name = "8 (S)", data = 8},
+	}
+	local quickslotActions = {
+		nil,
+		function() WW.LoadSetupCurrent(1) end,
+		function() WW.LoadSetupCurrent(2) end,
+		function() WW.LoadSetupAdjacent(-1) end,
+		function() WW.LoadSetupAdjacent(0) end,
+		function() WW.LoadSetupAdjacent(1) end,
+	}
+		
+	local quickslotActionItems = {
+		{name = "None", data = 1},
+		{name = "Equip First", data = 2},
+		{name = "Equip Second", data = 3},
+		{name = "Equip Previous", data = 4},
+		{name = "Equip Current", data = 5},
+		{name = "Equip Next", data = 6},
+	}
+	
+	local lastQuickslot = GetCurrentQuickslot()
+	local function onQuickslotSelected(_, slotIndex)
+		if WW.settings.quickslots[slotIndex] and quickslotActions[WW.settings.quickslots[slotIndex]] then
+			quickslotActions[WW.settings.quickslots[slotIndex]]()
+			if WW.settings.resetToOriginalQuickslot then 
+				SetCurrentQuickslot(lastQuickslot)
+				return
+			end
+		end
+		lastQuickslot = slotIndex
+	end
+	
+	local function toggleQuickslots(state)
+		if state then
+			EVENT_MANAGER:RegisterForEvent(WW.name, EVENT_ACTIVE_QUICKSLOT_CHANGED, onQuickslotSelected)
+		else
+			EVENT_MANAGER:UnregisterForEvent(WW.name, EVENT_ACTIVE_QUICKSLOT_CHANGED)
+		end
+	end
+	toggleQuickslots(WW.settings.quickslotsEnabled)
+	
+	local function buildQuickslotBindingsText()
+		local text = "\n\nBound quickslots:"
+		for slotIndex, actionIndex in pairs(WW.settings.quickslots) do
+			if actionIndex > 1 then
+				text = text .. "\n" .. quickslotItems[slotIndex].name .. " - " .. quickslotActionItems[actionIndex].name
+			end
+		end
+		return text
+	end
+	
+	local quickslotsEnabledCheckbox = {
+		type = LibHarvensAddonSettings.ST_CHECKBOX,
+		label = "Quickslots enabled",
+		tooltip = function() 
+			local text = "Turn on to enable quickslot bindings.\nThese will trigger a Wizards action when you select the corresponding quickslot.\nWarning: may overlap with other addons, bind wisely."
+			return text .. buildQuickslotBindingsText()
+		end,
+		setFunction = function(state)
+			WW.settings.quickslotsEnabled = state
+			toggleQuickslots(state)
+		end,
+		getFunction = function()
+			return WW.settings.quickslotsEnabled
+		end,
+		disable = function() return areSettingsDisabled end,
+	}
+	settings:AddSetting(quickslotsEnabledCheckbox)
+	
+	
+	local function isResetToOriginalQuickslotDisabled()
+		return not WW.settings.resetToOriginalQuickslot and (WW.settings.quickslots[lastQuickslot] and WW.settings.quickslots[lastQuickslot] > 1)
+	end
+	local resetToOriginalQuickslotCheckbox = {
+		type = LibHarvensAddonSettings.ST_CHECKBOX,
+		label = "Reset after equip",
+		tooltip = function()
+			local text = "Reset to your originally selected quickslot after equipping the setup."
+			if isResetToOriginalQuickslotDisabled() then
+				text = text .. "\nDisabled: select an unbound quickslot before you can enable this"
+			end
+			return text
+		end,
+		setFunction = function(state)
+			WW.settings.resetToOriginalQuickslot = state
+		end,
+		getFunction = function()
+			return WW.settings.resetToOriginalQuickslot
+		end,
+		disable = function() return areSettingsDisabled or not WW.settings.quickslotsEnabled or isResetToOriginalQuickslotDisabled() end,
+	}
+	settings:AddSetting(resetToOriginalQuickslotCheckbox)
+	
+	local quickslotDropdown = {
+		type = LibHarvensAddonSettings.ST_DROPDOWN,
+		label = "Select Quickslot",
+		tooltip = function() 
+			local text = "Select a quickslot to bind. Use compass directions to identify your target slot."
+			return text .. buildQuickslotBindingsText()
+		end,
+		setFunction = function(combobox, name, item)
+			selectedQuickslot = item.data
+		end,
+		getFunction = function() return quickslotItems[selectedQuickslot] end,
+		items = quickslotItems,
+		disable = function() return areSettingsDisabled or not WW.settings.quickslotsEnabled end,
+	}
+	settings:AddSetting(quickslotDropdown)
+	
+	local function isQuickslotActionDisabled()
+		return WW.settings.resetToOriginalQuickslot and lastQuickslot == selectedQuickslot
+	end
+	local quickslotActionDropdown = {
+		type = LibHarvensAddonSettings.ST_DROPDOWN,
+		label = "Select Action",
+		tooltip = function()
+			local text = ""
+			if isQuickslotActionDisabled() then 
+				text = text .. "Disabled: this is your character's current quickslot and \"Reset After Equip\" is enabled. Turn off Reset or change your quickslot"
+			end
+			return text .. buildQuickslotBindingsText()
+		end,
+		setFunction = function(combobox, name, item)
+			WW.settings.quickslots[selectedQuickslot] = item.data
+		end,
+		getFunction = function()
+			if WW.settings.quickslots[selectedQuickslot] then
+				return quickslotActionItems[WW.settings.quickslots[selectedQuickslot]].name
+			end
+			return "None"
+		end,
+		items = quickslotActionItems,
+		disable = function() return areSettingsDisabled or not WW.settings.quickslotsEnabled or isQuickslotActionDisabled() end,
+	}
+	settings:AddSetting(quickslotActionDropdown)
 end
