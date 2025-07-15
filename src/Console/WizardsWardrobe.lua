@@ -7,7 +7,7 @@ WW.name = "WizardsWardrobe"
 WW.simpleName = "Wizard's Wardrobe"
 WW.displayName =
 "|c18bed8W|c26c2d1i|c35c6c9z|c43cac2a|c52cebar|c60d1b3d|c6fd5ab'|c7dd9a4s|c8cdd9d |c9ae195W|ca8e58ea|cb7e986r|cc5ed7fd|cd4f077r|ce2f470o|cf1f868b|cfffc61e|r"
-WW.version = "0.2.0"
+WW.version = "0.2.1"
 WW.zones = {}
 WW.currentIndex = 0
 WW.IsHeavyAttacking = false
@@ -131,7 +131,7 @@ function WW.SaveSetup( zone, pageId, index, skip )
 	if WW.settings.auto.food then WW.SaveFood( setup ) end
 
 	setup:ToStorage( zone.tag, pageId, index )
-	ZO_SavePlayerConsoleProfile()
+	AUTO_SAVING:MarkDirty()
 
 	WW.Log( GetString( WW_MSG_SAVESETUP ), WW.LOGTYPES.NORMAL, "FFFFFF", setup:GetName() )
 end
@@ -1094,6 +1094,16 @@ function WW.OnAddOnLoaded( _, addonName )
 	SLASH_COMMANDS["/wwep"] = function() WW.LoadSetupAdjacent(-1) end
 	SLASH_COMMANDS["/wwec"] = function() WW.LoadSetupAdjacent(0) end
 	SLASH_COMMANDS["/wwen"] = function() WW.LoadSetupAdjacent(1) end
+	SLASH_COMMANDS["/wwresetcurrentpage"] = function()
+		WW.pages[WW.selection.zone.tag] = nil
+		WW.setups[WW.selection.zone.tag] = nil
+		ReloadUI()
+	end
+	SLASH_COMMANDS["/wwresetallpages"] = function()
+		WW.storage.pages = {}
+		WW.storage.setups = {}
+		ReloadUI()
+	end
 
 	WW.RegisterEvents()
 end

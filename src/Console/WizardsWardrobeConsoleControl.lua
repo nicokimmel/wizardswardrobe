@@ -200,7 +200,7 @@ function WWCC.Init()
 			setupIndex = 1
 			showSetupList()
 		end,
-		disable = function() return areSettingsDisabled end,
+		disable = function() return areSettingsDisabled or #WW.pages[WW.selection.zone.tag] == 1 end,
 	}
 	settings:AddSetting(deletePageButton)
 
@@ -261,6 +261,7 @@ function WWCC.Init()
 		for index, setup in ipairs(WW.setups[WW.selection.zone.tag][WW.selection.pageId]) do
 			table.insert(setupItems, { name = setup.name, data = index })
 		end
+		if not setupItems[setupIndex] then setupIndex = 1 end
 		selectedName = setupItems[setupIndex].name
 		return setupItems
 	end
@@ -345,6 +346,7 @@ function WWCC.Init()
 		tooltip = "Setup Preview",
 		setFunction = function(combobox, name, item)
 			setupIndex = findSetupItemIndex(item)
+			if not setupItems[setupIndex] then setupIndex = 1 end
 			rearrangeSelectedIndex = setupIndex
 			selectedName = setupItems[setupIndex].name
 			if quickEquipChecked then 
@@ -436,12 +438,13 @@ function WWCC.Init()
 		tooltip = "Delete setup",
 		buttonText = "Delete",
 		clickHandler = function(control, button)
+			if #setupItems == 1 then return end
 			WW.DeleteSetup( WW.selection.zone, WW.selection.pageId, setupIndex )
 			if WW.selection.zone.tag == equipped.zone and WW.selection.pageId == equipped.page and equipped.setup == setupIndex then equipped.setup = nil end
-			setupIndex = setupIndex - 1
 			rearrangeSelectedIndex = setupIndex
 			selectedName = setupItems[setupIndex].name
 			LibHarvensAddonSettings:RefreshAddonSettings()
+			generateSetupItems()
 			showSetupList()
 		end,
 		disable = function() return areSettingsDisabled or #setupItems == 1 end,
@@ -461,6 +464,71 @@ function WWCC.Init()
 		disable = function() return areSettingsDisabled end,
 	}
 	settings:AddSetting(renameSetup)
+
+	local autoEquipConditionDropdown = {
+		type = LibHarvensAddonSettings.ST_DROPDOWN,
+		label = "Auto Equip Condition",
+		tooltip = "Enable auto equip to set.\nWill attempt to equip the setup when you get close to the boss.\nIf you select Trash, set the After condition below to equip after a specific boss.",
+		setFunction = function(combobox, name, item)
+			WW.setups[WW.selection.zone.tag][WW.selection.pageId][setupIndex].condition.boss = item.data
+			if item.data ~= GetString(WW_TRASH) then
+				WW.setups[WW.selection.zone.tag][WW.selection.pageId][setupIndex].condition.trash = WW.CONDITIONS.EVERYWHERE
+			end
+		end,
+		getFunction = function()
+			local boss = WW.selection.zone.bosses[WW.selection.zone.lookupBosses[WW.setups[WW.selection.zone.tag][WW.selection.pageId][setupIndex].condition.boss]]
+			if not boss then return "None" end
+			return boss.displayName or boss.name
+		end,
+		items = function()
+			local items = {
+				{name = "None", data = {boss = WW.CONDITIONS.NONE}},
+			}
+			for _, boss in ipairs( WW.selection.zone.bosses ) do
+				table.insert(items, {name = boss.displayName or boss.name, data = boss.name})
+			end
+			return items
+		end,
+		disable = function()
+			return areSettingsDisabled
+				or not WW.settings.autoEquipSetups 
+				or #WW.zones[WW.selection.zone.tag].bosses < 3
+		end,
+	}
+	settings:AddSetting(autoEquipConditionDropdown)
+
+	local autoEquipConditionAfterDropdown = {
+		type = LibHarvensAddonSettings.ST_DROPDOWN,
+		label = "Auto Equip Trash After",
+		tooltip = "Enable auto equip and select Trash above to set.\nThis can be set to equip after a specific boss, or every boss.",
+		setFunction = function(combobox, name, item)
+			WW.setups[WW.selection.zone.tag][WW.selection.pageId][setupIndex].condition.trash = item.data
+		end,
+		getFunction = function()
+			local boss = WW.selection.zone.bosses[WW.selection.zone.lookupBosses[WW.setups[WW.selection.zone.tag][WW.selection.pageId][setupIndex].condition.trash]]
+			if not boss then return "Every Boss" end
+			return boss.displayName or boss.name
+		end,
+		items = function()
+			local items = {
+				{name = "Every Boss", data = WW.CONDITIONS.EVERYWHERE},
+			}
+			for _, boss in ipairs( WW.selection.zone.bosses ) do
+				if boss.name ~= GetString(WW_TRASH) then
+					table.insert(items, {name = boss.displayName or boss.name, data = boss.name})
+				end
+			end
+			return items
+		end,
+		disable = function()
+			return areSettingsDisabled
+				or not WW.settings.autoEquipSetups
+				or #WW.zones[WW.selection.zone.tag].bosses < 3
+				or WW.setups[WW.selection.zone.tag][WW.selection.pageId][setupIndex].condition.boss ~= GetString(WW_TRASH)
+				or WW.setups[WW.selection.zone.tag][WW.selection.pageId][setupIndex].condition.boss == WW.CONDITIONS.NONE
+		end,
+	}
+	settings:AddSetting(autoEquipConditionAfterDropdown)
 
 	local panelSection = {
 		type = LibHarvensAddonSettings.ST_SECTION,

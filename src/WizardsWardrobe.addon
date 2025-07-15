@@ -1,7 +1,7 @@
 ## Title: Wizard's Wardrobe
 ## Author: ownedbynico, |c268074JN_Slevin|r, STUDLETON
-## Version: 0.2.0
-## AddOnVersion: 200
+## Version: 0.2.1
+## AddOnVersion: 201
 ## Description: Throw all your setups into the wardrobe and let the wizard equip them exactly when you need it.
 ## APIVersion: 101046
 ## PCDependsOn: LibAddonMenu-2.0>=40 LibChatMessage>=118 LibDebugLogger>=268 LibAsync>=30002
