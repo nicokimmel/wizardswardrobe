@@ -29,7 +29,7 @@ function WWCC.Init()
 	local equipped = { zone = nil, page = nil, setup = nil}
 	WW.equipped = equipped
 	local rearrangeSelectedIndex = 1
-	local selectedName = ""
+	local selectedSetupName = ""
 	local function getSetupListItemControl(index)
 		local tooltip = GAMEPAD_TOOLTIPS:GetTooltip(GAMEPAD_RIGHT_TOOLTIP)
 		
@@ -47,6 +47,8 @@ function WWCC.Init()
 		return control
 	end
 	local function showSetupList()
+		local sceneName = SCENE_MANAGER:GetCurrentSceneName()
+		if sceneName ~= "LibHarvensAddonSettingsScene" and sceneName ~= "gamepad_banking" then return end
 		GAMEPAD_TOOLTIPS:LayoutSettingTooltip(GAMEPAD_RIGHT_TOOLTIP, WW.selection.zone.name .. "\n" .. WW.pages[WW.selection.zone.tag][WW.selection.pageId].name , "")
 		for index, setup in ipairs(WW.setups[WW.selection.zone.tag][WW.selection.pageId]) do
 			local control = getSetupListItemControl(index)
@@ -77,29 +79,6 @@ function WWCC.Init()
 			end
 		end
 	end
-	
-	local sceneHidden = true
-	SCENE_MANAGER:RegisterCallback( "SceneStateChanged", function(scene, oldState, newState)
-		if scene:GetName() == "LibHarvensAddonSettingsScene" then
-			if newState == SCENE_SHOWN and settings.selected then
-				-- the tooltip doesn't show if called right away, and the first time it's called it has anxiety; scrunched up
-				-- calling it again after it calms down, look into fixing properly later
-				zo_callLater(function()
-					if not sceneHidden then
-						showSetupList()
-						zo_callLater(function()
-							if not sceneHidden then
-								showSetupList()
-							end
-						end, 500)
-					end
-				end, 500) 
-				sceneHidden = false
-				return
-			end
-			sceneHidden = true
-		end
-	end)
 
 	local zonesByCategory = {
 		[WW.ACTIVITIES.GENERAL] = {name = "General", items = {}},
@@ -150,10 +129,6 @@ function WWCC.Init()
 	}
 	settings:AddSetting(subCategoryDropdown)
 
-	local pageItems = {}
-	for zoneTag, zone in pairs(WW.zones) do
-		table.insert(pageItems, { name = zone.name, data = zoneTag })
-	end
 	local pageDropdown = {
 		type = LibHarvensAddonSettings.ST_DROPDOWN,
 		label = "Page",
@@ -262,7 +237,7 @@ function WWCC.Init()
 			table.insert(setupItems, { name = setup.name, data = index })
 		end
 		if not setupItems[setupIndex] then setupIndex = 1 end
-		selectedName = setupItems[setupIndex].name
+		selectedSetupName = setupItems[setupIndex].name
 		return setupItems
 	end
 	local function getSetupPreviewControl()
@@ -283,7 +258,7 @@ function WWCC.Init()
 	end
 	local function showSetupPreview()	
 		local containerControl = getSetupPreviewControl()
-		containerControl:GetNamedChild("Name"):SetText(selectedName)
+		containerControl:GetNamedChild("Name"):SetText(selectedSetupName)
 		local skillIndex = 1
 		local setup = WW.setups[WW.selection.zone.tag][WW.selection.pageId][setupIndex]
 		local skillsContainer = containerControl:GetNamedChild("Skills")
@@ -344,20 +319,22 @@ function WWCC.Init()
 		type = LibHarvensAddonSettings.ST_DROPDOWN,
 		label = "Setups",
 		tooltip = "Setup Preview",
-		setFunction = function(combobox, name, item)
+		setFunction = function(combobox, name, item, isBankScene)
 			setupIndex = findSetupItemIndex(item)
 			if not setupItems[setupIndex] then setupIndex = 1 end
 			rearrangeSelectedIndex = setupIndex
-			selectedName = setupItems[setupIndex].name
-			if quickEquipChecked then 
-				WW.LoadSetupCurrent(setupIndex)
+			selectedSetupName = setupItems[setupIndex].name
+			if not isBankScene then
+				if quickEquipChecked then 
+					WW.LoadSetupCurrent(setupIndex)
+				end
+				if setupDropdownSetting.control == LibHarvensAddonSettings.list:GetSelectedControl() then showSetupPreview() end
 			end
-			if setupDropdownSetting.control == LibHarvensAddonSettings.list:GetSelectedControl() then showSetupPreview() end
 			showSetupList()
 		end,
-		getFunction = function()
-			if setupDropdownSetting.control == LibHarvensAddonSettings.list:GetSelectedControl() then zo_callLater(showSetupPreview,0) end
-			return selectedName
+		getFunction = function(isBankScene)
+			if not isBankScene and setupDropdownSetting.control == LibHarvensAddonSettings.list:GetSelectedControl() then zo_callLater(showSetupPreview,0) end
+			return selectedSetupName
 		end,
 		items = generateSetupItems,
 		disable = function() return areSettingsDisabled end,
@@ -426,7 +403,7 @@ function WWCC.Init()
 			setupIndex = #setupItems
 			rearrangeSelectedIndex = setupIndex
 			LibHarvensAddonSettings:RefreshAddonSettings()
-			selectedName = setupItems[setupIndex].name
+			selectedSetupName = setupItems[setupIndex].name
 			showSetupList()
 		end,
 		disable = function() return areSettingsDisabled end,
@@ -442,7 +419,7 @@ function WWCC.Init()
 			WW.DeleteSetup( WW.selection.zone, WW.selection.pageId, setupIndex )
 			if WW.selection.zone.tag == equipped.zone and WW.selection.pageId == equipped.page and equipped.setup == setupIndex then equipped.setup = nil end
 			rearrangeSelectedIndex = setupIndex
-			selectedName = setupItems[setupIndex].name
+			selectedSetupName = setupItems[setupIndex].name
 			LibHarvensAddonSettings:RefreshAddonSettings()
 			generateSetupItems()
 			showSetupList()
@@ -457,10 +434,10 @@ function WWCC.Init()
 		tooltip = "Rename currently selected setup",
 		setFunction = function(value)
 			WW.setups[WW.selection.zone.tag][WW.selection.pageId][setupIndex].name = value
-			selectedName = value
+			selectedSetupName = value
 			showSetupList()
 		end,
-		getFunction = function() return selectedName end,
+		getFunction = function() return selectedSetupName end,
 		disable = function() return areSettingsDisabled end,
 	}
 	settings:AddSetting(renameSetup)
@@ -654,16 +631,16 @@ function WWCC.Init()
 		{name = "Equip Next", data = 6},
 	}
 	
-	local lastQuickslot = GetCurrentQuickslot()
+	local lastQuickSlot = GetCurrentQuickslot()
 	local function onQuickslotSelected(_, slotIndex)
 		if WW.settings.quickslots[slotIndex] and quickslotActions[WW.settings.quickslots[slotIndex]] then
 			quickslotActions[WW.settings.quickslots[slotIndex]]()
-			if WW.settings.resetToOriginalQuickslot then 
-				SetCurrentQuickslot(lastQuickslot)
+			if WW.settings.resetToOriginalQuickslot and not (WW.settings.quickslots[lastQuickSlot] and WW.settings.quickslots[lastQuickSlot] > 1)then
+				SetCurrentQuickslot(lastQuickSlot)
 				return
 			end
 		end
-		lastQuickslot = slotIndex
+		lastQuickSlot = slotIndex
 	end
 	
 	local function toggleQuickslots(state)
@@ -705,7 +682,7 @@ function WWCC.Init()
 	
 	
 	local function isResetToOriginalQuickslotDisabled()
-		return not WW.settings.resetToOriginalQuickslot and (WW.settings.quickslots[lastQuickslot] and WW.settings.quickslots[lastQuickslot] > 1)
+		return not WW.settings.resetToOriginalQuickslot and (WW.settings.quickslots[lastQuickSlot] and WW.settings.quickslots[lastQuickSlot] > 1)
 	end
 	local resetToOriginalQuickslotCheckbox = {
 		type = LibHarvensAddonSettings.ST_CHECKBOX,
@@ -744,7 +721,7 @@ function WWCC.Init()
 	settings:AddSetting(quickslotDropdown)
 	
 	local function isQuickslotActionDisabled()
-		return WW.settings.resetToOriginalQuickslot and lastQuickslot == selectedQuickslot
+		return WW.settings.resetToOriginalQuickslot and lastQuickSlot == selectedQuickslot
 	end
 	local quickslotActionDropdown = {
 		type = LibHarvensAddonSettings.ST_DROPDOWN,
@@ -769,4 +746,227 @@ function WWCC.Init()
 		disable = function() return areSettingsDisabled or not WW.settings.quickslotsEnabled or isQuickslotActionDisabled() end,
 	}
 	settings:AddSetting(quickslotActionDropdown)
+
+	local controlSceneHidden = true
+	local bankDialogHidden = true
+	local dropdownsBeforeBank, lastActivatedControl
+	SCENE_MANAGER:RegisterCallback( "SceneStateChanged", function(scene, oldState, newState)
+		if scene:GetName() == "LibHarvensAddonSettingsScene" then
+			if newState == SCENE_SHOWN and settings.selected then
+				-- the tooltip doesn't show if called right away, and the first time it's called it has anxiety; scrunched up
+				-- calling it again after it calms down, look into fixing properly later
+				zo_callLater(function()
+					if not controlSceneHidden then
+						showSetupList()
+						zo_callLater(function()
+							if not controlSceneHidden then
+								showSetupList()
+							end
+						end, 500)
+					end
+				end, 500) 
+				controlSceneHidden = false
+				return
+			end
+			controlSceneHidden = true
+		end
+		if scene:GetName() == "gamepad_banking" then
+			if newState == SCENE_SHOWN then
+				myButton = {
+					name = "Wizards",
+					keybind = "UI_SHORTCUT_RIGHT_TRIGGER",
+					callback = function() 
+						ZO_Dialogs_ShowPlatformDialog("WizardsWardrobeBankDialog") 
+						zo_callLater(function()
+							if not bankDialogHidden then
+								showSetupList()
+								zo_callLater(function()
+									if not bankDialogHidden then
+										showSetupList()
+									end
+								end, 500)
+							end
+						end, 500) 
+						bankDialogHidden = false
+					end,
+					alignment = KEYBIND_STRIP_ALIGN_RIGHT,
+				}
+				KEYBIND_STRIP:AddKeybindButton(myButton)
+				return
+			end
+			bankDialogHidden = true
+			if newState == SCENE_HIDDEN then
+				KEYBIND_STRIP:RemoveKeybindButton(myButton)
+				if dropdownsBeforeBank then
+					categoryDropdown.setFunction(nil, nil, {data = dropdownsBeforeBank.category})
+					subCategoryDropdown.setFunction(nil, nil, {data = dropdownsBeforeBank.subCategory})
+					pageDropdown.setFunction(nil, nil, {data = dropdownsBeforeBank.page})
+					setupsDropdown.setFunction(nil, nil, {data = dropdownsBeforeBank.setup}, true)
+					dropdownsBeforeBank = nil
+				end
+				if lastActivatedControl then
+					if lastActivatedControl.Deactivate then lastActivatedControl:Deactivate() end
+					lastActivatedControl = nil
+				end
+			end
+		end
+	end)
+	
+	local function handleActiveControl(control, _, selected)
+    if not selected then return end
+    if lastActivatedControl and lastActivatedControl ~= control then
+        if lastActivatedControl.Deactivate then lastActivatedControl:Deactivate() end
+    end
+    if control.Activate then control:Activate() end
+    lastActivatedControl = control
+	end
+	local function equalityFunction(leftData, rightData)
+		return leftData == rightData.name or rightData == leftData.name or leftData.data == rightData.data
+	end
+	local function setupFunction(control, data)
+		control:SetText(data.name)
+		control:SetColor(ZO_SELECTED_TEXT:UnpackRGBA())
+	end
+	local function setupDialogHorizontalList(dropdown)
+		return function(control, data, selected)
+			control:GetNamedChild("Name"):SetText(dropdown.label)
+			local combobox = control.horizontalListObject
+			combobox.equalityFunction = equalityFunction
+			combobox.setupFunction = setupFunction
+			combobox:Clear()
+			combobox:SetOnSelectedDataChangedCallback(nil)
+
+			local items = type(dropdown.items) == "function" and dropdown.items() or dropdown.items
+			for i = 1, #items do
+				combobox:AddEntry(items[i])
+			end
+			combobox:Commit()
+			combobox:SetSelectedIndex(combobox:FindIndexFromData(dropdown.getFunction(true), combobox.equalityFunction) or 0, false, true)
+			combobox:SetOnSelectedDataChangedCallback(function(data)
+				if dropdown.getFunction(true) ~= data.name then dropdown.setFunction(nil, nil, data, true) end
+			end)
+			handleActiveControl(combobox, nil, selected)
+		end
+	end
+	local function setupDialogButton(...)
+		handleActiveControl(...)
+		ZO_SharedGamepadEntry_OnSetup(...)
+	end
+	ZO_Dialogs_RegisterCustomDialog(
+		"WizardsWardrobeBankDialog",
+    {
+			gamepadInfo =
+			{
+					dialogType = GAMEPAD_DIALOGS.PARAMETRIC,
+			},
+
+			title =
+			{
+					text = "Wizards Wardrobe Banking",
+			},
+
+			setup = function(dialog)
+				dialog:setupFunc()
+				if not dropdownsBeforeBank then
+					dropdownsBeforeBank = {
+						category = selectedCategory,
+						subCategory = WW.selection.zone.tag,
+						page = WW.selection.pageId,
+						setup = setupIndex,
+					}
+				end
+			end,
+
+			parametricList =
+			{
+				{
+					template = "ZO_GamepadHorizontalListRow",
+					templateData =
+					{
+						setup = setupDialogHorizontalList(categoryDropdown)
+					},
+				},
+				{
+					template = "ZO_GamepadHorizontalListRow",
+					templateData =
+					{
+						setup = setupDialogHorizontalList(subCategoryDropdown)
+					},
+				},
+				{
+					template = "ZO_GamepadHorizontalListRow",
+					templateData =
+					{
+						setup = setupDialogHorizontalList(setupsDropdown)
+					},
+				},
+				{
+					template = "ZO_GamepadMenuEntryTemplate",
+					templateData =
+					{
+						text = "Withdraw Setup",
+						setup = setupDialogButton,
+						callback = function(dialog) WW.banking.WithdrawSetup(WW.selection.zone, WW.selection.pageId, setupIndex) end,
+					},
+				},
+        {
+					template = "ZO_GamepadMenuEntryTemplate",
+					templateData =
+					{
+						text = "Deposit Setup",
+						setup = setupDialogButton,
+						callback = function(dialog) WW.banking.DepositSetup(WW.selection.zone, WW.selection.pageId, setupIndex) end,
+					},
+        },
+				{
+					template = "ZO_GamepadMenuEntryTemplate",
+					templateData =
+					{
+						text = "Withdraw Page",
+						setup = setupDialogButton,
+						callback = function(dialog)
+							WW.banking.WithdrawPage(WW.selection.zone, WW.selection.pageId)
+						end,
+					},
+				},
+        {
+					template = "ZO_GamepadMenuEntryTemplate",
+					templateData =
+					{
+						text = "Deposit Page",
+						setup = setupDialogButton,
+						callback = function(dialog) WW.banking.DepositPage(WW.selection.zone, WW.selection.pageId) end,
+					},
+        },
+        {
+					template = "ZO_GamepadMenuEntryTemplate",
+					templateData =
+					{
+						text = "Deposit All",
+						setup = setupDialogButton,
+						callback = function(dialog) WW.banking.DepositAllSetups() end,
+					},
+        },
+    },
+
+    buttons =
+    {
+			{
+				text = SI_GAMEPAD_SELECT_OPTION,
+				callback = function(dialog)
+					local data = dialog.entryList:GetTargetData()
+					if data.callback then data.callback(dialog) end
+					bankDialogHidden = true
+					GAMEPAD_BANKING:LayoutBankingEntryTooltip(GAMEPAD_BANKING:GetTargetData())
+				end,
+			},
+			{
+				text = SI_DIALOG_CANCEL,
+				callback = function(dialog)
+					bankDialogHidden = true
+					GAMEPAD_BANKING:LayoutBankingEntryTooltip(GAMEPAD_BANKING:GetTargetData())
+				end,
+			},
+    }
+	})
 end
