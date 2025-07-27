@@ -750,6 +750,25 @@ function WWCC.Init()
 	local controlSceneHidden = true
 	local bankDialogHidden = true
 	local dropdownsBeforeBank, lastActivatedControl
+	local bankingButton = {
+		name = "Wizards",
+		keybind = "UI_SHORTCUT_QUINARY",
+		callback = function()
+			ZO_Dialogs_ShowPlatformDialog("WizardsWardrobeBankDialog") 
+			zo_callLater(function()
+				if not bankDialogHidden then
+					showSetupList()
+					zo_callLater(function()
+						if not bankDialogHidden then
+							showSetupList()
+						end
+					end, 500)
+				end
+			end, 500) 
+			bankDialogHidden = false
+		end,
+		alignment = KEYBIND_STRIP_ALIGN_RIGHT,
+	}
 	SCENE_MANAGER:RegisterCallback( "SceneStateChanged", function(scene, oldState, newState)
 		if scene:GetName() == "LibHarvensAddonSettingsScene" then
 			if newState == SCENE_SHOWN and settings.selected then
@@ -772,31 +791,12 @@ function WWCC.Init()
 		end
 		if scene:GetName() == "gamepad_banking" then
 			if newState == SCENE_SHOWN then
-				myButton = {
-					name = "Wizards",
-					keybind = "UI_SHORTCUT_RIGHT_TRIGGER",
-					callback = function() 
-						ZO_Dialogs_ShowPlatformDialog("WizardsWardrobeBankDialog") 
-						zo_callLater(function()
-							if not bankDialogHidden then
-								showSetupList()
-								zo_callLater(function()
-									if not bankDialogHidden then
-										showSetupList()
-									end
-								end, 500)
-							end
-						end, 500) 
-						bankDialogHidden = false
-					end,
-					alignment = KEYBIND_STRIP_ALIGN_RIGHT,
-				}
-				KEYBIND_STRIP:AddKeybindButton(myButton)
+				KEYBIND_STRIP:AddKeybindButton(bankingButton)
 				return
 			end
 			bankDialogHidden = true
 			if newState == SCENE_HIDDEN then
-				KEYBIND_STRIP:RemoveKeybindButton(myButton)
+				KEYBIND_STRIP:RemoveKeybindButton(bankingButton)
 				if dropdownsBeforeBank then
 					categoryDropdown.setFunction(nil, nil, {data = dropdownsBeforeBank.category})
 					subCategoryDropdown.setFunction(nil, nil, {data = dropdownsBeforeBank.subCategory})
@@ -961,7 +961,7 @@ function WWCC.Init()
 				end,
 			},
 			{
-				text = SI_DIALOG_CANCEL,
+				text = SI_GAMEPAD_BACK_OPTION,
 				callback = function(dialog)
 					bankDialogHidden = true
 					GAMEPAD_BANKING:LayoutBankingEntryTooltip(GAMEPAD_BANKING:GetTargetData())
