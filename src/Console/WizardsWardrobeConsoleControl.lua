@@ -897,6 +897,13 @@ function WWCC.Init()
 					template = "ZO_GamepadHorizontalListRow",
 					templateData =
 					{
+						setup = setupDialogHorizontalList(pageDropdown)
+					},
+				},
+				{
+					template = "ZO_GamepadHorizontalListRow",
+					templateData =
+					{
 						setup = setupDialogHorizontalList(setupsDropdown)
 					},
 				},
