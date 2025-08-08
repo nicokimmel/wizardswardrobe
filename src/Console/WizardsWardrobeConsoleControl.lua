@@ -11,8 +11,8 @@ function WWCC.Init()
 		allowRefresh = false,
 		author = "STUDLETON",
 	}
-	local menuName = "Wizards Wardrobe Control"
-	local settings = LibHarvensAddonSettings:AddAddon(menuName, options)
+	WWCC.menuName = "Wizards Wardrobe Control"
+	local settings = LibHarvensAddonSettings:AddAddon(WWCC.menuName, options)
 	if not settings then
 		return
 	end

@@ -1104,6 +1104,23 @@ function WW.OnAddOnLoaded( _, addonName )
 		WW.storage.setups = {}
 		ReloadUI()
 	end
+	SLASH_COMMANDS["/wwcontrol"] = function()
+		if WW.consoleControl.openMenu then return WW.consoleControl.openMenu() end
+		if not LibHarvensAddonSettings.initialized then
+			LibHarvensAddonSettings:Initialize()
+		end
+		for i = 1, #ZO_MENU_ENTRIES do
+			if ZO_MENU_ENTRIES[i].text == GetString(SI_GAME_MENU_ADDONS) then
+				local submenu = ZO_MENU_ENTRIES[i].subMenu
+				for j = 1, #submenu do
+					if submenu[j].data.name == WW.consoleControl.menuName then
+						return submenu[j].data.activatedCallback()
+					end
+				end
+				break
+			end
+		end
+	end
 
 	WW.RegisterEvents()
 end
