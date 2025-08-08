@@ -43,6 +43,7 @@ function WWM.InitSV()
 			locked = true,
 			hidden = false,
 			mini = false,
+			scale = 1,
 		},
 		auto = {
 			gear = true,

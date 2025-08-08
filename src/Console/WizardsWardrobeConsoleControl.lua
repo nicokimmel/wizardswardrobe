@@ -509,9 +509,57 @@ function WWCC.Init()
 
 	local panelSection = {
 		type = LibHarvensAddonSettings.ST_SECTION,
-		label = "Panel Position",
+		label = "Info Panel",
 	}
 	settings:AddSetting(panelSection)
+
+	local litePanelCheckbox = {
+		type = LibHarvensAddonSettings.ST_CHECKBOX,
+		label = "Lite Mode",
+		tooltip = "Removes the background, icon and title for a smaller, simpler info panel.\nWill reload ui upon toggling.",
+		setFunction = function(state)
+			WW.settings.panel.mini = state
+			ReloadUI()
+		end,
+		getFunction = function() return WW.settings.panel.mini end,
+		disable = function() return areSettingsDisabled end,
+	}
+	settings:AddSetting(litePanelCheckbox)
+
+	local function temporarilyShowPanel()
+		if WW.settings.panel.mini then WizardsWardrobePanelBG:SetHidden(false) end
+		SCENE_MANAGER:GetScene("LibHarvensAddonSettingsScene"):AddFragment(WizardsWardrobePanel.fragment)
+		WizardsWardrobePanel:SetDrawTier(2)
+		WizardsWardrobePanel:SetDrawLayer(2)
+		
+		EVENT_MANAGER:UnregisterForUpdate("WizardsWardrobePanelMove")
+		EVENT_MANAGER:RegisterForUpdate("WizardsWardrobePanelMove", 5000, function()
+			SCENE_MANAGER:GetScene("LibHarvensAddonSettingsScene"):RemoveFragment(WizardsWardrobePanel.fragment)
+			WizardsWardrobePanel:SetDrawTier(0)
+			WizardsWardrobePanel:SetDrawLayer(1)
+			if WW.settings.panel.mini then WizardsWardrobePanelBG:SetHidden(true) end
+			EVENT_MANAGER:UnregisterForUpdate("WizardsWardrobePanelMove")
+		end)
+	end
+
+	local scaleSliderSetting
+	local scaleSlider = {
+		type = LibHarvensAddonSettings.ST_SLIDER,
+		label = "Panel Scale",
+		tooltip = "Adjust the scale of the panel",
+		setFunction = function(value)
+			temporarilyShowPanel()
+			WW.settings.panel.scale = value
+			scaleSliderSetting:UpdateControl()
+			WizardsWardrobePanel:SetScale(WW.settings.panel.scale)
+		end,
+		getFunction = function() return WW.settings.panel.scale end,
+		min = 1,
+		max = 20,
+		step = 0.1,
+		disable = function() return areSettingsDisabled end,
+	}
+	scaleSliderSetting = settings:AddSetting(scaleSlider)
 
 	local incSliderValue = 100
 	local incSlider = {
@@ -521,36 +569,28 @@ function WWCC.Init()
 		setFunction = function(value) incSliderValue = value end,
 		getFunction = function() return incSliderValue end,
 		min = 1,
-		max = 100,
+		max = 5,
 		step = 10,
 		disable = function() return areSettingsDisabled end,
 	}
 	settings:AddSetting(incSlider)
-
-	local function temporarilyShowPanel()
-		SCENE_MANAGER:GetCurrentScene():AddFragment(WizardsWardrobePanel.fragment)
-		WizardsWardrobePanel:SetDrawTier(2)
-		WizardsWardrobePanel:SetDrawLayer(2)
-		
-		EVENT_MANAGER:UnregisterForUpdate("WizardsWardrobePanelMove")
-		EVENT_MANAGER:RegisterForUpdate("WizardsWardrobePanelMove", 5000, function()
-			SCENE_MANAGER:GetCurrentScene():RemoveFragment(WizardsWardrobePanel.fragment)
-			WizardsWardrobePanel:SetDrawTier(0)
-			WizardsWardrobePanel:SetDrawLayer(1)
-			EVENT_MANAGER:UnregisterForUpdate("WizardsWardrobePanelMove")
-		end)
-	end
 	
 	local xSliderSetting
+	local function getMaxX() return math.max(0, GuiRoot:GetWidth() - WizardsWardrobePanel:GetWidth()) end
 	local xSlider = {
 		type = LibHarvensAddonSettings.ST_SLIDER,
-		label = "Panel X",
+		label = "Panel X position",
 		tooltip = "Move the panel left or right",
 		setFunction = function(value)
 			temporarilyShowPanel()
 			local offset = (value - WW.settings.panel.left) * incSliderValue
-			WW.settings.panel.left = WW.settings.panel.left + offset
+			local newX = WW.settings.panel.left + offset
+			local maxX = getMaxX()
+			if newX > maxX then newX = maxX end
+			if newX < 0 then newX = 0 end
+			WW.settings.panel.left = newX
 			xSliderSetting:UpdateControl()
+			WizardsWardrobePanel:ClearAnchors()
 			WizardsWardrobePanel:SetAnchor( TOPLEFT, GuiRoot, TOPLEFT, WW.settings.panel.left, WW.settings.panel.top )
 		end,
 		getFunction = function() return WW.settings.panel.left end,
@@ -563,20 +603,25 @@ function WWCC.Init()
 
 
 	local ySliderSetting
+	local function getMaxY() return GuiRoot:GetHeight() - WizardsWardrobePanel:GetHeight() end
 	local ySlider = {
 		type = LibHarvensAddonSettings.ST_SLIDER,
-		label = "Panel Y",
+		label = "Panel Y position",
 		tooltip = "Move the panel up or down",
 		setFunction = function(value)	
 			temporarilyShowPanel()
 			local offset = (value - WW.settings.panel.top) * incSliderValue
-			WW.settings.panel.top = WW.settings.panel.top + offset
+			local newY = WW.settings.panel.top + offset
+			local maxY = getMaxY()
+			if newY > maxY then newY = maxY end
+			if newY < 0 then newY = 0 end
+			WW.settings.panel.top = newY
 			ySliderSetting:UpdateControl()
 			WizardsWardrobePanel:SetAnchor( TOPLEFT, GuiRoot, TOPLEFT, WW.settings.panel.left, WW.settings.panel.top )
 		end,
 		getFunction = function() return WW.settings.panel.top end,
 		min = 0,
-		max = GuiRoot:GetWidth(),
+		max = GuiRoot:GetHeight(),
 		step = 1,
 		disable = function() return areSettingsDisabled end,
 	}

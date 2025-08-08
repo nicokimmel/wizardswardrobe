@@ -4,25 +4,11 @@ local WW = WizardsWardrobe
 WW.gui = WW.gui or {}
 local WWG = WW.gui
 
-local PANEL_WIDTH = 245
-local PANEL_HEIGHT = 70
-local PANEL_WIDTH_MINI = PANEL_WIDTH - 70
-local PANEL_HEIGHT_MINI = PANEL_HEIGHT - 30
+local PANEL_WIDTH_MINI = 160
+local PANEL_HEIGHT_MINI = 45
 
 local PANEL_DEFAULT_TOP = ActionButton8:GetTop() - 10
 local PANEL_DEFAULT_LEFT = ActionButton8:GetLeft() + ActionButton8:GetWidth() + 2
-
-local WINDOW_WIDTH = 360
-local WINDOW_HEIGHT = 665
-
-local TITLE_HEIGHT = 50
-local TOP_MENU_HEIGHT = 50
-local PAGE_MENU_HEIGHT = 40
-local BOTTOM_MENU_HEIGHT = 36
-local DIVIDER_HEIGHT = 2
-
-local SETUP_BOX_WIDTH = 350
-local SETUP_BOX_HEIGHT = 128
 
 function WWG.Init()
 	WWG.name = WW.name .. "Gui"
@@ -85,6 +71,7 @@ function WWG.SetupPanel()
 		}
 		WizardsWardrobePanel:SetAnchor( TOPLEFT, GuiRoot, TOPLEFT, PANEL_DEFAULT_LEFT, PANEL_DEFAULT_TOP )
 	end
+	WizardsWardrobePanel:SetScale(WW.settings.panel.scale)
 end
 
 function WWG.OnPanelMove()

@@ -12,7 +12,7 @@
 	</Animations>
 	<Controls>
 		<TopLevelControl name="WizardsWardrobePanel" tier="LOW" layer="CONTROLS" mouseEnabled="true" movable="false" clampedToScreen="true" hidden="true">
-			<Dimensions x="245" y="70" />
+			<Dimensions x="220" y="70" />
 			<OnMoveStop>WizardsWardrobe.gui.OnPanelMove()</OnMoveStop>
 			<Controls>
 				<Backdrop name="$(parent)BG" inherits="ZO_DarkThinFrame" alpha="0.5">
@@ -23,13 +23,13 @@
 					<Anchor point="LEFT" relativeTo="$(parent)" relativePoint="LEFT" offsetX="10" />
 				</Texture>
 				<Label name="$(parent)TopLabel" font="ZoFontGamepadChat" verticalAlignment="TEXT_ALIGN_CENTER">
-					<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="60" offsetY="7" />
+					<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="60" offsetY="2" />
 				</Label>
 				<Label name="$(parent)MiddleLabel" font="ZoFontGamepadChat" verticalAlignment="TEXT_ALIGN_CENTER">
 					<Anchor point="LEFT" relativeTo="$(parent)" relativePoint="LEFT" offsetX="60" />
 				</Label>
 				<Label name="$(parent)BottomLabel" font="ZoFontGamepadChat" verticalAlignment="TEXT_ALIGN_CENTER">
-					<Anchor point="BOTTOMLEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="60" offsetY="-7" />
+					<Anchor point="BOTTOMLEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" offsetX="60" offsetY="-2" />
 				</Label>
 			</Controls>
 		</TopLevelControl>
