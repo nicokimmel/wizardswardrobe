@@ -1093,10 +1093,19 @@ function WW.Init()
 	WW.currentZone = WW.zones[ "GEN" ]
 	WW.currentZoneId = 0
 
-	WW.selection = {
-		zone = WW.zones[ "GEN" ],
-		pageId = 1
-	}
+	WW.selection = setmetatable({zone = WW.zones["GEN"]}, {
+		__index = function(table, key)
+			if key == "pageId" then
+				return WW.pages[table.zone.tag][0].selected
+			end
+		end,
+		__newindex = function(table, key, value)
+			if key == "pageId" then
+				WW.pages[table.zone.tag][0].selected = value
+			end
+		end
+	})
+
 end
 
 function WW.OnAddOnLoaded( _, addonName )

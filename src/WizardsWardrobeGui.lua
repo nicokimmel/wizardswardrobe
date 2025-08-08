@@ -504,7 +504,7 @@ function WWG.SetupTopMenu()
 
 	WizardsWardrobeWindowTopMenuButtonsAddPage:SetHandler( "OnClicked", function( self )
 		local DO_REFRESH_TREE = true
-		WWG.CreatePage( WW.selection.zone, false, DO_REFRESH_TREE )
+		WWG.CreatePage(false, DO_REFRESH_TREE)
 	end )
 	WWG.SetTooltip( WizardsWardrobeWindowTopMenuButtonsAddPage, TOP, GetString( WW_BUTTON_ADDPAGE ) )
 
@@ -537,16 +537,14 @@ function WWG.OnZoneSelect( zone )
 	if (WW.currentZoneId ~= 0) then
 		WW.storage.selectedZoneTag = zone.tag
 	end
-	
-	PlaySound( SOUNDS.TABLET_PAGE_TURN )
-	local node = WWG.tree.tree:GetTreeNodeByData( zone )
-	if not WW.pages[ zone.tag ] then
-		local DO_NOT_REFRESH_TREE = false
-		WWG.CreatePage( zone, true, DO_NOT_REFRESH_TREE )
-	end
 
 	WW.selection.zone = zone
-	WW.selection.pageId = WW.pages[ zone.tag ][ 0 ].selected
+	PlaySound(SOUNDS.TABLET_PAGE_TURN)
+	local node = WWG.tree.tree:GetTreeNodeByData(zone)
+	if not WW.pages[zone.tag] then
+		local DO_NOT_REFRESH_TREE = false
+		WWG.CreatePage(true, DO_NOT_REFRESH_TREE)
+	end
 
 	WWG.BuildPage( WW.selection.zone, WW.selection.pageId )
 
@@ -627,7 +625,6 @@ function WWG.SetupPagesDropdown()
 		if pageId ~= 0 then
 			entry = comboBox:CreateItemEntry(page.name, function() 
 					WW.selection.pageId = pageId
-					WW.pages[ WW.selection.zone.tag ][ 0 ].selected = pageId
 					WWG.BuildPage( WW.selection.zone, WW.selection.pageId, true )
 				end
 			)
@@ -1278,11 +1275,12 @@ function WWG.BuildPage( zone, pageId, scroll )
 	end
 end
 
-function WWG.CreatePage( zone, skipBuilding, refreshTree )
-	if not WW.pages[ zone.tag ] then
-		WW.pages[ zone.tag ] = {}
-		WW.pages[ zone.tag ][ 0 ] = {}
-		WW.pages[ zone.tag ][ 0 ].selected = 1
+function WWG.CreatePage(skipBuilding, refreshTree)
+	local zone = WW.selection.zone
+	if not WW.pages[zone.tag] then
+		WW.pages[zone.tag] = {}
+		WW.pages[zone.tag][0] = {}
+		WW.pages[zone.tag][0].selected = 1
 	end
 
 	local nextPageId = #WW.pages[ zone.tag ] + 1
@@ -1290,7 +1288,6 @@ function WWG.CreatePage( zone, skipBuilding, refreshTree )
 		name = string.format( GetString( WW_PAGE ), tostring( nextPageId ) ),
 	}
 
-	WW.pages[ zone.tag ][ 0 ].selected = nextPageId
 	WW.selection.pageId = nextPageId
 
 	WWG.CreateDefaultSetups( zone, nextPageId )
@@ -1345,7 +1342,6 @@ function WWG.DeletePage()
 	local nextPageId = pageId - 1
 	if nextPageId < 1 then nextPageId = pageId end
 
-	WW.pages[ zone.tag ][ 0 ].selected = nextPageId
 	WW.selection.pageId = nextPageId
 
 	table.remove( WW.setups[ zone.tag ], pageId )
@@ -1383,7 +1379,6 @@ function WWG.PageLeft()
 	end
 	local prevPage = WW.selection.pageId - 1
 	WW.selection.pageId = prevPage
-	WW.pages[ WW.selection.zone.tag ][ 0 ].selected = prevPage
 	WWG.BuildPage( WW.selection.zone, WW.selection.pageId, true )
 end
 
@@ -1393,7 +1388,6 @@ function WWG.PageRight()
 	end
 	local nextPage = WW.selection.pageId + 1
 	WW.selection.pageId = nextPage
-	WW.pages[ WW.selection.zone.tag ][ 0 ].selected = nextPage
 	WWG.BuildPage( WW.selection.zone, WW.selection.pageId, true )
 end
 
