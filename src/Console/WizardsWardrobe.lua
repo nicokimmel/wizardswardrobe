@@ -1090,6 +1090,9 @@ function WW.OnAddOnLoaded( _, addonName )
 	WW.conditions.Init()
 	WW.conditions.LoadConditions()
 	WW.fixes.Init()
+	WW.repair.Init()
+	WW.poison.Init()
+	WW.food.Init()
 
 	SLASH_COMMANDS["/wwep"] = function() WW.LoadSetupAdjacent(-1) end
 	SLASH_COMMANDS["/wwec"] = function() WW.LoadSetupAdjacent(0) end
