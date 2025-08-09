@@ -47,7 +47,7 @@
 		<Control name="WizardsWardrobeCPItem" resizeToFitDescendents="true" virtual="true">
 			<Anchor point="TOPLEFT"/>
 			<Controls>
-				<Texture name="$(parent)Icon" textureFile="/esoui/art/champion/champion_points_stamina_icon.dds" level="2">
+				<Texture name="$(parent)Icon" textureFile="/esoui/art/champion/champion_points_stamina_icon.dds" level="2" hidden="true">
 						<Dimensions x="20" y="20" />
 						<Anchor point="TOPLEFT" relativeTo="$(parent)" relativePoint="TOPLEFT" offsetX="10" offsetY="10" />
 				</Texture>
@@ -382,8 +382,24 @@
 						</Control>
 					</Controls>
 				</Control>
+				<Control name="$(parent)Food" resizeToFitDescendents="true">
+					<Anchor point="TOPLEFT" relativeTo="$(parent)Gear" relativePoint="BOTTOMLEFT" offsetY="4"/>
+					<Controls>
+						<Texture name="$(parent)Icon" textureFile="/esoui/art/itemtooltip/eso_itemtooltip_emptyslot.dds" level="2">
+							<Dimensions x="36" y="36" />
+							<Anchor point="TOPLEFT" />
+						</Texture>
+						<Texture name="$(parent)Frame" textureFile="/esoui/art/actionbar/abilityframe64_up.dds" level="3">
+							<Dimensions x="36" y="36" />
+							<Anchor point="CENTER" relativeTo="$(parent)Icon" />
+						</Texture>
+						<Label name="$(parent)Label" font="ZoFontGamepadChat">
+							<Anchor point="LEFT" relativeTo="$(parent)Icon" relativePoint="RIGHT" offsetX="5" />
+						</Label>
+					</Controls>
+				</Control>
 				<Control name="$(parent)CP" resizeToFitDescendents="true">
-            <Anchor point="TOPLEFT" relativeTo="$(parent)Gear" relativePoint="BOTTOMLEFT"  />
+            <Anchor point="TOPLEFT" relativeTo="$(parent)Food" relativePoint="BOTTOMLEFT"  />
             <Controls>
                 <Control name="$(parent)Green1" inherits="WizardsWardrobeCPItem">
 									<Anchor point="TOPLEFT"/>

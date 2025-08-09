@@ -187,6 +187,7 @@ WW.BUFFFOOD = {
 	[ 153627 ] = 127572, -- Pack Leader's Bone Broth
 	[ 153629 ] = 127596, -- Bewitched Sugar Skulls
 	[ 171322 ] = 148633, -- Sparkling Mudcrab Apple Cider
+	[ 37845 ] = 66576, -- Alik'r Beets with Goat Cheese
 }
 
 WW.CONDITIONS = {

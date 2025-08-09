@@ -259,6 +259,7 @@ function WWCC.Init()
 	local function showSetupPreview()	
 		local containerControl = getSetupPreviewControl()
 		containerControl:GetNamedChild("Name"):SetText(selectedSetupName)
+
 		local skillIndex = 1
 		local setup = WW.setups[WW.selection.zone.tag][WW.selection.pageId][setupIndex]
 		local skillsContainer = containerControl:GetNamedChild("Skills")
@@ -274,6 +275,7 @@ function WWCC.Init()
 				skillIndex = skillIndex + 1
 			end
 		end
+
 		local gearContainer = containerControl:GetNamedChild("Gear")
 		for index, gearSlot in ipairs( WW.GEARSLOTS ) do
 			local gear = setup.gear[gearSlot]
@@ -295,13 +297,24 @@ function WWCC.Init()
 				itemIcon:SetTexture( WW.GEARICONS[ gearSlot ] )
 			end
 		end
+
+		local foodContainer = containerControl:GetNamedChild("Food")
+		local foodIcon = foodContainer:GetNamedChild("Icon")
+		local foodLabel = foodContainer:GetNamedChild("Label")
+		local food = setup.food
+		if food and food.link and #food.link > 0 then
+			foodLabel:SetText(food.link)
+			foodIcon:SetTexture(GetItemLinkIcon(food.link))
+		else
+			foodLabel:SetText("-/-")
+			foodIcon:SetTexture("/esoui/art/crafting/provisioner_indexicon_meat_disabled.dds")
+		end
+
 		local cpContainer = containerControl:GetNamedChild("CP")
 		for cpIndex = 1, 12 do
 			local cpControl = cpContainer:GetChild(cpIndex)
 			local cpIcon = cpControl:GetNamedChild("Icon")
-			cpIcon:SetHidden(true)
 			local cpLabel = cpControl:GetNamedChild("Label")
-			cpLabel:SetText( "-/-" )
 			local cpId = setup.cp[cpIndex]
 			if cpId then
 				local cpName = zo_strformat( "<<C:1>>", GetChampionSkillName( cpId ) )
@@ -311,9 +324,13 @@ function WWCC.Init()
 					cpIcon:SetTexture(WW.CPICONS[cpIndex])
 					cpIcon:SetHidden(false)
 				end
+			else
+				cpIcon:SetHidden(true)
+				cpLabel:SetText("-/-")
 			end
 		end
 	end
+	
 	local rearrangeDropdownSetting = nil
 	local setupsDropdown = {
 		type = LibHarvensAddonSettings.ST_DROPDOWN,
