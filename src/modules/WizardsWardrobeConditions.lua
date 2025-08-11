@@ -19,7 +19,7 @@ function WWC.LoadConditions()
 	
 	local zone = WW.currentZone
 	if not WW.pages[zone.tag] then return end
-	local pageId = WW.pages[zone.tag][0].selected
+	local pageId = WW.pages[zone.tag][0][WW.currentCharacterId]
 	
 	for entry in WW.PageIterator(zone, pageId) do
 		local setup = Setup:FromStorage(zone.tag, pageId, entry.index)

@@ -102,6 +102,7 @@ function WWG.HandleFirstStart()
 	end
 	if not PlainStringFind( string.lower( WW.version ), "beta" ) then
 		if highestMajor < currentMajor or (highestMajor == currentMajor and highestMinor < currentMinor) then
+			WWG.HandleMigration()
 			EVENT_MANAGER:RegisterForUpdate( WWG.name .. "UpdateWarning", 1000,
 			function()
 				if not ZO_Dialogs_IsShowingDialog() then
@@ -116,6 +117,28 @@ function WWG.HandleFirstStart()
 					end )
 				end
 			end )
+		end
+	end
+end
+
+function WWG.HandleMigration()
+	local savedVariables = WizardsWardrobeSV.Default[GetDisplayName()]
+	local characterIds = {}
+	local savedVariables = WizardsWardrobeSV.Default[GetDisplayName()]
+	for i = 1, GetNumCharacters() do
+		local _, _, _, _, _, _, characterId, _ = GetCharacterInfo(i)
+		table.insert(characterIds, characterId)
+	end
+	for characterId, characterSv in pairs(savedVariables) do
+		if characterId ~= "$AccountWide" then
+			characterSv.selectedCharacterId = characterId
+			for _, pages in pairs(characterSv.pages) do
+				local newObject = {}
+				for _, charId in iparis(characterIds) do
+					newObject[charId] = 1
+				end
+				pages[0] = newObject
+			end
 		end
 	end
 end
@@ -1280,7 +1303,7 @@ function WWG.CreatePage(skipBuilding, refreshTree)
 	if not WW.pages[zone.tag] then
 		WW.pages[zone.tag] = {}
 		WW.pages[zone.tag][0] = {}
-		WW.pages[zone.tag][0].selected = 1
+		WW.pages[zone.tag][0][WW.currentCharacterId] = 1
 	end
 
 	local nextPageId = #WW.pages[ zone.tag ] + 1

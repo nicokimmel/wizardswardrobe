@@ -117,10 +117,10 @@ function WW.LoadSetupCurrent( index, auto )
 	WW.LoadSetup( zone, pageId, index, auto, DO_NOT_SKIP_VALIDATION )
 end
 
-function WW.LoadSetupSubstitute( index )
-	if not WW.zones[ "SUB" ] or not WW.pages[ "SUB" ] then return end
+function WW.LoadSetupSubstitute(index)
+	if not WW.zones["SUB"] or not WW.pages["SUB"] then return end
 	local DO_NOT_SKIP_VALIDATION = false
-	WW.LoadSetup( WW.zones[ "SUB" ], WW.pages[ "SUB" ][ 0 ].selected, index, true, DO_NOT_SKIP_VALIDATION )
+	WW.LoadSetup(WW.zones["SUB"], WW.pages["SUB"][0][WW.currentCharacterId], index, true, DO_NOT_SKIP_VALIDATION)
 end
 
 function WW.SaveSetup( zone, pageId, index, skip )
@@ -1096,16 +1096,17 @@ function WW.Init()
 	WW.selection = setmetatable({zone = WW.zones["GEN"]}, {
 		__index = function(table, key)
 			if key == "pageId" then
-				return WW.pages[table.zone.tag][0].selected
+				return WW.pages[table.zone.tag][0][WW.currentCharacterId]
 			end
 		end,
 		__newindex = function(table, key, value)
 			if key == "pageId" then
-				WW.pages[table.zone.tag][0].selected = value
+				WW.pages[table.zone.tag][0][WW.currentCharacterId] = value
 			end
 		end
 	})
 
+	WW.currentCharacterId = GetCurrentCharacterId()
 end
 
 function WW.OnAddOnLoaded( _, addonName )
