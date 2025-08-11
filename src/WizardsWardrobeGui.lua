@@ -123,6 +123,12 @@ end
 
 function WWG.HandleMigration()
 	local savedVariables = WizardsWardrobeSV.Default[GetDisplayName()]
+		savedVariables["$AccountWide"].accountWideStorage = {
+		setups = {},
+		pages = {},
+		prebuffs = {},
+		autoEquipSetups = true,
+	}
 	local characterIds = {}
 	local savedVariables = WizardsWardrobeSV.Default[GetDisplayName()]
 	for i = 1, GetNumCharacters() do
@@ -134,7 +140,7 @@ function WWG.HandleMigration()
 			characterSv.selectedCharacterId = characterId
 			for _, pages in pairs(characterSv.pages) do
 				local newObject = {}
-				for _, charId in iparis(characterIds) do
+				for _, charId in ipairs(characterIds) do
 					newObject[charId] = 1
 				end
 				pages[0] = newObject

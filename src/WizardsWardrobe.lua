@@ -981,15 +981,8 @@ function WW.OnZoneChange( _, _ )
 		local shouldSelectInstance = WW.settings.autoSelectInstance and WW.currentZone.tag ~= "GEN"
 		local shouldSelectGeneral = WW.settings.autoSelectGeneral and WW.currentZone.tag == "GEN"
 		local shouldSelectCurrent = shouldSelectInstance or shouldSelectGeneral
-		if isFirstZoneAfterReload then
-			if shouldSelectCurrent then
-				WW.gui.OnZoneSelect(WW.currentZone)
-			else
-				-- select the last selected zone before reload
-				WW.gui.OnZoneSelect(WW.zones[WW.storage.selectedZoneTag])
-			end
-		elseif shouldSelectCurrent then
-			WW.gui.OnZoneSelect(WW.currentZone)
+		if isFirstZoneAfterReload or shouldSelectCurrent then
+			WW.gui.OnZoneSelect(shouldSelectCurrent and WW.currentZone or WW.zones[WW.storage.selectedZoneTag])
 		end
 
 		if WW.settings.fixes.surfingWeapons then

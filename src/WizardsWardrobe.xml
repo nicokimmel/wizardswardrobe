@@ -196,7 +196,7 @@
 				</Control>
 				<Texture name="$(parent)BottomDivider" textureFile="/esoui/art/miscellaneous/centerscreen_topdivider.dds">
 					<Dimensions x="360" y="2" />
-					<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOM" offsetY="-32" />
+					<Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOM" offsetY="-37" />
 				</Texture>
 				<Control name="$(parent)BottomMenu">
 					<Dimensions x="FLEX_ALIGNMENT_AUTO" y="36" />
@@ -204,7 +204,7 @@
 					<Controls>
 						<Button name="$(parent)Settings" inherits="ZO_ButtonBehaviorClickSound">
 							<Dimensions x="36" y="36" />
-							<Anchor point="LEFT" relativeTo="$(parent)" relativePoint="LEFT" />
+							<Anchor point="LEFT" relativeTo="$(parent)" relativePoint="LEFT" offsetX="-4" />
 							<Textures normal="/esoui/art/skillsadvisor/advisor_tabicon_settings_up.dds"
 								pressed="/esoui/art/skillsadvisor/advisor_tabicon_settings_down.dds"
 								mouseOver="/esoui/art/skillsadvisor/advisor_tabicon_settings_over.dds"
@@ -212,7 +212,7 @@
 						</Button>
 						<Button name="$(parent)Queue" inherits="ZO_ButtonBehaviorClickSound">
 							<Dimensions x="36" y="36" />
-							<Anchor point="LEFT" relativeTo="$(parent)Settings" relativePoint="RIGHT" offsetX="-4" />
+							<Anchor point="LEFT" relativeTo="$(parent)Settings" relativePoint="RIGHT" offsetX="-8" />
 							<Textures normal="/esoui/art/inventory/inventory_tabicon_crafting_up.dds"
 								pressed="/esoui/art/inventory/inventory_tabicon_crafting_down.dds"
 								mouseOver="/esoui/art/inventory/inventory_tabicon_crafting_over.dds"
@@ -220,7 +220,7 @@
 						</Button>
 						<Button name="$(parent)Undress" inherits="ZO_ButtonBehaviorClickSound">
 							<Dimensions x="36" y="36" />
-							<Anchor point="LEFT" relativeTo="$(parent)Queue" relativePoint="RIGHT" offsetX="-4" />
+							<Anchor point="LEFT" relativeTo="$(parent)Queue" relativePoint="RIGHT" offsetX="-8" />
 							<Textures normal="/esoui/art/inventory/inventory_tabicon_armor_up.dds"
 								pressed="/esoui/art/inventory/inventory_tabicon_armor_down.dds"
 								mouseOver="/esoui/art/inventory/inventory_tabicon_armor_over.dds"
@@ -228,7 +228,7 @@
 						</Button>
 						<Button name="$(parent)Prebuff" inherits="ZO_ButtonBehaviorClickSound">
 							<Dimensions x="36" y="36" />
-							<Anchor point="LEFT" relativeTo="$(parent)Undress" relativePoint="RIGHT" offsetX="-4" />
+							<Anchor point="LEFT" relativeTo="$(parent)Undress" relativePoint="RIGHT" offsetX="-8" />
 							<Textures normal="/esoui/art/progression/progression_indexicon_guilds_up.dds"
 								pressed="/esoui/art/progression/progression_indexicon_guilds_down.dds"
 								mouseOver="/esoui/art/progression/progression_indexicon_guilds_over.dds"
@@ -236,7 +236,7 @@
 						</Button>
 						<Button name="$(parent)Help" inherits="ZO_ButtonBehaviorClickSound">
 							<Dimensions x="34" y="34" />
-							<Anchor point="RIGHT" relativeTo="$(parent)" relativePoint="RIGHT" offsetX="2" />
+							<Anchor point="LEFT" relativeTo="$(parent)Prebuff" relativePoint="RIGHT" offsetX="-8" />
 							<Textures normal="/esoui/art/menubar/menubar_help_up.dds"
 								pressed="/esoui/art/menubar/menubar_help_down.dds"
 								mouseOver="/esoui/art/menubar/menubar_help_over.dds"
