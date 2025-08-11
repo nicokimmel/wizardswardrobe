@@ -39,6 +39,7 @@ function WWG.Init()
 	WWG.SetupBottomMenu()
 	WWG.CreateSetupPool()
 	WWG.SetupTopMenu()
+	WWG.SetupCharacterDropdown()
 
 	WWG.SetupModifyDialog()
 	WWG.SetupArrangeDialog()
@@ -123,7 +124,7 @@ end
 
 function WWG.HandleMigration()
 	local savedVariables = WizardsWardrobeSV.Default[GetDisplayName()]
-		savedVariables["$AccountWide"].accountWideStorage = {
+	savedVariables["$AccountWide"].accountWideStorage = {
 		setups = {},
 		pages = {},
 		prebuffs = {},
@@ -448,6 +449,10 @@ function WWG.OnWindowResize( action )
 		WizardsWardrobeWindowBottomDivider:SetWidth( width )
 		
 		WizardsWardrobeWindowPageMenuPagesDropdownSelectedItemText:SetDimensionConstraints(140, 0, width - 200, 29)
+
+		local characterDropdownMaxWidth = width/2-70
+		local characterDropdownMinWidth = characterDropdownMaxWidth < 140 and characterDropdownMaxWidth or 140
+		WizardsWardrobeWindowBottomMenuCharacterDropdown:SetDimensionConstraints( characterDropdownMinWidth, 0,characterDropdownMaxWidth, 20 )
 	end
 
 	local function OnResizeEnd()
@@ -1917,4 +1922,57 @@ function WWG.StartAlphaAnimation( control, duration, startAlpha, endAlpha )
 		timeline:PlayFromStart()
 	end
 	return animation, timeline
+end
+
+function WWG.SetupCharacterDropdown()
+	local comboBox = ZO_ComboBox_ObjectFromContainer(WizardsWardrobeWindowBottomMenuCharacterDropdown)
+	comboBox:SetSortsItems(false)
+	WizardsWardrobeWindowBottomMenuCharacterDropdown.comboBox = comboBox
+
+	comboBox:ClearItems()
+	local orderedCharInfo = {}
+	local savedVariables = WizardsWardrobeSV.Default[GetDisplayName()]
+	for i = 1, GetNumCharacters() do
+		local name, _, _, _, _, _, id, _ = GetCharacterInfo(i)
+		if not savedVariables[id] then
+			savedVariables[id] = WW.DefaultSavedVariables(id)
+			savedVariables[id]["$LastCharacterName"] = name:sub(1, -4)
+		end
+		table.insert(orderedCharInfo, {characterId = id, characterSv = savedVariables[id]})
+	end
+	table.insert(orderedCharInfo, {characterId = "$AccountWide", characterSv = savedVariables["$AccountWide"]})
+
+	for _, charInfo in ipairs(orderedCharInfo) do
+		local characterId = charInfo.characterId
+		local characterSv = charInfo.characterSv
+		local characterName = savedVariables[characterId]["$LastCharacterName"] or "Account Wide"
+
+		local entry = comboBox:CreateItemEntry(characterName, function()
+			local selectedCharacterSv
+			if characterId == "$AccountWide" then
+				selectedCharacterSv = savedVariables[characterId].accountWideStorage
+			else
+				selectedCharacterSv = savedVariables[characterId]
+			end
+			WW.setups = selectedCharacterSv.setups
+			WW.pages = selectedCharacterSv.pages
+			WW.prebuffs = selectedCharacterSv.prebuffs
+
+			WW.storage.selectedCharacterId = characterId
+			WWG.OnZoneSelect(WW.selection.zone)
+		end)
+		comboBox:AddItem(entry)
+
+		if characterId == GetCurrentCharacterId() then
+			if characterSv.selectedCharacterId then
+				if characterSv.selectedCharacterId == "$AccountWide" then
+					comboBox:SetSelectedItem("Account Wide")
+				else
+					comboBox:SetSelectedItem(savedVariables[characterSv.selectedCharacterId]["$LastCharacterName"])
+				end
+			else
+				comboBox:SetSelectedItem(characterName)
+			end
+		end
+	end
 end

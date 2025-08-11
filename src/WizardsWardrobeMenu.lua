@@ -103,6 +103,18 @@ function WWM.InitSV()
     },
 	} )
 
+	local savedVariables = WizardsWardrobeSV.Default[GetDisplayName()]
+	local selectedCharacterSv = WW.storage
+	local selectedCharacterId = selectedCharacterSv.selectedCharacterId
+	if selectedCharacterId == "$AccountWide" then
+		selectedCharacterSv = savedVariables["$AccountWide"].accountWideStorage
+	elseif selectedCharacterId ~= WW.currentCharacterId then
+		selectedCharacterSv = savedVariables[selectedCharacterId]
+	end
+	WW.setups = selectedCharacterSv.setups
+	WW.pages = selectedCharacterSv.pages
+	WW.prebuffs = selectedCharacterSv.prebuffs
+
 	-- migrate validation settings
 	if WW.settings.validationDelay then
 		WW.settings.setupValidation.delay = WW.settings.validationDelay

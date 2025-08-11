@@ -242,6 +242,9 @@
 								mouseOver="/esoui/art/menubar/menubar_help_over.dds"
 								disabled="/esoui/art/menubar/menubar_help_disabled.dds" />
 						</Button>
+						<Control name="$(parent)CharacterDropdown" inherits="ZO_ComboBoxResizeToFit" mouseEnabled="true">
+							<Anchor point="RIGHT" relativeTo="$(parent)" relativePoint="RIGHT" offsetX="-4" offsetY="-2" />
+						</Control>
 					</Controls>
 				</Control>
 				<!-- <Button name="$(parent)ZoneButton">
