@@ -123,22 +123,11 @@ function WWG.HandleFirstStart()
 end
 
 function WWG.HandleMigration()
-	local savedVariables = WizardsWardrobeSV.Default[GetDisplayName()]
-	savedVariables["$AccountWide"].accountWideStorage = {
-		setups = {},
-		pages = {},
-		prebuffs = {},
-		autoEquipSetups = true,
-	}
-	local characterIds = {}
-	local savedVariables = WizardsWardrobeSV.Default[GetDisplayName()]
-	for i = 1, GetNumCharacters() do
-		local _, _, _, _, _, _, characterId, _ = GetCharacterInfo(i)
-		table.insert(characterIds, characterId)
-	end
-	for characterId, characterSv in pairs(savedVariables) do
+	for characterId, characterSv in pairs(WizardsWardrobeSV.Default[GetDisplayName()]) do
 		if characterId ~= "$AccountWide" then
-			characterSv.selectedCharacterId = characterId
+			for _, pages in pairs(characterSv.pages) do
+				pages[0] = {[characterId] = pages[0].selected}
+			end
 		end
 	end
 end
