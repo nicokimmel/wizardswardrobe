@@ -139,13 +139,6 @@ function WWG.HandleMigration()
 	for characterId, characterSv in pairs(savedVariables) do
 		if characterId ~= "$AccountWide" then
 			characterSv.selectedCharacterId = characterId
-			for _, pages in pairs(characterSv.pages) do
-				local newObject = {}
-				for _, charId in ipairs(characterIds) do
-					newObject[charId] = 1
-				end
-				pages[0] = newObject
-			end
 		end
 	end
 end

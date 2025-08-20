@@ -1089,6 +1089,10 @@ function WW.Init()
 	WW.selection = setmetatable({zone = WW.zones["GEN"]}, {
 		__index = function(table, key)
 			if key == "pageId" then
+				if not WW.pages[table.zone.tag][0][WW.currentCharacterId] then
+					WW.pages[table.zone.tag][0][WW.currentCharacterId] = 1
+					return 1
+				end
 				return WW.pages[table.zone.tag][0][WW.currentCharacterId]
 			end
 		end,
