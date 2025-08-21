@@ -128,6 +128,9 @@ function WWG.HandleMigration()
 			for _, pages in pairs(characterSv.pages) do
 				pages[0] = {[characterId] = pages[0].selected}
 			end
+			characterSv.selectedZoneTag = {
+				[characterId] = characterSv.selectedZoneTag,
+			}
 		end
 	end
 end
@@ -551,7 +554,7 @@ end
 
 function WWG.OnZoneSelect( zone )
 	if (WW.currentZoneId ~= 0) then
-		WW.storage.selectedZoneTag = zone.tag
+		WW.storage.selectedZoneTag[WW.storage.selectedCharacterId] = zone.tag
 	end
 
 	WW.selection.zone = zone
@@ -1941,6 +1944,11 @@ function WWG.SetupCharacterDropdown()
 			WW.prebuffs = selectedCharacterSv.prebuffs
 
 			WW.storage.selectedCharacterId = characterId
+			if not WW.storage.selectedZoneTag[characterId] then
+				WW.storage.selectedZoneTag[characterId] = "GEN"
+			end
+			WW.selection.zone = WW.zones[WW.storage.selectedZoneTag[characterId]]
+
 			WWG.OnZoneSelect(WW.selection.zone)
 		end)
 		comboBox:AddItem(entry)

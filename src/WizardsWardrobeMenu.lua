@@ -33,7 +33,9 @@ function WW.DefaultSavedVariables(characterId)
 		pages = {},
 		prebuffs = {},
 		autoEquipSetups = true,
-		selectedZoneTag = 'GEN',
+		selectedZoneTag = {
+			[characterId] = "GEN",
+		},
 		selectedCharacterId = characterId,
 	}
 end
