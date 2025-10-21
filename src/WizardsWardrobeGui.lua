@@ -1949,6 +1949,8 @@ function WWG.SetupCharacterDropdown()
 			end
 			WW.selection.zone = WW.zones[WW.storage.selectedZoneTag[characterId]]
 
+      WW.gui.tree:RefreshTree( WW.gui.tree.tree, WW.selection.zone )
+
 			WWG.OnZoneSelect(WW.selection.zone)
 		end)
 		comboBox:AddItem(entry)
