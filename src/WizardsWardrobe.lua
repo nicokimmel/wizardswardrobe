@@ -7,7 +7,7 @@ WW.name = "WizardsWardrobe"
 WW.simpleName = "Wizard's Wardrobe"
 WW.displayName =
 "|c18bed8W|c26c2d1i|c35c6c9z|c43cac2a|c52cebar|c60d1b3d|c6fd5ab'|c7dd9a4s|c8cdd9d |c9ae195W|ca8e58ea|cb7e986r|cc5ed7fd|cd4f077r|ce2f470o|cf1f868b|cfffc61e|r"
-WW.version = "1.22.0"
+WW.version = "1.23.0"
 WW.zones = {}
 WW.currentIndex = 0
 WW.IsHeavyAttacking = false
@@ -117,10 +117,10 @@ function WW.LoadSetupCurrent( index, auto )
 	WW.LoadSetup( zone, pageId, index, auto, DO_NOT_SKIP_VALIDATION )
 end
 
-function WW.LoadSetupSubstitute( index )
-	if not WW.zones[ "SUB" ] or not WW.pages[ "SUB" ] then return end
+function WW.LoadSetupSubstitute(index)
+	if not WW.zones["SUB"] or not WW.pages["SUB"] then return end
 	local DO_NOT_SKIP_VALIDATION = false
-	WW.LoadSetup( WW.zones[ "SUB" ], WW.pages[ "SUB" ][ 0 ].selected, index, true, DO_NOT_SKIP_VALIDATION )
+	WW.LoadSetup(WW.zones["SUB"], WW.pages["SUB"][0][WW.currentCharacterId], index, true, DO_NOT_SKIP_VALIDATION)
 end
 
 function WW.SaveSetup( zone, pageId, index, skip )
@@ -981,15 +981,8 @@ function WW.OnZoneChange( _, _ )
 		local shouldSelectInstance = WW.settings.autoSelectInstance and WW.currentZone.tag ~= "GEN"
 		local shouldSelectGeneral = WW.settings.autoSelectGeneral and WW.currentZone.tag == "GEN"
 		local shouldSelectCurrent = shouldSelectInstance or shouldSelectGeneral
-		if isFirstZoneAfterReload then
-			if shouldSelectCurrent then
-				WW.gui.OnZoneSelect(WW.currentZone)
-			else
-				-- select the last selected zone before reload
-				WW.gui.OnZoneSelect(WW.zones[WW.storage.selectedZoneTag])
-			end
-		elseif shouldSelectCurrent then
-			WW.gui.OnZoneSelect(WW.currentZone)
+		if isFirstZoneAfterReload or shouldSelectCurrent then
+			WW.gui.OnZoneSelect(shouldSelectCurrent and WW.currentZone or WW.zones[WW.storage.selectedZoneTag[WW.storage.selectedCharacterId]])
 		end
 
 		if WW.settings.fixes.surfingWeapons then
@@ -1093,10 +1086,24 @@ function WW.Init()
 	WW.currentZone = WW.zones[ "GEN" ]
 	WW.currentZoneId = 0
 
-	WW.selection = {
-		zone = WW.zones[ "GEN" ],
-		pageId = 1
-	}
+	WW.selection = setmetatable({zone = WW.zones["GEN"]}, {
+		__index = function(table, key)
+			if key == "pageId" then
+				if not WW.pages[table.zone.tag][0][WW.currentCharacterId] then
+					WW.pages[table.zone.tag][0][WW.currentCharacterId] = 1
+					return 1
+				end
+				return WW.pages[table.zone.tag][0][WW.currentCharacterId]
+			end
+		end,
+		__newindex = function(table, key, value)
+			if key == "pageId" then
+				WW.pages[table.zone.tag][0][WW.currentCharacterId] = value
+			end
+		end
+	})
+
+	WW.currentCharacterId = GetCurrentCharacterId()
 end
 
 function WW.OnAddOnLoaded( _, addonName )

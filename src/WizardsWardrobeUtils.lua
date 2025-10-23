@@ -4,13 +4,6 @@ local WW = WizardsWardrobe
 WW.gui = WW.gui or {}
 local WWG = WW.gui
 
-function WW.GetSelectedPage( zone )
-	if WW.pages[ zone.tag ] and WW.pages[ zone.tag ][ 0 ] then
-		return WW.pages[ zone.tag ][ 0 ].selected
-	end
-	return nil
-end
-
 function WW.GetBossName( zone, index )
 	if zone.bosses
 		and zone.bosses[ index ]

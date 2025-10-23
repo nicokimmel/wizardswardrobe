@@ -26,14 +26,22 @@ local addonMenuChoices = {
 		GetString( WW_MENU_COMPARISON_DEPTH_THOROUGH_TT ),
 	}
 }
-function WWM.InitSV()
-	WW.storage = ZO_SavedVars:NewCharacterIdSettings( "WizardsWardrobeSV", 1, nil, {
+
+function WW.DefaultSavedVariables(characterId)
+	return {
 		setups = {},
 		pages = {},
 		prebuffs = {},
 		autoEquipSetups = true,
-		selectedZoneTag = 'GEN',
-	} )
+		selectedZoneTag = {
+			[characterId] = "GEN",
+		},
+		selectedCharacterId = characterId,
+	}
+end
+
+function WWM.InitSV()
+	WW.storage = ZO_SavedVars:NewCharacterIdSettings("WizardsWardrobeSV", 1, nil, WW.DefaultSavedVariables(WW.currentCharacterId))
 	WW.setups = WW.storage.setups
 	WW.pages = WW.storage.pages
 	WW.prebuffs = WW.storage.prebuffs
@@ -88,8 +96,26 @@ function WWM.InitSV()
 		legacyZoneSelection = false,
 		autoSelectInstance = true,
 		autoSelectGeneral = false,
-		lockSavedGear = true
+		lockSavedGear = true,
+		accountWideStorage = {
+			setups = {},
+			pages = {},
+			prebuffs = {},
+			autoEquipSetups = true,
+    },
 	} )
+
+	local savedVariables = WizardsWardrobeSV.Default[GetDisplayName()]
+	local selectedCharacterSv = WW.storage
+	local selectedCharacterId = selectedCharacterSv.selectedCharacterId
+	if selectedCharacterId == "$AccountWide" then
+		selectedCharacterSv = savedVariables["$AccountWide"].accountWideStorage
+	elseif selectedCharacterId ~= WW.currentCharacterId then
+		selectedCharacterSv = savedVariables[selectedCharacterId]
+	end
+	WW.setups = selectedCharacterSv.setups
+	WW.pages = selectedCharacterSv.pages
+	WW.prebuffs = selectedCharacterSv.prebuffs
 
 	-- migrate validation settings
 	if WW.settings.validationDelay then
