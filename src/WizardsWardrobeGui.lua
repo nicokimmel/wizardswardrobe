@@ -1361,6 +1361,15 @@ function WWG.DeletePage()
 	local nextPageId = pageId - 1
 	if nextPageId < 1 then nextPageId = pageId end
 
+	-- reset other characters last selected page if needed
+  for characterId, selectedPageId in pairs(WW.pages[zone.tag][0]) do
+    if (characterId ~= WW.currentCharacterId) and (selectedPageId >= pageId) then
+			local characterNextPageId = pageId - 1
+			if characterNextPageId < 1 then characterNextPageId = 1 end
+      WW.pages[zone.tag][0][characterId] = characterNextPageId
+    end
+  end
+
 	WW.selection.pageId = nextPageId
 
 	table.remove( WW.setups[ zone.tag ], pageId )
