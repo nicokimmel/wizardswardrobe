@@ -1959,6 +1959,7 @@ function WWG.SetupCharacterDropdown()
 			WW.selection.zone = WW.zones[WW.storage.selectedZoneTag[characterId]]
 
       WW.gui.tree:RefreshTree( WW.gui.tree.tree, WW.selection.zone )
+			WW.prebuff.RefreshPrebuffState()
 
 			WWG.OnZoneSelect(WW.selection.zone)
 		end)

@@ -12,6 +12,7 @@ function WWP.Init()
 
 	WWP.CreatePrebuffTable()
 	WWP.CreatePrebuffWindow()
+	WWP.RefreshPrebuffState()
 
 	EVENT_MANAGER:RegisterForEvent( WWP.name, EVENT_ACTION_SLOT_ABILITY_USED, WWP.OnPrebuffed )
 	EVENT_MANAGER:RegisterForEvent( WWP.name, EVENT_PLAYER_DEAD, function() WWP.cache = {} end )
@@ -192,7 +193,6 @@ function WWP.CreatePrebuffWindow()
 		editBox:SetHandler( "OnTextChanged", function( self )
 			WW.prebuffs[ i ][ 0 ].delay = tonumber( editBox:GetText() ) or 0
 		end )
-		editBox:SetText( WW.prebuffs[ i ][ 0 ].delay )
 
 		local editBoxBackground = WINDOW_MANAGER:CreateControlFromVirtual( editBox:GetName() .. "BG", editBox,
 			"ZO_EditBackdrop" )
@@ -294,12 +294,6 @@ function WWP.CreatePrebuffWindow()
 				end
 			end )
 			skill:SetHandler( "OnDragStart", OnSkillDragStart )
-			local abilityId = WW.prebuffs[ i ][ slot + 2 ]
-			local abilityIcon = "/esoui/art/itemtooltip/eso_itemtooltip_emptyslot.dds"
-			if abilityId and abilityId > 0 then
-				abilityIcon = GetAbilityIcon( abilityId )
-			end
-			skill:SetTexture( abilityIcon )
 
 			local frame = WINDOW_MANAGER:CreateControl( skill:GetName() .. "Frame", skill, CT_TEXTURE )
 			frame:SetDrawLayer( DL_CONTROLS )
@@ -307,8 +301,29 @@ function WWP.CreatePrebuffWindow()
 			frame:SetAnchor( CENTER, skill, CENTER, 0, 0 )
 			frame:SetTexture( "/esoui/art/actionbar/abilityframe64_up.dds" )
 			frame:SetDrawLevel( 3 )
+		end
+	end
+end
 
-			WWP.CheckToggleCondition( i, checkBox, editBox )
+function WWP.RefreshPrebuffState()
+	WWP.cache = {}
+	WWP.CreatePrebuffTable()
+	for i = 1, 5 do
+		local prebuffBox = WWP.dialog:GetNamedChild("Box" .. i)
+		local editBox = prebuffBox:GetNamedChild("EditBox")
+		local checkBox = prebuffBox:GetNamedChild("CheckBox")
+
+		editBox:SetText(WW.prebuffs[i][0].delay)
+
+		for slot = 1, 6 do
+			local skill = prebuffBox:GetNamedChild("Skill" .. slot)
+			local abilityId = WW.prebuffs[i][slot + 2]
+			local abilityIcon = "/esoui/art/itemtooltip/eso_itemtooltip_emptyslot.dds"
+			if abilityId and abilityId > 0 then
+				abilityIcon = GetAbilityIcon(abilityId)
+			end
+			skill:SetTexture(abilityIcon)
+			WWP.CheckToggleCondition(i, checkBox, editBox)
 		end
 	end
 end
