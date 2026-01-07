@@ -47,6 +47,12 @@ function WWM.InitSV()
 	WW.prebuffs = WW.storage.prebuffs
 
 	WW.settings = ZO_SavedVars:NewAccountWide( "WizardsWardrobeSV", 1, nil, {
+		accountWideStorage = {
+			setups = {},
+			pages = {},
+			prebuffs = {},
+			autoEquipSetups = true,
+    },
 		window = {
 			wizard = {
 				width = 360,
@@ -97,12 +103,7 @@ function WWM.InitSV()
 		autoSelectInstance = true,
 		autoSelectGeneral = false,
 		lockSavedGear = true,
-		accountWideStorage = {
-			setups = {},
-			pages = {},
-			prebuffs = {},
-			autoEquipSetups = true,
-    },
+		verticalSetupDisplay = true
 	} )
 
 	local savedVariables = WizardsWardrobeSV.Default[GetDisplayName()]
@@ -156,6 +157,21 @@ function WWM.InitAM()
 			name = GetString( WW_MENU_GENERAL ),
 		},
 
+		{
+			type = "dropdown",
+			name = GetString(WW_MENU_SETUP_DIRECTION),
+			choices = {
+				GetString(WW_MENU_SETUP_DIRECTION_VERTICAL),
+				GetString(WW_MENU_SETUP_DIRECTION_HORIZONTAL),
+			},
+			choicesValues = {true, false},
+			getFunc = function() return WW.settings.verticalSetupDisplay end,
+			setFunc = function(value)
+				WW.settings.verticalSetupDisplay = value
+				WW.gui.OnWindowResize("stop")
+			end,
+			tooltip = GetString(WW_MENU_SETUP_DIRECTION_TT),
+		},
 		{
 			type = "dropdown",
 			name = GetString( WW_MENU_PRINTCHAT ),

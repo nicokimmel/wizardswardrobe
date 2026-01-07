@@ -64,6 +64,10 @@ local language = {
 
     -- ADDON MENU
     WW_MENU_GENERAL = "常规",
+		WW_MENU_SETUP_DIRECTION = "Setup display direction",
+		WW_MENU_SETUP_DIRECTION_TT = "The direction that setups are displayed in if the window is expanded to show multiple columns",
+		WW_MENU_SETUP_DIRECTION_VERTICAL = "Vertical",
+		WW_MENU_SETUP_DIRECTION_HORIZONTAL = "Horizontal",
     WW_MENU_PRINTCHAT = "打印消息",
     WW_MENU_PRINTCHAT_TT = "以聊天栏或系统提示的形式来提示配装的加载情况",
     WW_MENU_PRINTCHAT_OFF = "不打印",

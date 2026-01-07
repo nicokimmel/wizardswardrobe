@@ -61,6 +61,10 @@ local language = {
 
 	-- ADDON MENU
 	WW_MENU_GENERAL = "Настройки",
+	WW_MENU_SETUP_DIRECTION = "Setup display direction",
+	WW_MENU_SETUP_DIRECTION_TT = "The direction that setups are displayed in if the window is expanded to show multiple columns",
+	WW_MENU_SETUP_DIRECTION_VERTICAL = "Vertical",
+	WW_MENU_SETUP_DIRECTION_HORIZONTAL = "Horizontal",
 	WW_MENU_PRINTCHAT = "Писать уведомления в чат",
 	WW_MENU_OVERWRITEWARNING = "Показывать предупреждение при перезаписи",
 	WW_MENU_OVERWRITEWARNING_TT = "Отображает предупреждение, если уже сохраненный набор перезаписывается.",

@@ -410,8 +410,14 @@ function WWG.OnWindowResize( action )
 		for i = 1, #WWG.setupTable do
 			local key = WWG.setupTable[ i ]
 			local setupControl = WWG.setupPool:AcquireObject( key )
-			local x = zo_floor( (i - 1) / itemsPerCol ) * SETUP_BOX_WIDTH + 3
-			local y = (((i - 1) % itemsPerCol) * SETUP_BOX_HEIGHT)
+			local x, y
+			if WW.settings.verticalSetupDisplay then
+				x = zo_floor( (i - 1) / itemsPerCol ) * SETUP_BOX_WIDTH + 3
+				y = (((i - 1) % itemsPerCol) * SETUP_BOX_HEIGHT)
+			else
+				x = (((i - 1) % rows) * SETUP_BOX_WIDTH) + 3
+				y = zo_floor( (i - 1) / rows ) * SETUP_BOX_HEIGHT
+			end
 			setupControl:ClearAnchors()
 			setupControl:SetAnchor( TOPLEFT, scrollBox, TOPLEFT, x, y )
 		end
@@ -450,6 +456,7 @@ function WWG.OnWindowResize( action )
 		WW.settings.window.wizard.height = WizardsWardrobeWindow:GetHeight()
 		--	d( "WizardsWardrobeWindow resized to " .. WizardsWardrobeWindow:GetWidth() .. "x" .. WizardsWardrobeWindow:GetHeight() )
 		WizardsWardrobeWindowZone:SetHeight( WizardsWardrobeWindow:GetHeight() )
+		WWG.OnWindowMove()
 	end
 
 	local identifier = WW.name .. "WindowResize"
