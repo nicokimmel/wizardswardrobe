@@ -7,7 +7,7 @@ WW.name = "WizardsWardrobe"
 WW.simpleName = "Wizard's Wardrobe"
 WW.displayName =
 "|c18bed8W|c26c2d1i|c35c6c9z|c43cac2a|c52cebar|c60d1b3d|c6fd5ab'|c7dd9a4s|c8cdd9d |c9ae195W|ca8e58ea|cb7e986r|cc5ed7fd|cd4f077r|ce2f470o|cf1f868b|cfffc61e|r"
-WW.version = "0.4.1"
+WW.version = "0.4.2"
 WW.zones = {}
 WW.currentIndex = 0
 WW.IsHeavyAttacking = false
@@ -408,7 +408,7 @@ local isMovingItems = false
 local itemTaskQueue = {}
 
 
-function WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons )
+function WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons, postMoveTasks )
 	if isMovingItems then
 		gearMoveTask:Cancel()
 		logger:Info( "MoveItems: Queueing %d items, isChangingWeapons = %s", #itemTaskList, tostring( isChangingWeapons ) )
@@ -485,7 +485,26 @@ function WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons )
 				gearMoveTask:Resume()
 			end ) ]]
 		end )
-	end ):Then( function()
+	end )
+		:WaitUntil( function()
+			-- Ensure post-move actions (like poisons) don't run if the player re-enters combat mid-swap.
+			return WW.IsReadyToSwap()
+		end )
+		:WaitUntil( function()
+			-- Mirror the gear move behavior: don't attempt protected calls while blocking.
+			return not IsBlockActive()
+		end )
+		:Then( function()
+			-- Run any follow-up tasks after the main gear moves complete.
+			if postMoveTasks and type( postMoveTasks ) == "table" then
+				for _, task in ipairs( postMoveTasks ) do
+					if type( task ) == "function" then
+						task()
+					end
+				end
+			end
+		end )
+		:Then( function()
 		if not areAllItemsInInventory then
 			local zone = WW.selection.zone
 			local pageId = WW.selection.pageId
@@ -524,6 +543,7 @@ function WW.LoadGear( setup )
 	logger:Warn( "LoadGear " .. setup:GetName() )
 	local freeSlotMap = WW.GetFreeSlots( BAG_BACKPACK )
 	local itemTaskList = {}
+	local postMoveTasks = {}
 	local inventoryList = WW.GetItemLocation()
 	local areAllItemsInInventory = true
 	local isChangingWeapons = false
@@ -548,13 +568,28 @@ function WW.LoadGear( setup )
 	for index, gearSlot in ipairs( WW.GEARSLOTS ) do
 		local gear = setup:GetGearInSlot( gearSlot )
 
+		-- Poisons are stackable consumables and may not have a stable uniqueId in saved data.
+		-- Always use the saved link directly so we still attempt to equip/unequip the right poison.
+		if gearSlot == EQUIP_SLOT_POISON or gearSlot == EQUIP_SLOT_BACKUP_POISON then
+			gear = setup.gear and setup.gear[ gearSlot ] or gear
+			if gear and (not gear.link or #gear.link == 0) then
+				gear = nil
+			end
+		end
+
 		if gear then
 			local lookupId = Id64ToString( GetItemUniqueId( BAG_WORN, gearSlot ) )
 			if gearSlot == EQUIP_SLOT_POISON or gearSlot == EQUIP_SLOT_BACKUP_POISON then
 				-- handle poisons
 				local lookupLink = GetItemLink( BAG_WORN, gearSlot, LINK_STYLE_DEFAULT )
 				if lookupLink ~= gear.link then
-					WW.poison.EquipPoisons( gear.link, gearSlot )
+					-- Defer poison equip until after all gear/weapon moves complete. When swaps are initiated in combat,
+					-- poison equip requests can otherwise execute out of order as soon as combat ends, and get cleared.
+					local poisonLink = gear.link
+					local poisonSlot = gearSlot
+					postMoveTasks[ #postMoveTasks + 1 ] = function()
+						WW.poison.EquipPoisons( poisonLink, poisonSlot )
+					end
 				end
 			else
 				-- equip item (if not already equipped)
@@ -603,8 +638,19 @@ function WW.LoadGear( setup )
 				end
 			end
 		else
+			-- Always unequip poisons if the saved setup slot is empty (independent of unequipEmpty).
+			if gearSlot == EQUIP_SLOT_POISON or gearSlot == EQUIP_SLOT_BACKUP_POISON then
+				local _, stackCount = GetItemInfo( BAG_WORN, gearSlot )
+				if stackCount and stackCount > 0 then
+					table.insert( itemTaskList, {
+						sourceBag = BAG_WORN,
+						sourceSlot = gearSlot,
+						destBag = BAG_BACKPACK,
+						destSlot = nil,
+					} )
+				end
 			-- unequip if option is set to true, but ignore tabards if set to do so
-			if WW.settings.unequipEmpty and (gearSlot ~= EQUIP_SLOT_COSTUME or ((gearSlot == EQUIP_SLOT_COSTUME) and WW.settings.ignoreTabards == false)) then
+			elseif WW.settings.unequipEmpty and (gearSlot ~= EQUIP_SLOT_COSTUME or ((gearSlot == EQUIP_SLOT_COSTUME) and WW.settings.ignoreTabards == false)) then
 				table.insert( itemTaskList, {
 					sourceBag = BAG_WORN,
 					sourceSlot = gearSlot,
@@ -621,7 +667,7 @@ function WW.LoadGear( setup )
 		logger:Warn( "Not all items in inventory" )
 	end
 
-	WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons )
+	WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons, postMoveTasks )
 	return true, areAllItemsInInventory, isChangingWeapons
 	--end
 end
