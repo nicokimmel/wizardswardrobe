@@ -69,7 +69,9 @@ function WWP.EquipPoisons( itemLink, slotId )
 		end
 	end
 	local poisonStack = poisonSlots[ #poisonSlots ]
-	EquipItem( poisonStack.bag, poisonStack.slot, slotId )
+	-- Mirror the stock UI behavior: equipping is a move into BAG_WORN's equip slot.
+	local stackCount = poisonStack.count or 1
+	CallSecureProtected( "RequestMoveItem", poisonStack.bag, poisonStack.slot, BAG_WORN, slotId, stackCount )
 	PlaySound( SOUNDS.DYEING_TOOL_SET_FILL_USED )
 end
 

@@ -7,7 +7,7 @@ WW.name = "WizardsWardrobe"
 WW.simpleName = "Wizard's Wardrobe"
 WW.displayName =
 "|c18bed8W|c26c2d1i|c35c6c9z|c43cac2a|c52cebar|c60d1b3d|c6fd5ab'|c7dd9a4s|c8cdd9d |c9ae195W|ca8e58ea|cb7e986r|cc5ed7fd|cd4f077r|ce2f470o|cf1f868b|cfffc61e|r"
-WW.version = "1.22.0"
+WW.version = "0.4.3"
 WW.zones = {}
 WW.currentIndex = 0
 WW.IsHeavyAttacking = false
@@ -404,7 +404,7 @@ end
 local function moveItemToDestination( item )
 	logger:Verbose( "moveItemToDestination" )
 	if item.destBag == BAG_WORN then
-		EquipItem( item.sourceBag, item.sourceSlot, item.destSlot )
+		CallSecureProtected( "RequestEquipItem", item.sourceBag, item.sourceSlot, BAG_WORN, item.destSlot )
 	else
 		local isSlotEmpty = GetItemId( item.destBag, item.destSlot ) == 0
 		item.destSlot = isSlotEmpty and item.destSlot or FindFirstEmptySlotInBag( item.destBag )
@@ -427,7 +427,7 @@ local isMovingItems = false
 local itemTaskQueue = {}
 
 
-function WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons )
+function WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons, postMoveTasks )
 	if isMovingItems then
 		gearMoveTask:Cancel()
 		logger:Info( "MoveItems: Queueing %d items, isChangingWeapons = %s", #itemTaskList, tostring( isChangingWeapons ) )
@@ -504,7 +504,26 @@ function WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons )
 				gearMoveTask:Resume()
 			end ) ]]
 		end )
-	end ):Then( function()
+	end )
+		:WaitUntil( function()
+			-- Ensure post-move actions (like poisons) don't run if the player re-enters combat mid-swap.
+			return WW.IsReadyToSwap()
+		end )
+		:WaitUntil( function()
+			-- Mirror the gear move behavior: don't attempt protected calls while blocking.
+			return not IsBlockActive()
+		end )
+		:Then( function()
+			-- Run any follow-up tasks after the main gear moves complete.
+			if postMoveTasks and type( postMoveTasks ) == "table" then
+				for _, task in ipairs( postMoveTasks ) do
+					if type( task ) == "function" then
+						task()
+					end
+				end
+			end
+		end )
+		:Then( function()
 		if not areAllItemsInInventory then
 			local zone = WW.selection.zone
 			local pageId = WW.selection.pageId
@@ -543,6 +562,7 @@ function WW.LoadGear( setup )
 	logger:Warn( "LoadGear " .. setup:GetName() )
 	local freeSlotMap = WW.GetFreeSlots( BAG_BACKPACK )
 	local itemTaskList = {}
+	local postMoveTasks = {}
 	local inventoryList = WW.GetItemLocation()
 	local areAllItemsInInventory = true
 	local isChangingWeapons = false
@@ -573,7 +593,12 @@ function WW.LoadGear( setup )
 				-- handle poisons
 				local lookupLink = GetItemLink( BAG_WORN, gearSlot, LINK_STYLE_DEFAULT )
 				if lookupLink ~= gear.link then
-					WW.poison.EquipPoisons( gear.link, gearSlot )
+					-- Defer poison equip until after all gear/weapon moves complete.
+					local poisonLink = gear.link
+					local poisonSlot = gearSlot
+					postMoveTasks[ #postMoveTasks + 1 ] = function()
+						WW.poison.EquipPoisons( poisonLink, poisonSlot )
+					end
 				end
 			else
 				-- equip item (if not already equipped)
@@ -640,7 +665,7 @@ function WW.LoadGear( setup )
 		logger:Warn( "Not all items in inventory" )
 	end
 
-	WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons )
+	WW.MoveItems( itemTaskList, areAllItemsInInventory, isChangingWeapons, postMoveTasks )
 	return true, areAllItemsInInventory, isChangingWeapons
 	--end
 end
