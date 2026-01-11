@@ -69,7 +69,7 @@ function WWP.EquipPoisons( itemLink, slotId )
 		end
 	end
 	local poisonStack = poisonSlots[ #poisonSlots ]
-	EquipItem( poisonStack.bag, poisonStack.slot, slotId )
+	CallSecureProtected( "RequestMoveItem", poisonStack.bag, poisonStack.slot, BAG_WORN, slotId )
 	PlaySound( SOUNDS.DYEING_TOOL_SET_FILL_USED )
 end
 

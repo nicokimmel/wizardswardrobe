@@ -40,7 +40,7 @@ function WWF.FlipShoulders()
 		if lookupId == itemId then
 			EVENT_MANAGER:UnregisterForUpdate(WWF.name .. "FlipShoulders")
 			zo_callLater(function()
-				EquipItem(BAG_BACKPACK, slot, EQUIP_SLOT_SHOULDERS)
+				RequestEquipItem(BAG_BACKPACK, slot, EQUIP_SLOT_SHOULDERS)
 			end, 500)
 			WWF.flippingShoulders = false
 			return

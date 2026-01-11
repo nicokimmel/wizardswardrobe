@@ -64,6 +64,7 @@ function WWM.InitSV()
 		printMessages = "announcement",
 		ignoreTabards = true,
 		unequipEmpty = false,
+		unequipEmptyPoisons = false,
 		chargeWeapons = false,
 		repairArmor = false,
 		fillPoisons = false,
@@ -150,6 +151,14 @@ function WWM.InitAM()
 			getFunc = function() return WW.settings.unequipEmpty end,
 			setFunc = function( value ) WW.settings.unequipEmpty = value end,
 			tooltip = GetString( WW_MENU_UNEQUIPEMPTY_TT ),
+		},
+		{
+			type = "checkbox",
+			name = "Always unequip empty poison slots",
+			getFunc = function() return WW.settings.unequipEmptyPoisons end,
+			setFunc = function( value ) WW.settings.unequipEmptyPoisons = value end,
+			tooltip = "If a poison slot is saved as empty in the setup, it will be unequipped. This is checked if the above Unequip empty slots option is disabled.",
+			disabled = function() return WW.settings.unequipEmpty end,
 		},
 		{
 			type = "checkbox",

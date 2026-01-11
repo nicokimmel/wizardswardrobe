@@ -7,7 +7,7 @@ WW.name = "WizardsWardrobe"
 WW.simpleName = "Wizard's Wardrobe"
 WW.displayName =
 "|c18bed8W|c26c2d1i|c35c6c9z|c43cac2a|c52cebar|c60d1b3d|c6fd5ab'|c7dd9a4s|c8cdd9d |c9ae195W|ca8e58ea|cb7e986r|cc5ed7fd|cd4f077r|ce2f470o|cf1f868b|cfffc61e|r"
-WW.version = "0.4.1"
+WW.version = "0.4.2"
 WW.zones = {}
 WW.currentIndex = 0
 WW.IsHeavyAttacking = false
@@ -604,13 +604,14 @@ function WW.LoadGear( setup )
 			end
 		else
 			-- unequip if option is set to true, but ignore tabards if set to do so
-			if WW.settings.unequipEmpty and (gearSlot ~= EQUIP_SLOT_COSTUME or ((gearSlot == EQUIP_SLOT_COSTUME) and WW.settings.ignoreTabards == false)) then
-				table.insert( itemTaskList, {
+			if (WW.settings.unequipEmpty and (gearSlot ~= EQUIP_SLOT_COSTUME or ((gearSlot == EQUIP_SLOT_COSTUME) and WW.settings.ignoreTabards == false)))
+				or (WW.settings.unequipEmptyPoisons and (gearSlot == EQUIP_SLOT_POISON or gearSlot == EQUIP_SLOT_BACKUP_POISON)) then
+				table.insert(itemTaskList, {
 					sourceBag = BAG_WORN,
 					sourceSlot = gearSlot,
 					destBag = BAG_BACKPACK,
 					destSlot = nil,
-				} )
+				})
 			end
 		end
 	end
