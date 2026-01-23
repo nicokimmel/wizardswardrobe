@@ -61,7 +61,7 @@ zones/KA.lua
 zones/RG.lua
 zones/DSR.lua
 zones/SE.lua
-zones/BRP.lua
-zones/EA.lua
 zones/LC.lua
 zones/OC.lua
+zones/BRP.lua
+zones/IA.lua
