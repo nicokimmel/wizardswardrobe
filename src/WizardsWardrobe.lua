@@ -1112,7 +1112,7 @@ function WW.OnAddOnLoaded( _, addonName )
 	-- Refactor this
 	WW.Init()
 	WW.menu.Init()
-	--WW.queue.Init()
+	WW.queue.Init()
 	WW.gui.Init()
 	WW.conditions.Init()
 	WW.transfer.Init()

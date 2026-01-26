@@ -125,7 +125,7 @@ function WWB.DepositAllSetups(skipCurrentCharacter)
 	WW.Log(GetString(WW_MSG_DEPOSIT_ALL), WW.LOGTYPES.NORMAL, "FFFFFF")
 	
 	for characterId, characterSv in pairs(WizardsWardrobeSV.Default[GetDisplayName()]) do
-		if characterId ~= "$AccountWide" then		
+		if characterId ~= "$AccountWide" and not (skipCurrentCharacter and characterId == WW.currentCharacterId) then
 			for zoneTag, setupPages in pairs(characterSv.setups) do
 				for pageId, setups in pairs(setupPages) do
 					

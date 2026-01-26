@@ -7,7 +7,8 @@ local WWM = WW.markers
 function WWM.Init()
 	WWM.name = WW.name .. "Markers"
 	WWM.gearList = {}
-	WWM.markList = {}
+	WWM.markListByName = {}
+	WWM.markListById = {}
 	
 	if not WW.settings.inventoryMarker then return end
 	
@@ -27,6 +28,7 @@ function WWM.BuildGearList()
 					WWM.gearList[item.id] = {}
 				end
 				table.insert(WWM.gearList[item.id], {tag = entry.zone.tag, pageId = entry.pageId, index = entry.index})
+				if WWM.markListById[item.id] then WWM.markListById[item.id]:SetHidden(false) end
 			end
 		end
 	end
@@ -54,13 +56,13 @@ end
 
 function WWM.AddMark(control)
 	local slot = control.dataEntry.data
-	local mark = WWM.GetMark(control)
-	
 	local lookupId = Id64ToString(GetItemUniqueId(slot.bagId, slot.slotIndex))
-	local itemData = WWM.gearList[lookupId]
-	mark:SetHidden(not itemData)
+	local mark = WWM.GetMark(control, lookupId)
+	mark:SetHidden(not WWM.gearList[lookupId])
 	
 	mark:SetHandler("OnMouseEnter", function(self)
+		local itemData = WWM.gearList[lookupId]
+		mark:SetHidden(not itemData)
 		if itemData then
 			ZO_Tooltips_ShowTextTooltip(self, RIGHT, WWM.GetTooltip(itemData))
 		end
@@ -70,12 +72,13 @@ function WWM.AddMark(control)
 	end)
 end
 
-function WWM.GetMark(control)
+function WWM.GetMark(control, lookupId)
 	local name = control:GetName()
-	local mark = WWM.markList[name]
+	local mark = WWM.markListByName[name]
 	if not mark then
 		mark = WINDOW_MANAGER:CreateControl(name .. "WizardsWardrobeMarker", control, CT_TEXTURE)
-		WWM.markList[name] = mark
+		WWM.markListById[lookupId] = mark
+		WWM.markListByName[name] = mark
 		mark:SetTexture("/WizardsWardrobe/assets/mark.dds")
 		mark:SetColor(0.09, 0.75, 0.85, 1)
 		mark:SetDrawLayer(3)

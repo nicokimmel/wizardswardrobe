@@ -456,7 +456,6 @@ function WWG.OnWindowResize( action )
 		WW.settings.window.wizard.height = WizardsWardrobeWindow:GetHeight()
 		--	d( "WizardsWardrobeWindow resized to " .. WizardsWardrobeWindow:GetWidth() .. "x" .. WizardsWardrobeWindow:GetHeight() )
 		WizardsWardrobeWindowZone:SetHeight( WizardsWardrobeWindow:GetHeight() )
-		WWG.OnWindowMove()
 	end
 
 	local identifier = WW.name .. "WindowResize"
@@ -1969,6 +1968,7 @@ function WWG.SetupCharacterDropdown()
 			WW.prebuff.RefreshPrebuffState()
 
 			WWG.OnZoneSelect(WW.selection.zone)
+			WW.markers.BuildGearList()
 		end)
 		comboBox:AddItem(entry)
 
