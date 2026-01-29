@@ -86,24 +86,45 @@ function WWG.HandleFirstStart()
 		return
 	end
 
-	local function getMajorMinorVersion( version )
-		version = version:match( "[^%s]+" ):match( "%d+%.%d+" )
-		local major, minor = version:match( "^(%d+)%.(%d+)" )
-		return tonumber( major ), tonumber( minor )
-	end
-	-- only show warning if major or minor patches are updated, do not show it with fixes
-	local currentMajor, currentMinor = getMajorMinorVersion( WW.version )
+	if WW.settings.changelogs[WW.version] == true then return end
 
-	local highestMajor, highestMinor = 0, 0
+	local function getMajorMinorVersion(version)
+		version = version:match("[^%s]+"):match("%d+%.%d+%.%d+")
+		local major, minor, patch = version:match("^(%d+)%.(%d+)%.(%d+)")
+		return tonumber(major), tonumber(minor), tonumber(patch)
+	end
+	local currentMajor, currentMinor, currentPatch = getMajorMinorVersion( WW.version )
+
+	local highestMajor, highestMinor, highestPatch = 0, 0, 0
+	local highestMajorShown, highestMinorShown = 0, 0
 	for version, shown in pairs( WW.settings.changelogs ) do
-		local oldMajor, oldMinor = getMajorMinorVersion( version )
-		if oldMajor > highestMajor or (oldMajor == highestMajor and oldMinor > highestMinor) then
-			highestMajor, highestMinor = oldMajor, oldMinor
+		local oldMajor, oldMinor, oldPatch = getMajorMinorVersion( version )
+		if oldMajor >= highestMajor then
+			if oldMajor > highestMajor then highestMajor = oldMajor end
+			if oldMajor > highestMajorShown and shown then highestMajorShown = oldMajor end
+
+			if oldMinor >= highestMinor then
+				if oldMinor > highestMinor then highestMinor = oldMinor end
+				if oldMinor > highestMinorShown and shown then highestMinorShown = oldMinor end
+
+				if oldPatch > highestPatch then
+					highestPatch = oldPatch
+				end
+			end
 		end
 	end
+
+	if highestMajor < currentMajor or (highestMajor == currentMajor and
+		(highestMinor < currentMinor or (highestMinor == currentMinor and
+		highestPatch < currentPatch))) then
+		WWG.HandleMigration()
+	end
+
+	WW.settings.changelogs[ WW.version ] = false
+
 	if not PlainStringFind( string.lower( WW.version ), "beta" ) then
-		if highestMajor < currentMajor or (highestMajor == currentMajor and highestMinor < currentMinor) then
-			WWG.HandleMigration()
+		-- only show warning if major or minor versions are updated, do not show it with patches
+		if highestMajorShown < currentMajor or (highestMajorShown == currentMajor and highestMinorShown < currentMinor) then
 			EVENT_MANAGER:RegisterForUpdate( WWG.name .. "UpdateWarning", 1000,
 			function()
 				if not ZO_Dialogs_IsShowingDialog() then
@@ -126,10 +147,14 @@ function WWG.HandleMigration()
 	for characterId, characterSv in pairs(WizardsWardrobeSV.Default[GetDisplayName()]) do
 		if characterId ~= "$AccountWide" then
 			for _, pages in pairs(characterSv.pages) do
-				pages[0] = {[characterId] = pages[0].selected}
+				if not pages[0][characterId] then
+					pages[0] = {[characterId] = pages[0].selected}
+				end
+				pages[0].selected = nil
 			end
+			-- reset to GEN to fix migration errors in 1.23.2, make conditional upon version in next patch
 			characterSv.selectedZoneTag = {
-				[characterId] = characterSv.selectedZoneTag,
+				[characterId] = "GEN",
 			}
 		end
 	end
